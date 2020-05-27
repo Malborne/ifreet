@@ -57,7 +57,7 @@ func main() {
 		log.Fatalf("%+v\n", errors.Wrap(err, "failed to open session"))
 	}
 
-	go heimdallr.CheckPermissions(dg)
+	// go heimdallr.CheckPermissions(dg)
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
