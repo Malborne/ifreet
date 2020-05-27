@@ -1,0 +1,28 @@
+---
+
+- name: Deploy Heimdallr
+  hosts: all
+  tasks:
+
+    - name: Deploy new executable
+      copy:
+        src: ../heimdallr
+        dest: heimdallr/{{ ENVIRONMENT }}/
+        mode: u+x
+
+    - name: Create config if missing
+      template:
+        src: config.toml.j2
+        dest: heimdallr/{{ ENVIRONMENT }}/config.toml
+        force: no
+
+    - name: Create unit file
+      template:
+        src: heimdallr.service
+        dest: .config/systemd/user/heimdallr-{{ ENVIRONMENT }}.service
+
+    - name: Restart service
+      systemd:
+        name: heimdallr-{{ ENVIRONMENT }}
+        state: restarted
+        scope: user

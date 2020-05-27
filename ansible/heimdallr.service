@@ -1,0 +1,9 @@
+[Unit]
+Description=Heimdallr Discord bot for Norwegian Language Learning
+
+[Service]
+WorkingDirectory=/home/heimdallr/heimdallr/{{ ENVIRONMENT }}
+ExecStart=/home/heimdallr/heimdallr/{{ ENVIRONMENT }}/heimdallr
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+*.toml
+vendor/
+!Gopkg.toml
+.idea/
+*.db
+rest-client.private.env.json
+scratch.http
