@@ -1,1 +1,1 @@
-web: heimdallr
+worker: heimdallr
