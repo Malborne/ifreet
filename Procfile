@@ -1,1 +1,1 @@
-worker:  heimdallr-bot
+worker:  bin/ifreet
