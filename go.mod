@@ -1,4 +1,4 @@
-module github.com/Malborne/ifreet-bot/tree/master
+module github.com/Malborne/ifreet/tree/master
 
 go 1.12
 
