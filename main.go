@@ -20,14 +20,14 @@ var (
 )
 
 func init() {
-	fmt.Printf("Heimdallr version: %s, commit: %s\n", version.VERSION, version.COMMIT)
+	fmt.Printf("Ifreet version: %s, commit: %s\n", version.VERSION, version.COMMIT)
 
 	err := heimdallr.Config.LoadConfig("config.toml")
 	if err != nil {
 		log.Fatalf("%+v\n", errors.WithMessage(err, "failed to load config"))
 	}
 
-	flag.StringVar(&token, "token", heimdallr.Config.Token, "The bot token that Heimdallr should use.")
+	flag.StringVar(&token, "token", heimdallr.Config.Token, "The bot token that Ifreet should use.")
 	flag.Parse()
 
 	if token == "" {

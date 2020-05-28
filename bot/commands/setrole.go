@@ -17,7 +17,7 @@ var setRoleCommand = command{
 	},
 	[]string{
 		"mod Moderators",
-		"supermod 144519596349517457",
+		"supermod",
 		"admin @admin",
 	},
 }

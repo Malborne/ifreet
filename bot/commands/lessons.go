@@ -20,6 +20,6 @@ var lessonsCommand = command{
 
 //commandLessons gives a link to the list of lessons
 func commandLessons(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	_, err := s.ChannelMessageSend(m.ChannelID, "https://docs.google.com/document/d/1DTjcpMeRKse91rC7Tut5WwQspqGI3_OOchGuYEveEjc/edit?usp=sharing")
+	_, err := s.ChannelMessageSend(m.ChannelID, "https://docs.google.com/document/d/188RD6TQEleoPqugOOM68JNQvDmZPsc58o7K4u1TSRA4/edit?usp=sharing")
 	return errors.Wrap(err, "sending message failed")
 }

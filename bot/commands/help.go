@@ -73,7 +73,7 @@ func helpAll(s *discordgo.Session, m *discordgo.MessageCreate) error {
 		})
 	}
 	_, err = s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-		Title:  "**Heimdallr bot**",
+		Title:  "**Ifreet bot**",
 		Fields: fields,
 	})
 	return errors.Wrap(err, "sending embed failed")

@@ -1,4 +1,4 @@
-![Heimdallr logo](https://gitlab.com/NorwegianLanguageLearning/heimdallr/raw/master/heimdallr_avatar.svg)
+![Ifreet logo](https://gitlab.com/NorwegianLanguageLearning/heimdallr/raw/master/heimdallr_avatar.svg)
 # Heimdallr
 [![pipeline status](https://gitlab.com/NorwegianLanguageLearning/heimdallr/badges/master/pipeline.svg)](https://gitlab.com/NorwegianLanguageLearning/heimdallr/commits/master)
 

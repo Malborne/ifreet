@@ -107,8 +107,8 @@ func init() {
 	userCommands = []command{
 		helpCommand,
 		quoteCommand,
-		sundayCallCommand,
-		isItSundayCommand,
+		tajweedLessonCommand,
+		// isItSundayCommand,
 		roleCommand,
 		versionCommand,
 		lessonsCommand,
