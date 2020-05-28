@@ -112,7 +112,6 @@ func init() {
 		roleCommand,
 		versionCommand,
 		lessonsCommand,
-		websiteCommand,
 		searchResourcesCommand,
 		channelLinkCommand,
 	}
