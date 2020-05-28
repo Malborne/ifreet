@@ -1,0 +1,21 @@
+token = "<DISCORD BOT TOKEN>"
+welcome_channel = "715063178031005767"
+log_channel = "715413775750004766"
+admin_channel = "715461170584092712"
+admin_log_channel = "715183992688607292"
+admin_role_id = "715063252304003082"
+supermod_role_id = "715188166293979196"
+mod_role_id = "715188120626135301"
+user_role_id = "715063417852919868"
+welcome_message = "Welcome to the server, %s! \n In order to have full access to the server, you must Read the Rules in the #rules channel and tell us about yourself by answering the following questions:\n 1. \n 2. \n 3. \n After that a mod will give you approval. If you need any help, feel free to ask here."
+command_prefix = ";"
+
+[[role]]
+  id = "1235435345476"
+  name = "cool_kid"
+  description = "self-assignable role with the name 'cool_kid'"
+
+[[role]]
+  id = "7656535438"
+  name = "developer"
+  description = "self-assignable roles for developers"
