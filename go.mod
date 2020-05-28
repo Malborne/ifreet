@@ -1,4 +1,4 @@
-module gitlab.com/NorwegianLanguageLearning/heimdallr
+// module gitlab.com/NorwegianLanguageLearning/heimdallr
 
 go 1.12
 
