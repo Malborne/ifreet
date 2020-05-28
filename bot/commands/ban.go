@@ -2,11 +2,12 @@ package commands
 
 import (
 	"fmt"
+	"time"
+
+	heimdallr "github.com/Malborne/ifreet-bot/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
-	"/heimdallr/bot"
-	"time"
 )
 
 var banCommand = command{

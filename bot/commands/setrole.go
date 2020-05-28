@@ -2,10 +2,11 @@ package commands
 
 import (
 	"fmt"
+
+	heimdallr "github.com/Malborne/ifreet-bot/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
-	"gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
 )
 
 var setRoleCommand = command{

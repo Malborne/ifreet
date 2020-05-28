@@ -2,11 +2,12 @@ package commands
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
-	"/heimdallr/bot"
-	"time"
+	heimdallr "gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
 )
 
 var infractionsCommand = command{

@@ -2,11 +2,12 @@ package commands
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
-	"gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
-	"strings"
+	heimdallr "gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
 )
 
 var roleCommand = command{

@@ -3,14 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/pkg/errors"
-	"E:/GitHub/ifreet-master/bot"
-	"myapp/bot/commands"
-	"/myapp/bot/version"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/Malborne/ifreet-bot/tree/master/bot/version"
+	"github.com/Malborne/ifreet-bot/tree/master/commands"
+
+	"github.com/pkg/errors"
+	heimdallr "gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
 
 	"github.com/bwmarrin/discordgo"
 )

@@ -3,11 +3,12 @@ package commands
 import (
 	"database/sql"
 	"fmt"
+	"strings"
+
+	heimdallr "github.com/Malborne/ifreet-bot/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
-	heimdallr "/heimdallr/bot"
-	"strings"
 )
 
 var searchResourcesCommand = command{

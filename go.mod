@@ -1,4 +1,4 @@
-module gitlab.com/NorwegianLanguageLearning/heimdallr
+module github.com/Malborne/ifreet-bot/tree/master
 
 go 1.12
 

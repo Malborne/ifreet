@@ -2,14 +2,15 @@ package commands
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
+	"unicode"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/google/shlex"
 	"github.com/pkg/errors"
-	"/heimdallr/bot"
-	"regexp"
-	"strings"
-	"unicode"
+	heimdallr "gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
 )
 
 var parser = &docopt.Parser{

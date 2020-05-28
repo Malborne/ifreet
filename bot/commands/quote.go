@@ -2,10 +2,11 @@ package commands
 
 import (
 	"fmt"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
-	"/heimdallr/bot"
+	heimdallr "gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
 )
 
 var quoteCommand = command{
