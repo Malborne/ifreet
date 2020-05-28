@@ -1,1 +1,1 @@
-worker:  bin/ifreet-master
+worker:  bin/master
