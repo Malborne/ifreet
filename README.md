@@ -1,8 +1,8 @@
 ![Ifreet logo](https://gitlab.com/NorwegianLanguageLearning/heimdallr/raw/master/heimdallr_avatar.svg)
 # Heimdallr
-[![pipeline status](https://gitlab.com/NorwegianLanguageLearning/heimdallr/badges/master/pipeline.svg)](https://gitlab.com/NorwegianLanguageLearning/heimdallr/commits/master)
+[![pipeline status](https://gitlab.com/NorwegianLanguageLearning/heimdallr/badges/master/pipeline.svg)](https://github.com/Malborne/ifreet-bot)
 
-Heimdallr is a Discord bot, mainly made for managing the Norwegian Language Learning Discord server.
+Ifreet is a Discord bot, based on Heimdallr bot mainly made for managing the Learn/Memorize Quran Discord server.
 
 ## Planned features
 - [x] Notify chat when new members join the server, and when members leave.
@@ -11,6 +11,6 @@ Heimdallr is a Discord bot, mainly made for managing the Norwegian Language Lear
 - [x] Ban users through a command
 - [x] Kick users through a command
 - [x] Set up an infraction/warning system
-- [ ] Notify the chat about events (e.g. the server's weekly calls)
+- [ ] Notify the chat about events (e.g. the server's weekly lessons)
 - [x] Quote users by message ID using an Embed.
 - [ ] ... (more stuff to come!)

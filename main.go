@@ -8,11 +8,11 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/Malborne/ifreet-bot/tree/master/bot/commands"
 	"github.com/Malborne/ifreet-bot/tree/master/bot/version"
-	"github.com/Malborne/ifreet-bot/tree/master/commands"
 
+	heimdallr "github.com/Malborne/ifreet-bot/tree/master/bot"
 	"github.com/pkg/errors"
-	heimdallr "gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
 
 	"github.com/bwmarrin/discordgo"
 )
