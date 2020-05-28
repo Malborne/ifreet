@@ -1,5 +1,5 @@
 ![Ifreet logo](github.com/Malborne/ifreet-bot/tree/master/Ifreet_avatar.svg)
-# Heimdallr
+# Ifreet
 [![pipeline status](github.com/Malborne/ifreet-bot/tree/master/badges/master/pipeline.svg)](https://github.com/Malborne/ifreet-bot)
 
 Ifreet is a Discord bot, based on Heimdallr bot mainly made for managing the Learn/Memorize Quran Discord server.
