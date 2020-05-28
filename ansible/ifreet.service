@@ -1,0 +1,9 @@
+[Unit]
+Description=Ifreet Discord bot for Learn/Memorize Quran
+
+[Service]
+WorkingDirectory=/home/ifreet/ifreet/{{ ENVIRONMENT }}
+ExecStart=/home/ifreet/ifreet/{{ ENVIRONMENT }}/ifreet
+
+[Install]
+WantedBy=multi-user.target

@@ -1,1 +1,1 @@
-worker: ifreet-bot
+worker: ifreet
