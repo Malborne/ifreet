@@ -4,7 +4,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
-	"gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
+	"/heimdallr/bot"
 )
 
 var setChannelCommand = command{

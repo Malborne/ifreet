@@ -6,7 +6,7 @@ import (
 	"github.com/docopt/docopt-go"
 	"github.com/google/shlex"
 	"github.com/pkg/errors"
-	"gitlab.com/NorwegianLanguageLearning/heimdallr/bot"
+	"/heimdallr/bot"
 	"regexp"
 	"strings"
 	"unicode"
