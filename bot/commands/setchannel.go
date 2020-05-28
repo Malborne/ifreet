@@ -44,8 +44,6 @@ func commandSetChannel(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		heimdallr.Config.WelcomeChannel = channel.ID
 	case "log":
 		heimdallr.Config.LogChannel = channel.ID
-	case "admin":
-		heimdallr.Config.AdminChannel = channel.ID
 	case "adminlog":
 		heimdallr.Config.AdminLogChannel = channel.ID
 	case "bot":

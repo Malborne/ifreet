@@ -1,8 +1,9 @@
 package heimdallr
 
 import (
-	"github.com/pkg/errors"
 	"os"
+
+	"github.com/pkg/errors"
 
 	"github.com/BurntSushi/toml"
 )
