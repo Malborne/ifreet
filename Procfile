@@ -1,1 +1,1 @@
-worker: heimdallr
+worker:  heimdallr-bot
