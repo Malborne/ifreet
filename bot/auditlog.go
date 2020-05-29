@@ -60,7 +60,7 @@ func MemberBanAddHandler(s *discordgo.Session, e *discordgo.GuildBanAdd) {
 	}
 
 	_, err = s.ChannelMessageSend(Config.AdminLogChannel, "**Here is a report you can submit to other servers who should be wary of this user:**\n\n"+
-		"```\nUser banned from Norwegian Language Learning:"+
+		"```\nUser banned from Quran Learning Center:"+
 		"\n**·User:** "+bannedUser.Username+"#"+bannedUser.Discriminator+
 		"\n**·User ID:** "+bannedUser.ID+
 		"\n**Reason: **\n"+guildBan.Reason+"\n```"+

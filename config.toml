@@ -13,11 +13,11 @@ command_prefix = ";"
 
 [[role]]
   id = "715824164451254332"
-  name = "tajweed_lesson_s1"
+  name = "tajweedlesson1"
   description = "A self-assignable role for those who which to be reminded of the tajweed lesson session 1"
 
   [[role]]
   id = "715824246357491743"
-  name = "tajweed_lesson_s2"
+  name = "tajweedlesson2"
   description = "A self-assignable role for those who which to be reminded of the tajweed lesson session 2"
 

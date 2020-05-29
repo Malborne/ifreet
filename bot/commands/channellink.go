@@ -19,8 +19,8 @@ var channelLinkCommand = command{
 	},
 	[]string{
 		"441787683208036352",
-		"#bot-chat",
-		"tekst-for-søndagschatten",
+		"#bot-commands",
+		"text-for-tajweed-lesson",
 	},
 }
 

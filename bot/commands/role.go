@@ -21,10 +21,8 @@ var roleCommand = command{
 	},
 	[]string{
 		"list",
-		"get sundaylesson",
-		"get sundaylesson chitchat",
-		"remove sundaylesson",
-		"remove sundaylesson chitchat",
+		"get tajweedlesson1",
+		"remove tajweedlesson1",
 	},
 }
 

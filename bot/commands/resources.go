@@ -21,10 +21,10 @@ var searchResourcesCommand = command{
 		"add <name> <content> [<tags>]...",
 	},
 	[]string{
-		"search verbs",
+		"search ghunna",
 		"get 1",
-		"add Ordbok https://ordbok.uib.no/",
-		"add Ordbok https://ordbok.uib.no/ dictionary bokmål nynorsk",
+		"add Tajweed https://tajweed.me/",
+		"add Tajweed https://tajweed.me/index-of-posted-tajweed-rules/ rules index",
 	},
 }
 
