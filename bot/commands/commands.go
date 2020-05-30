@@ -129,6 +129,7 @@ func init() {
 		welcomeMessageCommand,
 		approvalMessageCommand,
 		pruneCommand,
+		DMUnapprovedCommand,
 	}
 
 	ownerCommands = []command{

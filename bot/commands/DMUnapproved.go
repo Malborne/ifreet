@@ -9,9 +9,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-var pingUnapprovedCommand = command{
+var DMUnapprovedCommand = command{
 	"dmunapproved",
-	commandPrune,
+	commandDMUnapproved,
 	"DM unapproved users to let them know that they will lose acess to the server and should contact on of the mods and direct them to the #approval and verification channel.",
 	[]string{
 		"",
