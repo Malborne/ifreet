@@ -130,6 +130,7 @@ func init() {
 		approvalMessageCommand,
 		pruneCommand,
 		DMUnapprovedCommand,
+		DMUnverifiedCommand,
 	}
 
 	ownerCommands = []command{

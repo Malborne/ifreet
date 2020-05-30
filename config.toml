@@ -2,13 +2,15 @@ token = "NzE1MTMwODExMTU4MTAyMDQ4.XtDwFQ.aj8aoQ5pDAhOuoX2BDg1FiQrCtc"
 welcome_channel = "715063178031005767"
 log_channel = "715413775750004766"
 admin_channel = "715461170584092712"
+approval_and_verification = "716188946446417931"
 admin_log_channel = "715183992688607292"
 admin_role_id = "715063252304003082"
 supermod_role_id = "715188166293979196"
 mod_role_id = "715188120626135301"
 user_role_id = "715063417852919868"
+verified_role_id = "715088722575491142"
 welcome_message = "Welcome to the server, %s! \n In order to have full access to the server, you must Read the Rules in the #rules channel and tell us about yourself by answering the following questions:\n 1. \n 2. \n 3. \n After that a mod will give you approval. If you need any help, feel free to ask here."
-approval_message = "You now have full access to the server %s!\nOn Saturdays, we have a weekly Tajweed lesson at 6 PM AST (UTC+3) and  8 PM PST (UTC-5). You can be pinged for the lesson by typing `;role get tajweedlesson1`  or ;role get `tajweedlesson2` in #bot-commands \nIf you'd like to see a list of the other roles available, type `;role list.`"
+approval_message = "You now have full access to the server %s!\nOn Saturdays, we have a weekly Tajweed lesson at 6 PM AST (UTC+3) and  8 PM PST (UTC-5). You can be pinged for the lesson by typing `;role get tajweedlesson1`  for the first sessions or `;role get tajweedlesson2` for the second session in #bot-commands \nIf you'd like to see a list of the other roles available, type `;role list.`"
 
 command_prefix = ";"
 
@@ -16,10 +18,10 @@ command_prefix = ";"
 [[role]]
   id = "715824164451254332"
   name = "tajweedlesson1"
-  description = "A self-assignable role for those who which to be reminded of the tajweed lesson session 1"
+  description = "A self-assignable role for those who wish to be reminded of the tajweed lesson session 1"
 
   [[role]]
   id = "715824246357491743"
   name = "tajweedlesson2"
-  description = "A self-assignable role for those who which to be reminded of the tajweed lesson session 2"
+  description = "A self-assignable role for those who wish to be reminded of the tajweed lesson session 2"
 
