@@ -40,7 +40,7 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 			if err != nil {
 				return errors.Wrap(err, "sending message failed")
 			}
-			if err == nil {
+			else {
 				count = count + 1
 			}
 		}
