@@ -112,3 +112,12 @@ func isApproved(m *discordgo.Member) bool {
 	}
 	return false
 }
+
+func isVerified(m *discordgo.Member) bool {
+	for _, role := range m.Roles {
+		if role == heimdallr.Config.VerifiedRole {
+			return true
+		}
+	}
+	return false
+}
