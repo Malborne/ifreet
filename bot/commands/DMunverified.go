@@ -36,7 +36,7 @@ func commandDMUnverified(s *discordgo.Session, m *discordgo.MessageCreate, args 
 				return errors.Wrap(err, "creating private channel failed")
 			}
 			_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-				"You are an Unverified member of Learn/Memorize Quran Server and you are about to lose access to the gender specific channels on the server. If you still wish to retain access to those channels, please contact one of the moderators in the #approval-and-verification channel below to be approved.\n  https://discord.gg/tY2eMR \n\nYou cannot reply to this message."))
+				"You are an Unverified member of Learn/Memorize Quran Server and you are about to lose access to the gender specific channels on the server. If you still wish to retain access to those channels, please contact one of the moderators in the #approval-and-verification channel below to be verified.\n  https://discord.gg/tY2eMR \n\nYou cannot reply to this message."))
 			if err != nil {
 				return errors.Wrap(err, "sending message failed")
 			} else {
