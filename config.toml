@@ -8,6 +8,8 @@ supermod_role_id = "715188166293979196"
 mod_role_id = "715188120626135301"
 user_role_id = "715063417852919868"
 welcome_message = "Welcome to the server, %s! \n In order to have full access to the server, you must Read the Rules in the #rules channel and tell us about yourself by answering the following questions:\n 1. \n 2. \n 3. \n After that a mod will give you approval. If you need any help, feel free to ask here."
+approval_message = "You now have full access to the server %s!\nOn Saturdays, we have a weekly Tajweed lesson at 6 PM AST (UTC+3) and  8 PM PST (UTC-5). You can be pinged for the lesson by typing `;role get tajweedlesson1`  or ;role get `tajweedlesson2` in #bot-commands \nIf you'd like to see a list of the other roles available, type `;role list.`"
+
 command_prefix = ";"
 
 
