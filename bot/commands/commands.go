@@ -109,11 +109,11 @@ func init() {
 		helpCommand,
 		quoteCommand,
 		tajweedLessonCommand,
-		// isItSundayCommand,
+		// isItSundayCommand,s
 		roleCommand,
 		versionCommand,
 		lessonsCommand,
-		searchResourcesCommand,
+		// searchResourcesCommand,
 		channelLinkCommand,
 	}
 
@@ -138,7 +138,7 @@ func init() {
 
 	requireRoleForCommands("moderator", moderatorCommands)
 	requireRoleForCommands("admin", adminCommands)
-	requireRoleForCommands("owner", ownerCommands)
+	requireRoleForCommands("admin", ownerCommands)
 
 	var commands []command
 	commands = append(commands, userCommands...)
