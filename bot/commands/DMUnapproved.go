@@ -27,9 +27,10 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 	if err != nil {
 		return err
 	}
+	var count int = 0
 	for _, member := range guild.Members {
 
-		if !isApproved(member) {
+		if !isApproved(member) && member.User.ID != s.State.User.ID {
 			userChannel, err := s.UserChannelCreate(member.User.ID)
 			if err != nil {
 				return errors.Wrap(err, "creating private channel failed")
@@ -39,7 +40,21 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 			if err != nil {
 				return errors.Wrap(err, "sending message failed")
 			}
+			if err == nil {
+				count = count + 1
+			}
 		}
 	}
-	return nil
+
+	if count == 0 {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No unapproved users found."))
+		return errors.Wrap(err, "sending message failed")
+	}
+	else {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent messaged to %s users",count))
+		return errors.Wrap(err, "sending message failed")
+	}
+
+	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
+	return errors.Wrap(err, "adding reaction failed")
 }
