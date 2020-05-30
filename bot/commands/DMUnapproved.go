@@ -50,10 +50,10 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No unapproved users found."))
 		return errors.Wrap(err, "sending message failed")
 	}
-	else {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent messaged to %s users",count))
-		return errors.Wrap(err, "sending message failed")
-	}
+	// else {
+	// 	_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent messaged to %s users",count))
+	// 	return errors.Wrap(err, "sending message failed")
+	// }
 
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 	return errors.Wrap(err, "adding reaction failed")
