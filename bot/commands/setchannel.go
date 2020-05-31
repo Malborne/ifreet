@@ -48,6 +48,8 @@ func commandSetChannel(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		heimdallr.Config.AdminLogChannel = channel.ID
 	case "bot":
 		heimdallr.Config.BotChannel = channel.ID
+	case "admin":
+		heimdallr.Config.AdminChannel = channel.ID
 	default:
 		return nil
 	}
