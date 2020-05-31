@@ -22,7 +22,7 @@ var tajweedLessonCommand = command{
 func tajweedlesson(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "Tajweed Lesson",
-		Description: "This server has a weekly Tajweed Lesson on Saturdays, where we explain the rules of Tajweed. There are two sessions to accomodate different time zones. The first session is at 15:00 UTC/GMT and the second session is 1:00 UTC/GMT.",
+		Description: "This server has a weekly Tajweed Lesson on Saturdays, where we explain the rules of Tajweed. There are two sessions to accomodate different time zones. The first session is at 16:00 UTC/GMT and the second session is 3:00 UTC/GMT.",
 		Color:       0x00AA00,
 	})
 	return errors.Wrap(err, "sending embed failed")
