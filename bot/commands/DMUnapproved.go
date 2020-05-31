@@ -30,7 +30,7 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 	var count int = 0
 	for _, member := range guild.Members {
 
-		if !isApproved(member) && member.User.ID != s.State.User.ID && member.User.ID != 680170745627934742 && member.User.ID != 714905000668692541 { //IDs for Admin and supermod
+		if !isApproved(member) && member.User.ID != s.State.User.ID && member.User.ID != "680170745627934742" && member.User.ID != "714905000668692541" { //IDs for Admin and supermod
 			userChannel, err := s.UserChannelCreate(member.User.ID)
 			if err != nil {
 				return errors.Wrap(err, "creating private channel failed")
