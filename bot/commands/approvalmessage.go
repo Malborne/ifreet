@@ -53,7 +53,7 @@ func showApprovalMessage(s *discordgo.Session, m *discordgo.MessageCreate) error
 		_, err = s.ChannelMessageSend(m.ChannelID, "No approval message set.")
 
 	} else {
-		_, err = s.ChannelMessageSend(m.ChannelID, heimdallr.Config.ApprovalMessage)
+		_, err = s.ChannelMessageSend(m.ChannelID,  fmt.Sprintf(heimdallr.Config.ApprovalMessage, <@Username>, heimdallr.Config.BotChannel) )
 	}
 	return errors.Wrap(err, "sending message failed")
 }

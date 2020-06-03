@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"strings"
 
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
@@ -51,7 +52,7 @@ func showWelcomeMessage(s *discordgo.Session, m *discordgo.MessageCreate) error 
 	if welcomeMessage == "" {
 		_, err = s.ChannelMessageSend(m.ChannelID, "No welcome message set.")
 	} else {
-		_, err = s.ChannelMessageSend(m.ChannelID, heimdallr.Config.WelcomeMessage)
+		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf(heimdallr.Config.WelcomeMessage, g.User.Mention(), Config.RulesChannel))
 	}
 	return errors.Wrap(err, "sending message failed")
 }
