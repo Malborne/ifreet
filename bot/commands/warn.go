@@ -30,6 +30,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	var user *discordgo.User
 
 	guildID := m.GuildID
+
 	guild, err := heimdallr.GetGuild(s, guildID)
 	if err != nil {
 		return err
@@ -43,7 +44,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 			return errors.Wrap(err, "sending message failed")
 		}
 	} else {
-		user = member.User
+		user = infractor.User
 	}
 	if userID == s.State.User.ID {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("I'm not going to warn myself, silly. 😉"))
