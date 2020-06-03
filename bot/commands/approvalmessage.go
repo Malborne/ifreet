@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"strings"
 
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
@@ -53,7 +54,7 @@ func showApprovalMessage(s *discordgo.Session, m *discordgo.MessageCreate) error
 		_, err = s.ChannelMessageSend(m.ChannelID, "No approval message set.")
 
 	} else {
-		_, err = s.ChannelMessageSend(m.ChannelID,  fmt.Sprintf(heimdallr.Config.ApprovalMessage, <@Username>, heimdallr.Config.BotChannel) )
+		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf(heimdallr.Config.ApprovalMessage, "<@Username>", heimdallr.Config.BotChannel))
 	}
 	return errors.Wrap(err, "sending message failed")
 }
