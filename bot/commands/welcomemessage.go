@@ -52,7 +52,7 @@ func showWelcomeMessage(s *discordgo.Session, m *discordgo.MessageCreate) error 
 	if welcomeMessage == "" {
 		_, err = s.ChannelMessageSend(m.ChannelID, "No welcome message set.")
 	} else {
-		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf(heimdallr.Config.WelcomeMessage, "<@Username>", Config.RulesChannel))
+		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf(heimdallr.Config.WelcomeMessage, "<@Username>", heimdallr.Config.RulesChannel))
 	}
 	return errors.Wrap(err, "sending message failed")
 }
