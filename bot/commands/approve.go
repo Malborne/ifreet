@@ -15,7 +15,7 @@ var approveCommand = command{
 	commandApprove,
 	"Gives the user full access to the server.",
 	[]string{
-		"<user>",
+		"<Member>",
 	},
 	[]string{
 		"@username",
@@ -93,6 +93,22 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	if err != nil {
 		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
 		return
+	}
+
+	if isApproved(member) && strings.Contains( strings.ToLower(message.Content), "male") // true 
+	{
+		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.MaleRole)
+		if err != nil {
+			heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
+			return
+		}
+	} else if isApproved(member) && strings.Contains( strings.ToLower(message.Content), "female")
+	{
+		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.FemaleRole)
+		if err != nil {
+			heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
+			return
+		}
 	}
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {

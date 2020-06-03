@@ -35,10 +35,19 @@ func commandKickUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return errors.Wrap(err, "sending message failed")
 	}
 	user := member.User
+	if userID == user.ID {
+		_, err := s.ChannelMessageSend(m.ChannelID, "I'm not going to let you kick yourself, silly. 😉")
+		return errors.Wrap(err, "sending message failed")
+		if user.ID == 550664345302859786 { // Wasan's ID
+			_, err := s.ChannelMessageSend(m.ChannelID, "I'm looking at you, وسن. I had to make this because of you 😒")
+		}
+
+	}
 	if userID == s.State.User.ID {
 		_, err := s.ChannelMessageSend(m.ChannelID, "I'm not going to kick myself, silly. 😉")
 		return errors.Wrap(err, "sending message failed")
 	}
+
 	err = s.GuildMemberDeleteWithReason(guildID, userID, reason)
 	if err != nil {
 		return errors.Wrap(err, "kick failed")

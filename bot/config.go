@@ -24,6 +24,8 @@ type BotConfig struct {
 	SuperModRole string `toml:"supermod_role_id"`
 	ModRole      string `toml:"mod_role_id"`
 	UserRole     string `toml:"user_role_id"`
+	MaleRole     string `toml:"male_role_id"`
+	FemaleRole   string `toml:"female_role_id"`
 	VerifiedRole string `toml:"verified_role_id"`
 
 	Roles []Role `toml:"role"`
