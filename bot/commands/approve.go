@@ -96,7 +96,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	if isApproved(member) && strings.Contains(strings.ToLower(message.Content), "male") { // true
+	if isApproved(member) && !strings.Contains(strings.ToLower(message.Content), "female") && strings.Contains(strings.ToLower(message.Content), "male") {
 		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.MaleRole)
 		if err != nil {
 			heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
