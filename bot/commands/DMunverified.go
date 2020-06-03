@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 
+	// heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
