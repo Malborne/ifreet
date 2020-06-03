@@ -112,7 +112,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
 		if strings.Count(approvalMessage, "%s") > 0 {
-			approvalMessage = fmt.Sprintf(approvalMessage, message.Author.Mention())
+			approvalMessage = fmt.Sprintf(approvalMessage, message.Author.Mention(), heimdallr.Config.BotChannel)
 		}
 		_, err := s.ChannelMessageSend(m.ChannelID, approvalMessage)
 		heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
