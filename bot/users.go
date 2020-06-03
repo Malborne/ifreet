@@ -2,8 +2,10 @@ package heimdallr
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
 	"strings"
+
+	"github.com/pkg/errors"
+	"gitlab.com/NorwegianLanguageLearning/heimdallr/heimdallr"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -12,7 +14,7 @@ import (
 func UserJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	welcomeMessage := Config.WelcomeMessage
 	if strings.Count(welcomeMessage, "%s") > 0 {
-		welcomeMessage = fmt.Sprintf(welcomeMessage, g.User.Mention())
+		welcomeMessage = fmt.Sprintf(welcomeMessage, g.User.Mention(), heimdallr.Config.RulesChannel)
 	}
 	_, err := s.ChannelMessageSend(Config.WelcomeChannel, welcomeMessage)
 	LogIfError(s, errors.Wrap(err, "sending message failed"))

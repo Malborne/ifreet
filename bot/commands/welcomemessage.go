@@ -31,8 +31,8 @@ func commandWelcomeMessage(s *discordgo.Session, m *discordgo.MessageCreate, arg
 }
 
 func setWelcomeMessage(s *discordgo.Session, m *discordgo.MessageCreate, welcomeMessage string) error {
-	if strings.Count(welcomeMessage, "%s") > 1 {
-		_, err := s.ChannelMessageSend(m.ChannelID, "The welcome message can only have a single placeholder for the user mention.")
+	if strings.Count(welcomeMessage, "%s") > 2 {
+		_, err := s.ChannelMessageSend(m.ChannelID, "The welcome message can only have two placeholders, one for the user mention and one for the rules channel.")
 		return errors.Wrap(err, "sending message failed")
 	}
 

@@ -44,7 +44,7 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
 		if strings.Count(approvalMessage, "%s") > 0 {
-			approvalMessage = fmt.Sprintf(approvalMessage, user.Mention())
+			approvalMessage = fmt.Sprintf(approvalMessage, user.Mention(), heimdallr.Config.BotChannel)
 		}
 		_, err := s.ChannelMessageSend(m.ChannelID, approvalMessage)
 		return errors.Wrap(err, "sending message failed")

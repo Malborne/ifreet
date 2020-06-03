@@ -31,8 +31,8 @@ func commandApprovalMessage(s *discordgo.Session, m *discordgo.MessageCreate, ar
 }
 
 func setApprovalMessage(s *discordgo.Session, m *discordgo.MessageCreate, approvalMessage string) error {
-	if strings.Count(approvalMessage, "%s") > 1 {
-		_, err := s.ChannelMessageSend(m.ChannelID, "The approval message can only have a single placeholder for the user mention.")
+	if strings.Count(approvalMessage, "%s") > 2 {
+		_, err := s.ChannelMessageSend(m.ChannelID, "The approval message can only have two placeholders for the user mention and for #bot-commands.")
 		return err
 	}
 
