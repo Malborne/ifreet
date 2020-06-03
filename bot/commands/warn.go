@@ -27,6 +27,7 @@ var warnCommand = command{
 func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	userID := getIDFromMaybeMention(args["<user>"].(string))
 	reason, _ := args.String("<reason>")
+	var user *discordgo.User
 
 	guildID := m.GuildID
 	guild, err := heimdallr.GetGuild(s, guildID)
@@ -36,8 +37,13 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 
 	infractor, err := heimdallr.GetMember(s, guildID, userID)
 	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No member was found with ID %s.", userID))
-		return errors.Wrap(err, "sending message failed")
+		user, err = s.User(userID)
+		if err != nil {
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No user was found with ID %s.", userID))
+			return errors.Wrap(err, "sending message failed")
+		}
+	} else {
+		user = member.User
 	}
 	if userID == s.State.User.ID {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("I'm not going to warn myself, silly. 😉"))
