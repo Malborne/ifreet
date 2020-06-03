@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/pkg/errors"
 
 	"github.com/bwmarrin/discordgo"
@@ -14,7 +13,7 @@ import (
 func UserJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	welcomeMessage := Config.WelcomeMessage
 	if strings.Count(welcomeMessage, "%s") > 0 {
-		welcomeMessage = fmt.Sprintf(welcomeMessage, g.User.Mention(), heimdallr.Config.RulesChannel)
+		welcomeMessage = fmt.Sprintf(welcomeMessage, g.User.Mention(), Config.RulesChannel)
 	}
 	_, err := s.ChannelMessageSend(Config.WelcomeChannel, welcomeMessage)
 	LogIfError(s, errors.Wrap(err, "sending message failed"))
