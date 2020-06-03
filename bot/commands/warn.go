@@ -77,7 +77,6 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	user, err := s.User(userID)
 	if err != nil {
 		return errors.Wrap(err, "getting user failed")
 	}
