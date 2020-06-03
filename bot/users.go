@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/pkg/errors"
-	"gitlab.com/NorwegianLanguageLearning/heimdallr/heimdallr"
 
 	"github.com/bwmarrin/discordgo"
 )

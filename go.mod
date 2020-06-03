@@ -10,7 +10,6 @@ require (
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	github.com/pkg/errors v0.9.1
-	gitlab.com/NorwegianLanguageLearning/heimdallr v0.1.2
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
 	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
 )
