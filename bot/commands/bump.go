@@ -20,6 +20,6 @@ var bumpCommand = command{
 
 //commandLessons gives a link to the list of lessons
 func commandBump(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	_, err := s.ChannelMessageSend(m.ChannelID, "!d bump")
+	_, err := s.ChannelMessageSend(m.ChannelID, "!d help")
 	return errors.Wrap(err, "sending message failed")
 }
