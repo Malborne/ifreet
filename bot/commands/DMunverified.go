@@ -12,7 +12,7 @@ import (
 var DMUnverifiedCommand = command{
 	"dmunverified",
 	commandDMUnverified,
-	"DM Unverified users to let them know that they will lose acess to the gender specific channels and should contact on of the mods and directs them to the #approval and verification channel.",
+	"DM Unverified users to let them know that they will lose acess to the gender specific channels and should contact on of the mods and directs them to the #welcome.",
 	[]string{
 		"",
 	},
@@ -36,7 +36,7 @@ func commandDMUnverified(s *discordgo.Session, m *discordgo.MessageCreate, args 
 				return errors.Wrap(err, "creating private channel failed")
 			}
 			_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-				"You are an Unverified member of Learn/Memorize Quran Server and you are about to lose access to the gender specific channels on the server. If you still wish to retain access to those channels, please contact one of the moderators in the #approval-and-verification channel below to be verified.\n  https://discord.gg/R6jKWT \n\nYou cannot reply to this message."))
+				"You are an Unverified member of Learn/Memorize Quran Server and you are about to lose access to the gender specific channels on the server. If you still wish to retain access to those channels, please contact one of the moderators in the %s below to be verified.\n  https://discord.gg/R6jKWT \n\nYou cannot reply to this message.", heimdallr.Config.WelcomeChannel))
 			if err != nil {
 				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.User.Mention))
 				// return errors.Wrap(err, "sending message failed")
