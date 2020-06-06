@@ -105,7 +105,6 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	})
 
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
-	return errors.Wrap(err, "adding reaction failed")
 
 	userChannel, err := s.UserChannelCreate(userID)
 	if err != nil {
@@ -122,7 +121,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return nil
 		// return errors.Wrap(err, "sending message failed")
 	}
-	if err != nil {
-		return errors.Wrap(err, "sending embed failed")
-	}
+
+	return errors.Wrap(err, "adding reaction failed")
+
 }
