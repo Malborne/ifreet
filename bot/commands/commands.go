@@ -216,15 +216,16 @@ func getHighestRole(m *discordgo.Member) int {
 		case heimdallr.Config.ModRole:
 			if highestRole > 3 {
 				highestRole = 3
-			}		
+			}
 		case heimdallr.Config.SuperModRole:
 			if highestRole > 2 {
 				highestRole = 2
-				}		
+			}
 		case heimdallr.Config.AdminRole:
 			if highestRole > 1 {
 				highestRole = 1
-					}		default:
+			}
+		default:
 			highestRole = 5
 		}
 	}
