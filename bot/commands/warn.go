@@ -82,22 +82,6 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return err
 	}
 
-	userChannel, err := s.UserChannelCreate(userID)
-	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", infractor.Mention()))
-		return nil
-		// return errors.Wrap(err, "creating private channel failed")
-	}
-	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-		"You have received a warning in %s for the following reason: %s\n\nYou cannot reply to this message.",
-		guild.Name, reason,
-	))
-	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", infractor.Mention()))
-		return nil
-		// return errors.Wrap(err, "sending message failed")
-	}
-
 	if err != nil {
 		return errors.Wrap(err, "getting user failed")
 	}
@@ -125,4 +109,20 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 	return errors.Wrap(err, "adding reaction failed")
+
+	userChannel, err := s.UserChannelCreate(userID)
+	if err != nil {
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", infractor.Mention()))
+		return nil
+		// return errors.Wrap(err, "creating private channel failed")
+	}
+	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
+		"You have received a warning in %s for the following reason: %s\n\nYou cannot reply to this message.",
+		guild.Name, reason,
+	))
+	if err != nil {
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", infractor.Mention()))
+		return nil
+		// return errors.Wrap(err, "sending message failed")
+	}
 }
