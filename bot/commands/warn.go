@@ -73,7 +73,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	}
 
 	if isOneLowerThanTwo(author, infractor) {
-		_, _ = s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s the infractor has rank of: %s and %s the author has rank of: %s", infractor.Mention(), getHighestRole(infractor), author.Mention(), getHighestRole(author)))
+		// _, _ = s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s the infractor has rank of: %s and %s the author has rank of: %s", infractor.Mention(), getHighestRole(infractor), author.Mention(), getHighestRole(author)))
 		_, err := s.ChannelMessageSend(m.ChannelID, "You cannot warn a user that has the same or a role higher than you")
 		return errors.Wrap(err, "sending message failed")
 	}
