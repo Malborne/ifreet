@@ -59,7 +59,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	if heimdallr.IsAdminOrHigher(author, guild) {
+	if heimdallr.IsAdminOrHigher(infractor, guild) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot warn the admin. 👎"))
 		return errors.Wrap(err, "sending message failed")
 	}
