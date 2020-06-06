@@ -29,6 +29,11 @@ func commandKickUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	reason, _ := args.String("<reason>")
 
 	guildID := m.GuildID
+	guild, err := heimdallr.GetGuild(s, guildID)
+	if err != nil {
+		return err
+	}
+
 	member, err := heimdallr.GetMember(s, guildID, userID)
 	if err != nil {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No member was found with ID %s.", userID))
