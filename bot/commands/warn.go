@@ -51,10 +51,10 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	if m.Message.Member.User.ID == user.ID && userID == "550664345302859786" { // Wasan's ID
+	if m.Author.ID == user.ID && userID == "550664345302859786" { // Wasan's ID
 		_, err := s.ChannelMessageSend(m.ChannelID, "I'm not going to let you warn yourself, silly. 😉 I'm looking at you, وسن. I had to make this because of you 😒")
 		return errors.Wrap(err, "sending message failed")
-	} else if m.Message.Member.User.ID == user.ID {
+	} else if m.Author.ID == user.ID {
 		_, err := s.ChannelMessageSend(m.ChannelID, "I'm not going to let you warn yourself, silly. 😉")
 		return errors.Wrap(err, "sending message failed")
 	}
