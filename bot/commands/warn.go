@@ -60,7 +60,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	}
 
 	if isOneLowerThanTwo(infractor, m.Member) {
-		_, err := s.ChannelMessageSend(m.ChannelID, "You cannot warn a user that has a role higher than you")
+		_, err := s.ChannelMessageSend(m.ChannelID, "You cannot warn a user that has the same or a role higher than you")
 		return errors.Wrap(err, "sending message failed")
 	}
 
