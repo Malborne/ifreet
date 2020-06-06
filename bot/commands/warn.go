@@ -91,7 +91,8 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		guild.Name, reason,
 	))
 	if err != nil {
-		return errors.Wrap(err, "sending message failed")
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", infractor.Mention))
+		// return errors.Wrap(err, "sending message failed")
 	}
 
 	if err != nil {
