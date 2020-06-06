@@ -38,7 +38,7 @@ func commandDMUnverified(s *discordgo.Session, m *discordgo.MessageCreate, args 
 			_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
 				"You are an Unverified member of Learn/Memorize Quran Server and you are about to lose access to the gender specific channels on the server. If you still wish to retain access to those channels, please contact one of the moderators in the %s below to be verified.\n  https://discord.gg/R6jKWT \n\nYou cannot reply to this message.", heimdallr.Config.WelcomeChannel))
 			if err != nil {
-				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.User.Mention))
+				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.User.Mention()))
 				// return errors.Wrap(err, "sending message failed")
 			} else {
 				count = count + 1
