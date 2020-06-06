@@ -219,7 +219,7 @@ func getHighestRole(m *discordgo.Member) int {
 		case "owner":
 			highestRole = 1
 		default:
-			highestRole = 5
+			highestRole = 0
 		}
 	}
 	return highestRole
