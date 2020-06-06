@@ -85,6 +85,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	userChannel, err := s.UserChannelCreate(userID)
 	if err != nil {
 		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", infractor.Mention()))
+		return
 		// return errors.Wrap(err, "creating private channel failed")
 	}
 	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
@@ -93,6 +94,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	))
 	if err != nil {
 		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", infractor.Mention()))
+		return
 		// return errors.Wrap(err, "sending message failed")
 	}
 
