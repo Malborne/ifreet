@@ -225,8 +225,6 @@ func getHighestRole(m *discordgo.Member) int {
 			if highestRole > 1 {
 				highestRole = 1
 			}
-		default:
-			highestRole = 5
 		}
 	}
 	return highestRole
