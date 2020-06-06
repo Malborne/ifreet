@@ -122,6 +122,9 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		// return errors.Wrap(err, "sending message failed")
 	}
 
+	_, err := s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s the infractor has rank of: %s and %s the author has rank of: %s", infractor.Mention(), getHighestRole(infractor), author.Mention(), getHighestRole(author)))
+	return errors.Wrap(err, "sending message failed")
+
 	return errors.Wrap(err, "adding reaction failed")
 
 }
