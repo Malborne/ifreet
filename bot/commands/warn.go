@@ -103,9 +103,6 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		},
 		Color: 0xEE0000,
 	})
-	if err != nil {
-		return errors.Wrap(err, "sending embed failed")
-	}
 
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 	return errors.Wrap(err, "adding reaction failed")
@@ -124,5 +121,8 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but the warning was successfully registered", infractor.Mention()))
 		return nil
 		// return errors.Wrap(err, "sending message failed")
+	}
+	if err != nil {
+		return errors.Wrap(err, "sending embed failed")
 	}
 }
