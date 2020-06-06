@@ -208,6 +208,7 @@ func isOneLowerThanTwo(member1 *discordgo.Member, member2 *discordgo.Member) boo
 func getHighestRole(m *discordgo.Member) int {
 	var highestRole int = 5
 	for _, role := range m.Roles {
+		fmt.Sprintf(strings.ToLower(role))
 		switch strings.ToLower(role) {
 		case "moderator":
 			highestRole = 4
