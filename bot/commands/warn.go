@@ -37,7 +37,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	}
 
 	infractor, err := heimdallr.GetMember(s, guildID, userID)
-	
+
 	if err != nil {
 		user, err = s.User(userID)
 		if err != nil {
@@ -49,11 +49,11 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	}
 
 	author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
-	if err !=nil {
+	if err != nil {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author was not found.", userID))
-			return errors.Wrap(err, "sending message failed")
-		}
+		return errors.Wrap(err, "sending message failed")
 	}
+
 	if userID == s.State.User.ID {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("I'm not going to warn myself, silly. 😉"))
 		return errors.Wrap(err, "sending message failed")
