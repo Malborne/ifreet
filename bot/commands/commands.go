@@ -201,12 +201,13 @@ func getPrivilegeChecker(role string) func(*discordgo.Member, *discordgo.Guild) 
 func isOneLowerThanTwo(member1 string, member2 string) bool {
 	if getHighestRole(member1) < getHighestRole(member2) {
 		return true
-	} else return false
+	} else {
+		return false
+	}
 }
 
-
 func getHighestRole(m *discordgo.Member) int {
-	highestRole int = 5
+	var highestRole int = 5
 	for _, role := range m.Roles {
 		switch role {
 		case "moderator":
