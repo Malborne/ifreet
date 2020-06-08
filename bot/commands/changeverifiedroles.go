@@ -22,7 +22,7 @@ var ChangeVerifiedRolesCommand = command{
 }
 
 //Switches everyone from Verified roles to Verified Male or Verified Female, depending on their gender.
-func commandChangeVerifiedRoles(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
+func commandChangeVerifiedRoles(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) {
 	guild, err := heimdallr.GetGuild(s, m.GuildID)
 	if err != nil {
 		return err
