@@ -131,6 +131,7 @@ func init() {
 		pruneCommand,
 		DMUnapprovedCommand,
 		DMUnverifiedCommand,
+		ChangeVerifiedRolesCommand,
 	}
 
 	ownerCommands = []command{

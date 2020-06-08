@@ -21,13 +21,15 @@ type BotConfig struct {
 	BotChannel      string `toml:"bot_channel"`
 	RulesChannel    string `toml:"rules_channel"`
 
-	AdminRole    string `toml:"admin_role_id"`
-	SuperModRole string `toml:"supermod_role_id"`
-	ModRole      string `toml:"mod_role_id"`
-	UserRole     string `toml:"user_role_id"`
-	MaleRole     string `toml:"male_role_id"`
-	FemaleRole   string `toml:"female_role_id"`
-	VerifiedRole string `toml:"verified_role_id"`
+	AdminRole          string `toml:"admin_role_id"`
+	SuperModRole       string `toml:"supermod_role_id"`
+	ModRole            string `toml:"mod_role_id"`
+	UserRole           string `toml:"user_role_id"`
+	MaleRole           string `toml:"male_role_id"`
+	FemaleRole         string `toml:"female_role_id"`
+	VerifiedRole       string `toml:"verified_role_id"`
+	VerifiedMaleRole   string `toml:"verified_male_role_id"`
+	VerifiedFemaleRole string `toml:"verified_female_role_id"`
 
 	Roles []Role `toml:"role"`
 

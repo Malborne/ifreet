@@ -12,6 +12,8 @@ mod_role_id = "700866384044752936"
 user_role_id = "680170954432839798"
 male_role_id = "680388374124822577"
 female_role_id = "680388518882836509"
+verified_male_role_id = "719618009731170344"
+verified_female_role_id = "719618129319297064"
 
 verified_role_id = "714939884326092813"
 welcome_message = "السلام عليكم ورحمة اللّٰه وبركاته\nMay peace and mercy of Allah be upon you \n\nWelcome %s to the Quran Learning Center, a server dedicated to aiding its members in the memorization and recitation of the Quran, including teaching Tajweed. We hope that you benefit from this server and what it has to offer. In order to have full access to the server, You have to read the Rules in <#%s> and we kindly request that you inform us of: \n1. **Your gender (Male or Female)** \n2. **how much of the Quran do you know/memorize?** \n3. **The reason for joining the server plus anything else you would like to share.**\n\nAfter completing these steps, a Moderator will grant you approval inshallah.\nIf you need any help or have any questions, feel free to ask here and tag @ Moderators.\nJazakum Allah Khair\n\nAnd May Allah protect you and guide you to the straight path."
