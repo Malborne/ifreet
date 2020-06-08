@@ -22,7 +22,7 @@ var ChangeVerifiedRolesCommand = command{
 }
 
 //Switches everyone from Verified roles to Verified Male or Verified Female, depending on their gender.
-func commandChangeVerifiedRoles(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) {
+func commandChangeVerifiedRoles(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	guild, err := heimdallr.GetGuild(s, m.GuildID)
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func commandChangeVerifiedRoles(s *discordgo.Session, m *discordgo.MessageCreate
 			err = s.GuildMemberRoleAdd(m.GuildID, member.User.ID, heimdallr.Config.VerifiedMaleRole)
 			if err != nil {
 				heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
-				return
+				return errors.Wrap(err, "Changing roles failed")
 			} else {
 				count = count + 1
 			}
@@ -42,33 +42,33 @@ func commandChangeVerifiedRoles(s *discordgo.Session, m *discordgo.MessageCreate
 			err = s.GuildMemberRoleRemove(m.GuildID, member.User.ID, heimdallr.Config.MaleRole)
 			if err != nil {
 				heimdallr.LogIfError(s, errors.Wrap(err, "removing user role failed"))
-				return
+				return errors.Wrap(err, "Changing roles failed")
 			}
 
 			err = s.GuildMemberRoleRemove(m.GuildID, member.User.ID, heimdallr.Config.VerifiedRole)
 			if err != nil {
 				heimdallr.LogIfError(s, errors.Wrap(err, "removing user role failed"))
-				return
+				return errors.Wrap(err, "Changing roles failed")
 			}
 
 		} else if isVerified(member) && member.User.ID != s.State.User.ID && isFemale(member) {
 			err = s.GuildMemberRoleAdd(m.GuildID, member.User.ID, heimdallr.Config.VerifiedFemaleRole)
 			if err != nil {
 				heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
-				return
+				return errors.Wrap(err, "Changing roles failed")
 			} else {
 				count = count + 1
 			}
 			err = s.GuildMemberRoleRemove(m.GuildID, member.User.ID, heimdallr.Config.FemaleRole)
 			if err != nil {
 				heimdallr.LogIfError(s, errors.Wrap(err, "removing user role failed"))
-				return
+				return errors.Wrap(err, "Changing roles failed")
 			}
 
 			err = s.GuildMemberRoleRemove(m.GuildID, member.User.ID, heimdallr.Config.VerifiedRole)
 			if err != nil {
 				heimdallr.LogIfError(s, errors.Wrap(err, "removing user role failed"))
-				return
+				return errors.Wrap(err, "Changing roles failed")
 			}
 		}
 	}
