@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"strings"
 
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
@@ -91,13 +90,12 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		Color: 0xEE0000,
 	})
 	for _, role := range roles {
-
-		if strings.Contains(role, "%d") {
-			err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
-		}
+		// if role != heimdallr.Config.MutedRole {
+		err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
+		// }
 
 		if err != nil {
-			return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
+			// return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
 		}
 
 	}
