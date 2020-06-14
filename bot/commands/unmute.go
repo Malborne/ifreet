@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"strings"
 
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
@@ -90,7 +91,8 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		Color: 0xEE0000,
 	})
 	for _, role := range roles {
-		if role != "" {
+
+		if strings.Contains(role, "%d") {
 			err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
 		}
 
