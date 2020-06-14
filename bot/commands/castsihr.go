@@ -103,7 +103,7 @@ func commandcastSihr(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 }
 
 func castSihr(member *discordgo.Member) {
-	_, err := member.User.setNickname("Mashoor💨")
-	return errors.Wrap(err, "casting Sihr failed")
+	// _, err := member.User.setNickname("Mashoor💨")
+	// return errors.Wrap(err, "casting Sihr failed")
 
 }
