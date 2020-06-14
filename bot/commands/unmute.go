@@ -75,11 +75,25 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		return errors.Wrap(err, "getting roles from the database failed")
 	}
 
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
+		Title: fmt.Sprintf("%d User roles were successfully taken from the database.", len(roles)),
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:  "**Role #1**",
+				Value: roles[0],
+			},
+			{
+				Name:  "**User ID**",
+				Value: user.ID,
+			},
+		},
+		Color: 0xEE0000,
+	})
 	for _, role := range roles {
 		err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
 
 		if err != nil {
-			return errors.Wrap(err, "removing role failed")
+			return errors.Wrap(err, "adding role failed")
 		}
 
 	}
