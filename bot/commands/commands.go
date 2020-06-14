@@ -123,6 +123,9 @@ func init() {
 		kickCommand,
 		banCommand,
 		approveCommand,
+		verifyCommand,
+		muteCommand,
+		unmuteCommand,
 	}
 
 	adminCommands = []command{
@@ -131,7 +134,7 @@ func init() {
 		pruneCommand,
 		DMUnapprovedCommand,
 		DMUnverifiedCommand,
-		castSihrCommand,
+		// castSihrCommand,
 	}
 
 	ownerCommands = []command{

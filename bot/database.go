@@ -2,8 +2,10 @@ package heimdallr
 
 import (
 	"database/sql"
-	"github.com/pkg/errors"
+	"strings"
 	"time"
+
+	"github.com/pkg/errors"
 
 	"github.com/bwmarrin/discordgo"
 	// Register SQL driver
@@ -43,6 +45,14 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS infractions (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	reason TEXT,
+	time_ DATETIME,
+	user_id TEXT,
+	FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS mutedUsers (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	roleIDs TEXT,
 	time_ DATETIME,
 	user_id TEXT,
 	FOREIGN KEY(user_id) REFERENCES users(id)
@@ -122,6 +132,56 @@ func AddInfraction(user discordgo.User, infraction Infraction) error {
 	_, err = db.Exec("INSERT INTO infractions (reason, time_, user_id) VALUES ($1, $2, $3)",
 		infraction.Reason, infraction.Time, user.ID)
 	return errors.Wrap(err, "inserting infraction failed")
+}
+
+//Adds a muted user to the list of users
+func AddMutedUser(user discordgo.User, time time.Time, roleIDs string) error {
+	err := AddUser(user)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec("INSERT INTO mutedUsers (roleIDs, time_, user_id) VALUES ($1, $2, $3)",
+		roleIDs, time, user.ID)
+	return errors.Wrap(err, "inserting infraction failed")
+}
+
+func GetMutedUserRoles(userID string) ([]string, error) {
+	var roles []string
+	var roleIDs string
+	rows, err := db.Query(
+		"SELECT roleIDs, time_ FROM mutedUsers WHERE user_id=$1 ORDER BY datetime(time_)",
+		userID,
+	)
+	if err != nil {
+		return roles, errors.Wrap(err, "fetching infractions failed")
+	}
+
+	for rows.Next() {
+		var mutedTime time.Time
+		err = rows.Scan(&roleIDs, &mutedTime)
+		if err != nil {
+			return nil, errors.Wrap(err, "parsing infraction row failed")
+		}
+
+		// roleIDs = append(infractions, Infraction{infractionReason, infractionTime})
+	}
+	roles = strings.Split(roleIDs, ",")
+
+	if err = rows.Err(); err != nil {
+		return roles, errors.WithStack(err)
+	}
+
+	return roles, nil
+}
+
+//Removes a user from the database after being unmuted
+func RemoveMutedUser(userID string) error {
+	_, err := db.Query(
+		"DELETE mutedUsers WHERE user_id=$1",
+		userID,
+	)
+	return errors.Wrap(err, "deleting user failed")
 }
 
 //AddInvite adds an invite for a user
