@@ -66,7 +66,7 @@ func commandVerify(s *discordgo.Session, m *discordgo.MessageCreate, args docopt
 	return errors.Wrap(err, "adding reaction failed")
 }
 
-//ReactionApprove approves a person if a mod reacts to their message with a green checkmark in the welcome channel
+//ReactionVerify verifies a person if a mod reacts to their message with a green checkmark in the welcome channel
 func ReactionVerify(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	if m.ChannelID != heimdallr.Config.WelcomeChannel {
 		return

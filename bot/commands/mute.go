@@ -51,7 +51,7 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 
 	author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
 	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author was not found.", userID))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", userID))
 		return errors.Wrap(err, "sending message failed")
 	}
 

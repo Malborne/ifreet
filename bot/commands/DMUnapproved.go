@@ -38,7 +38,7 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 			_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
 				"You are an unapproved member of Learn/Memorize Quran Server and you are about to lose access to most of the server. If you still wish to retain access to the server, please contact one of the moderators in the %s channel below to be approved.\n  https://discord.gg/R6jKWT \n\nYou cannot reply to this message.", heimdallr.Config.WelcomeChannel))
 			if err != nil {
-				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.User.Mention))
+				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.User.Mention()))
 				// return errors.Wrap(err, "sending message failed")
 			} else {
 				count = count + 1
@@ -54,6 +54,4 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
-	return errors.Wrap(err, "adding reaction failed")
 }

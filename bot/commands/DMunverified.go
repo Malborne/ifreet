@@ -50,10 +50,9 @@ func commandDMUnverified(s *discordgo.Session, m *discordgo.MessageCreate, args 
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No Unverified users found."))
 		return errors.Wrap(err, "sending message failed")
 	} else {
+
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent messages to %d user(s)", count))
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
-	return errors.Wrap(err, "adding reaction failed")
 }

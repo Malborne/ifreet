@@ -178,7 +178,7 @@ func GetMutedUserRoles(userID string) ([]string, error) {
 //Removes a user from the database after being unmuted
 func RemoveMutedUser(userID string) error {
 	_, err := db.Query(
-		"DELETE mutedUsers WHERE user_id=$1",
+		"DELETE FROM mutedUsers WHERE user_id=$1",
 		userID,
 	)
 	return errors.Wrap(err, "deleting user failed")
