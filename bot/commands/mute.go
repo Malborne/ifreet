@@ -130,7 +130,7 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		guild.Name,
 	))
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but has been muted", infractor.Mention()))
+		// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but has been muted", infractor.Mention()))
 		return nil
 		// return errors.Wrap(err, "sending message failed")
 	}
