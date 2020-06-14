@@ -90,7 +90,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		Color: 0xEE0000,
 	})
 	for _, role := range roles {
-		if role != " " {
+		if role != "" {
 			err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
 		}
 
