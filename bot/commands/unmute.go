@@ -100,7 +100,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	//Remove the muted role
 	err = s.GuildMemberRoleRemove(guildID, userID, heimdallr.Config.MutedRole)
 	if err != nil {
-		return errors.Wrap(err, "adding user role failed")
+		return errors.Wrap(err, "removing muted role failed")
 	}
 
 	if err != nil {
