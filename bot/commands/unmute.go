@@ -80,7 +80,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Role #1**",
-				Value: roles[0],
+				Value: roles[3],
 			},
 			{
 				Name:  "**User ID**",
@@ -90,10 +90,12 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		Color: 0xEE0000,
 	})
 	for _, role := range roles {
-		err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
+		if role != heimdallr.Config.MutedRole {
+			err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
+		}
 
 		if err != nil {
-			return errors.Wrap(err, "adding role failed")
+			return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
 		}
 
 	}
