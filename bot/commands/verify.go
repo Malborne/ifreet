@@ -62,7 +62,8 @@ func commandVerify(s *discordgo.Session, m *discordgo.MessageCreate, args docopt
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s does NOT have any gender roles.", member.Mention()))
 		return errors.Wrap(err, "sending message failed")
 	}
-	return nil
+	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
+	return errors.Wrap(err, "adding reaction failed")
 }
 
 //ReactionApprove approves a person if a mod reacts to their message with a green checkmark in the welcome channel
