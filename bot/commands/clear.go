@@ -24,7 +24,7 @@ var clearCommand = command{
 
 //commandWarnUser warns another user and gives an infraction.
 func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	// number, _ := args.Int("<number>")
+	number, _ := args.Int("<number>")
 
 	guildID := m.GuildID
 
@@ -39,10 +39,10 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	// prompt, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages? This cannot be undone.", number))
-	// if err != nil {
-	// 	return errors.Wrap(err, "sending message failed")
-	// }
+	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages? This cannot be undone.", number))
+	if err != nil {
+		return errors.Wrap(err, "sending message failed")
+	}
 	// err = s.MessageReactionAdd(m.ChannelID, prompt.ID, "✅")
 	// if err != nil {
 	// 	return errors.Wrap(err, "adding reaction failed")
