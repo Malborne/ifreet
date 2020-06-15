@@ -32,3 +32,47 @@ command_prefix = ";"
   name = "tajweedlesson2"
   description = "A self-assignable role for those who wish to be reminded of the tajweed lesson session 2"
 
+   [[role]]
+  id = "722098745386205274"
+  name = "English"
+  description = "A self-assignable role for those who speak English"
+
+   [[role]]
+  id = "722098817507524678"
+  name = "Arabic"
+  description = "A self-assignable role for those who speak Arabic"
+
+  [[role]]
+  id = "722098858288480267"
+  name = "Japanese"
+  description = "A self-assignable role for those who speak Japanese"
+
+  [[role]]
+  id = "722098887854391306"
+  name = "French"
+  description = "A self-assignable role for those who speak French"
+
+  [[role]]
+  id = "722098945446248490"
+  name = "Chinese"
+  description = "A self-assignable role for those who speak Chinese"
+
+  [[role]]
+  id = "722098919684702218"
+  name = "Urdu"
+  description = "A self-assignable role for those who speak Urdu"
+
+  [[role]]
+  id = "722099260006334526"
+  name = "Spanish"
+  description = "A self-assignable role for those who speak Spanish"
+
+  [[role]]
+  id = "722099379779010610"
+  name = "Norwegian"
+  description = "A self-assignable role for those who speak Norwegian"
+
+  [[role]]
+  id = "722098976882688052"
+  name = "Indonesian"
+  description = "A self-assignable role for those who speak Indonesian"
