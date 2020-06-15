@@ -80,6 +80,14 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	// 	return
 	// }
 
+	message, err := heimdallr.GetMessage(s, m.ChannelID, m.MessageID)
+	if !message.Author.Bot || message.Author.ID != s.State.User.ID {
+		return
+	}
+	if !strings.Contains(message.Content, "Are you sure you want to clear") {
+		return
+	}
+
 	reactingMember, err := heimdallr.GetMember(s, m.GuildID, m.UserID)
 	if err != nil {
 		heimdallr.LogIfError(s, err)
@@ -93,11 +101,6 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	if !heimdallr.IsModOrHigher(reactingMember, guild) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You do NOT have permissions to delete messages"))
 		heimdallr.LogIfError(s, err)
-		return
-	}
-
-	message, err := heimdallr.GetMessage(s, m.ChannelID, m.MessageID)
-	if !message.Author.Bot || message.Author.ID != s.State.User.ID {
 		return
 	}
 
@@ -122,7 +125,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		}
 		s.ChannelMessageDelete(message.ChannelID, message.ID)
 		_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("%d Messages  were cleared.", len(messages)),
+			Title: fmt.Sprintf("%d Messages  were cleared by", number),
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "**Username**",
