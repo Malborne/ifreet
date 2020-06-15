@@ -100,6 +100,7 @@ func (command *command) parse(args []string) (docopt.Opts, error) {
 
 var userCommands []command
 var moderatorCommands []command
+var superModeratorCommands []command
 var adminCommands []command
 var ownerCommands []command
 var nameToCommand = map[string]command{}
@@ -126,6 +127,9 @@ func init() {
 		verifyCommand,
 		muteCommand,
 		unmuteCommand,
+	}
+
+	superModeratorCommands = []command{
 		clearCommand,
 	}
 
@@ -146,10 +150,12 @@ func init() {
 	requireRoleForCommands("moderator", moderatorCommands)
 	requireRoleForCommands("admin", adminCommands)
 	requireRoleForCommands("admin", ownerCommands)
+	requireRoleForCommands("supermoderator", superModeratorCommands)
 
 	var commands []command
 	commands = append(commands, userCommands...)
 	commands = append(commands, moderatorCommands...)
+	commands = append(commands, superModeratorCommands...)
 	commands = append(commands, adminCommands...)
 	commands = append(commands, ownerCommands...)
 	for _, command := range commands {
