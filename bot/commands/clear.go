@@ -105,7 +105,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 		}
 		_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("%d Messages  were cleared.", number),
+			Title: fmt.Sprintf("%d Messages  were cleared.", len(messages)),
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "**Username**",
