@@ -18,7 +18,7 @@ var clearCommand = command{
 	},
 	[]string{
 		"10",
-		"500",
+		"100",
 	},
 }
 

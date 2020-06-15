@@ -126,6 +126,7 @@ func init() {
 		verifyCommand,
 		muteCommand,
 		unmuteCommand,
+		clearCommand,
 	}
 
 	adminCommands = []command{

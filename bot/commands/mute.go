@@ -13,7 +13,7 @@ import (
 var muteCommand = command{
 	"mute",
 	commandMuteUser,
-	"mutes a user for a number of minutes.",
+	"mutes a user.",
 	[]string{
 		"<user>",
 	},
@@ -24,7 +24,7 @@ var muteCommand = command{
 	},
 }
 
-//commandWarnUser warns another user and gives an infraction.
+//commandMuteUser mues another user
 func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	userID := getIDFromMaybeMention(args["<user>"].(string))
 	// number, _ := args.Int("<no>")
