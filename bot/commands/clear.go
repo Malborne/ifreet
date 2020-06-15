@@ -94,7 +94,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 	}
 	if m.Emoji.Name == "✅" {
-		messages, err := s.ChannelMessages(m.ChannelID, number+2, message.ID, message.ID, message.ID)
+		messages, err := s.ChannelMessages(m.ChannelID, number+3, message.ID, message.ID, message.ID)
 		if err != nil {
 			heimdallr.LogIfError(s, err)
 			return
