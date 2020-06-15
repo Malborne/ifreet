@@ -81,7 +81,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	// }
 
 	message, err := heimdallr.GetMessage(s, m.ChannelID, m.MessageID)
-	if !message.Author.Bot || m.MessageID != s.State.User.ID {
+	if !message.Author.Bot || message.Author.ID != s.State.User.ID {
 		return
 	}
 
