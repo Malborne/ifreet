@@ -39,28 +39,19 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	prompt, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages? This cannot be undone.", number))
-	if err != nil {
-		return errors.Wrap(err, "sending message failed")
-	}
-	err = s.MessageReactionAdd(m.ChannelID, prompt.ID, "✅")
-	if err != nil {
-		return errors.Wrap(err, "adding reaction failed")
-	}
-	err = s.MessageReactionAdd(m.ChannelID, prompt.ID, "❌")
-	if err != nil {
-		return errors.Wrap(err, "adding reaction failed")
-	}
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: fmt.Sprintf("%d Messages  were cleared. The command was made by %s", number, author.Mention()),
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:  "**Username**",
-				Value: author.User.Username + "#" + author.User.Discriminator,
-			},
-		},
-		Color: 0xEE0000,
-	})
+	// prompt, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages? This cannot be undone.", number))
+	// if err != nil {
+	// 	return errors.Wrap(err, "sending message failed")
+	// }
+	// err = s.MessageReactionAdd(m.ChannelID, prompt.ID, "✅")
+	// if err != nil {
+	// 	return errors.Wrap(err, "adding reaction failed")
+	// }
+	// err = s.MessageReactionAdd(m.ChannelID, prompt.ID, "❌")
+	// if err != nil {
+	// 	return errors.Wrap(err, "adding reaction failed")
+	// }
+
 	return nil
 }
 
@@ -73,13 +64,35 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd, promp
 	// 	return
 	// }
 
-	if prompt.ID != m.MessageID {
+	// if prompt.ID != m.MessageID {
+	// 	return
+	// }
+
+	message, err := heimdallr.GetMessage(s, m.ChannelID, m.MessageID)
+	if !message.Author.Bot {
 		return
 	}
 
 	if m.Emoji.Name != "✅" && m.Emoji.Name != "❌" {
 		//Output incorrect reactions
 		return
+	}
+
+	if m.Emoji.Name == "✅" {
+		_, err := s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
+			Title: fmt.Sprintf("Messages  were cleared. The command was made by ..."),
+			Fields: []*discordgo.MessageEmbedField{
+				{
+					Name:  "**Username**",
+					Value: "Username" + "#" + "123456",
+				},
+			},
+			Color: 0xEE0000,
+		})
+		if err != nil {
+			heimdallr.LogIfError(s, err)
+			return
+		}
 	}
 
 	if m.Emoji.Name == "❌" {
