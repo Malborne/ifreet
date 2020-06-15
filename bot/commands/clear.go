@@ -66,7 +66,7 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 }
 
 //ReactionPrompt Performs the clear action based on the response to the prompt
-func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd, number int) {
+func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	// guildID := m.GuildID
 	// guild, err := heimdallr.GetGuild(s, guildID)
 
@@ -90,7 +90,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd, numbe
 
 	if m.Emoji.Name == "✅" {
 		_, err := s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("%d Messages  were cleared. The command was made by ...", number),
+			Title: fmt.Sprintf("%d Messages  were cleared. The command was made by ...", 5),
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "**Username**",
