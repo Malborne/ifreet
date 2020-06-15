@@ -85,11 +85,6 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	if m.Emoji.Name != "✅" && m.Emoji.Name != "❌" {
-		//Output incorrect reactions
-		return
-	}
-
 	var number int = 0
 	for _, word := range strings.Split(message.Content, " ") {
 		if n, err := strconv.Atoi(word); err == nil {
