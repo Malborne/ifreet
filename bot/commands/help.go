@@ -61,6 +61,12 @@ func helpAll(s *discordgo.Session, m *discordgo.MessageCreate) error {
 			Value: strings.Join(getHelpMessages(moderatorCommands), "\n"),
 		})
 	}
+	if heimdallr.IsSuperModOrHigher(member, guild) {
+		fields = append(fields, &discordgo.MessageEmbedField{
+			Name:  "Super Moderator commands",
+			Value: strings.Join(getHelpMessages(superModeratorCommands), "\n"),
+		})
+	}
 	if heimdallr.IsAdminOrHigher(member, guild) {
 		fields = append(fields, &discordgo.MessageEmbedField{
 			Name:  "Admin commands",
