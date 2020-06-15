@@ -80,6 +80,11 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	// 	return
 	// }
 
+	reactingMember, err := heimdallr.GetMember(s, m.GuildID, m.UserID)
+	if err != nil {
+		heimdallr.LogIfError(s, err)
+		return
+	}
 	message, err := heimdallr.GetMessage(s, m.ChannelID, m.MessageID)
 	if !message.Author.Bot || message.Author.ID != s.State.User.ID {
 		return
@@ -110,7 +115,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "**Username**",
-					Value: "Username" + "#" + "123456",
+					Value: reactingMember.User.String(),
 				},
 			},
 			Color: 0xEE0000,
