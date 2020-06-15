@@ -2,6 +2,8 @@ package commands
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
@@ -49,7 +51,7 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 		return errors.Wrap(err, "getting messages failed")
 	}
 
-	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages starting from %s? This cannot be undone. ✅/❌", number, messages[0].MessageReference))
+	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages starting from %s? This cannot be undone. ✅/❌", number, messages[0].ID))
 	if err != nil {
 		return errors.Wrap(err, "sending message failed")
 	}
@@ -88,9 +90,17 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	// 	return
 	// }
 
+	var number int = 0
+	for _, word := range strings.Split(message.Content, " ") {
+		if n, err := strconv.Atoi(word); err == nil {
+			number = n
+			break
+		}
+
+	}
 	if m.Emoji.Name == "✅" {
 		_, err := s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("%d Messages  were cleared. The command was made by ...", 5),
+			Title: fmt.Sprintf("%d Messages  were cleared.", number),
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "**Username**",
