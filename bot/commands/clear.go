@@ -24,7 +24,7 @@ var clearCommand = command{
 
 //commandWarnUser warns another user and gives an infraction.
 func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	number, _ := args.Int("<number>")
+	// number, _ := args.Int("<number>")
 
 	guildID := m.GuildID
 
