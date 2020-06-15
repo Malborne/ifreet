@@ -81,14 +81,14 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	// }
 
 	message, err := heimdallr.GetMessage(s, m.ChannelID, m.MessageID)
-	if !message.Author.Bot {
+	if !message.Author.Bot || m.MessageID != s.State.User.ID {
 		return
 	}
 
-	// if m.Emoji.Name != "✅" && m.Emoji.Name != "❌" {
-	// 	//Output incorrect reactions
-	// 	return
-	// }
+	if m.Emoji.Name != "✅" && m.Emoji.Name != "❌" {
+		//Output incorrect reactions
+		return
+	}
 
 	var number int = 0
 	for _, word := range strings.Split(message.Content, " ") {
@@ -99,7 +99,17 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 	}
 	if m.Emoji.Name == "✅" {
-		_, err := s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
+		messages, err := s.ChannelMessages(m.ChannelID, number, message.ID, message.ID, message.ID)
+		if err != nil {
+			heimdallr.LogIfError(s, err)
+			return
+		}
+		for mess := range messages {
+
+			s.ChannelMessageDelete(message.ChannelID, messages[mess].ID)
+
+		}
+		_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
 			Title: fmt.Sprintf("%d Messages  were cleared.", number),
 			Fields: []*discordgo.MessageEmbedField{
 				{
