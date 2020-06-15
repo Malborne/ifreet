@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+//DMUnapprovedCommand DMs all the unapproved users
 var DMUnapprovedCommand = command{
 	"dmunapproved",
 	commandDMUnapproved,
@@ -49,9 +50,8 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 	if count == 0 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No unapproved users found."))
 		return errors.Wrap(err, "sending message failed")
-	} else {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent messages to %d user(s)", count))
-		return errors.Wrap(err, "sending message failed")
 	}
+	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent messages to %d user(s)", count))
+	return errors.Wrap(err, "sending message failed")
 
 }

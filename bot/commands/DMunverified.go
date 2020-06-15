@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+//DMUnverifiedCommand DM Unverified users to let them know that they will lose acess to the server and should contact on of the mods and direct them to the #approval and verification channel.
 var DMUnverifiedCommand = command{
 	"dmunverified",
 	commandDMUnverified,
@@ -49,10 +50,9 @@ func commandDMUnverified(s *discordgo.Session, m *discordgo.MessageCreate, args 
 	if count == 0 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No Unverified users found."))
 		return errors.Wrap(err, "sending message failed")
-	} else {
-
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent messages to %d user(s)", count))
-		return errors.Wrap(err, "sending message failed")
 	}
+
+	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent messages to %d user(s)", count))
+	return errors.Wrap(err, "sending message failed")
 
 }

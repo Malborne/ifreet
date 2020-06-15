@@ -205,9 +205,9 @@ func getPrivilegeChecker(role string) func(*discordgo.Member, *discordgo.Guild) 
 func isOneLowerThanTwo(member1 *discordgo.Member, member2 *discordgo.Member) bool {
 	if getHighestRole(member1) >= getHighestRole(member2) { // Higher number means lower rank
 		return true
-	} else {
-		return false
 	}
+	return false
+
 }
 
 func getHighestRole(m *discordgo.Member) int {
