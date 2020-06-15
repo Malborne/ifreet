@@ -94,7 +94,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 	}
 	if m.Emoji.Name == "✅" {
-		messages, err := s.ChannelMessages(m.ChannelID, number+3, message.ID, "", "")
+		messages, err := s.ChannelMessages(m.ChannelID, number, message.ID, "", "")
 		if err != nil {
 			heimdallr.LogIfError(s, err)
 			return
@@ -104,6 +104,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			s.ChannelMessageDelete(message.ChannelID, messages[mess].ID)
 
 		}
+		s.ChannelMessageDelete(message.ChannelID, message.ID)
 		_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
 			Title: fmt.Sprintf("%d Messages  were cleared.", len(messages)),
 			Fields: []*discordgo.MessageEmbedField{
