@@ -56,7 +56,7 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 }
 
 //Reaction Prompt Performs the clear action based on the response to the prompt
-func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd, prompt *discordgo.Message) {
+func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	// guildID := m.GuildID
 	// guild, err := heimdallr.GetGuild(s, guildID)
 
@@ -73,10 +73,10 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd, promp
 		return
 	}
 
-	if m.Emoji.Name != "✅" && m.Emoji.Name != "❌" {
-		//Output incorrect reactions
-		return
-	}
+	// if m.Emoji.Name != "✅" && m.Emoji.Name != "❌" {
+	// 	//Output incorrect reactions
+	// 	return
+	// }
 
 	if m.Emoji.Name == "✅" {
 		_, err := s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
@@ -96,14 +96,14 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd, promp
 	}
 
 	if m.Emoji.Name == "❌" {
-		messages, err := s.ChannelMessages(prompt.ChannelID, 2, prompt.ID, prompt.ID, prompt.ID)
+		messages, err := s.ChannelMessages(message.ChannelID, 2, message.ID, message.ID, message.ID)
 		if err != nil {
 			heimdallr.LogIfError(s, err)
 			return
 		}
 		//Delete the message and the command
 		for mess := range messages {
-			s.ChannelMessageDelete(prompt.ChannelID, messages[mess].ID)
+			s.ChannelMessageDelete(message.ChannelID, messages[mess].ID)
 
 		}
 		// s.ChannelMessageDelete(prompt.ChannelID, prompt.ID)
