@@ -12,7 +12,7 @@ import (
 var verifyCommand = command{
 	"verify",
 	commandVerify,
-	"Gives the user full access to the server.",
+	"Gives the user full access to the gender specific channels.",
 	[]string{
 		"<Member>",
 	},

@@ -15,17 +15,18 @@ var approveCommand = command{
 	commandApprove,
 	"Gives the user full access to the server.",
 	[]string{
-		"<Member>",
+		"<Member> <gender>",
 	},
 	[]string{
-		"@username",
-		"295207597929480192",
+		"@username male",
+		"295207597929480192 female",
 	},
 }
 
 //commandApprove gives a member the User role.
 func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	userID := getIDFromMaybeMention(args["<Member>"].(string)) //Changed from user to Member
+	gender := getIDFromMaybeMention(args["<gender>"].(string))
 
 	guildID := m.GuildID
 	member, err := heimdallr.GetMember(s, guildID, userID)
@@ -41,6 +42,19 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	if err != nil {
 		return errors.Wrap(err, "adding user role failed")
 	}
+
+	if strings.Contains(strings.ToLower(gender), "female") {
+		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.FemaleRole)
+		if err != nil {
+			return errors.Wrap(err, "adding gender role failed")
+		}
+	} else if strings.Contains(strings.ToLower(gender), "male") {
+		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.MaleRole)
+		if err != nil {
+			return errors.Wrap(err, "adding gender role failed")
+		}
+	}
+
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
 		if strings.Count(approvalMessage, "%s") > 0 {
@@ -108,6 +122,10 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
 			return
 		}
+	} else {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The gender was not found in the content of the message. Please make sure that you react to a message that contains the gender."))
+		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
+		return
 	}
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
