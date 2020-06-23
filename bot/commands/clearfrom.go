@@ -40,7 +40,7 @@ func commandClearFromMessage(s *discordgo.Session, m *discordgo.MessageCreate, a
 		return errors.Wrap(erro, "sending message failed")
 	}
 
-	messages, err := s.ChannelMessages(m.ChannelID, 100, "", m.ID, "")
+	messages, err := s.ChannelMessages(m.ChannelID, 100, "", startingID, "")
 	if err != nil {
 		return errors.Wrap(err, "getting messages failed")
 	}
@@ -52,7 +52,7 @@ func commandClearFromMessage(s *discordgo.Session, m *discordgo.MessageCreate, a
 		return errors.Wrap(err, "deleting message failed")
 	}
 
-	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages starting from https://discordapp.com/channels/678795606906634281/%s/%s ? This cannot be undone. ✅/❌", number, m.ChannelID, messages[len(messages)-1].ID))
+	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages starting from https://discordapp.com/channels/678795606906634281/%s/%s ?\nThis cannot be undone. ✅/❌", number, m.ChannelID, messages[len(messages)-1].ID))
 	if err != nil {
 		return errors.Wrap(err, "sending message failed")
 	}
