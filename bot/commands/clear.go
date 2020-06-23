@@ -24,22 +24,22 @@ var clearCommand = command{
 	},
 }
 
-//commandWarnUser warns another user and gives an infraction.
+//commandClearMessages Clears a number of messages.
 func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	number, _ := args.Int("<number>")
 
-	guildID := m.GuildID
+	// guildID := m.GuildID
 
 	// guild, err := heimdallr.GetGuild(s, guildID)
 	// if err != nil {
 	// 	return err
 	// }
 
-	author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
-	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", author.User.ID))
-		return errors.Wrap(err, "sending message failed")
-	}
+	// author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
+	// if err != nil {
+	// 	_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", author.User.ID))
+	// 	return errors.Wrap(err, "sending message failed")
+	// }
 
 	if number > 99 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot delete more than 99 messages at a time"))
@@ -55,30 +55,12 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 	if err != nil {
 		return errors.Wrap(err, "sending message failed")
 	}
-	// err = s.MessageReactionAdd(m.ChannelID, prompt.ID, "✅")
-	// if err != nil {
-	// 	return errors.Wrap(err, "adding reaction failed")
-	// }
-	// err = s.MessageReactionAdd(m.ChannelID, prompt.ID, "❌")
-	// if err != nil {
-	// 	return errors.Wrap(err, "adding reaction failed")
-	// }
 
 	return nil
 }
 
 //ReactionPrompt Performs the clear action based on the response to the prompt
 func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
-	// guildID := m.GuildID
-	// guild, err := heimdallr.GetGuild(s, guildID)
-
-	// if err != nil {
-	// 	return
-	// }
-
-	// if prompt.ID != m.MessageID {
-	// 	return
-	// }
 
 	message, err := heimdallr.GetMessage(s, m.ChannelID, m.MessageID)
 	if !message.Author.Bot || message.Author.ID != s.State.User.ID {

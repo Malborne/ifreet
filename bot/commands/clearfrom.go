@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
@@ -23,7 +22,7 @@ var clearFromCommand = command{
 	},
 }
 
-//commandWarnUser warns another user and gives an infraction.
+//commandClearFromMessage Clears a number of messages from a starting message.
 func commandClearFromMessage(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	startingID, _ := args.String("<startingID>")
 
@@ -45,15 +44,8 @@ func commandClearFromMessage(s *discordgo.Session, m *discordgo.MessageCreate, a
 	if err != nil {
 		return errors.Wrap(err, "getting messages failed")
 	}
-	guildID := m.GuildID
 
 	number := len(messages)
-
-	author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
-	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", author.User.ID))
-		return errors.Wrap(err, "sending message failed")
-	}
 
 	if number > 99 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot delete more than 99 messages at a time"))
