@@ -131,6 +131,7 @@ func init() {
 
 	superModeratorCommands = []command{
 		clearCommand,
+		clearFromCommand,
 	}
 
 	adminCommands = []command{

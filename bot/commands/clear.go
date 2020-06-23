@@ -41,17 +41,17 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	if number > 100 {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot delete more than 100 messages at a time"))
+	if number > 99 {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot delete more than 99 messages at a time"))
 		return errors.Wrap(err, "deleting message failed")
 	}
 
-	messages, err := s.ChannelMessages(m.ChannelID, number, m.ID, m.ID, m.ID)
+	messages, err := s.ChannelMessages(m.ChannelID, number, m.ID, "", "")
 	if err != nil {
 		return errors.Wrap(err, "getting messages failed")
 	}
 
-	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages starting from %s? This cannot be undone. ✅/❌", number, messages[0].ID))
+	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Are you sure you want to clear %d messages starting from https://discordapp.com/channels/678795606906634281/%s/%s ? This cannot be undone. ✅/❌", number, m.ChannelID, messages[0].ID))
 	if err != nil {
 		return errors.Wrap(err, "sending message failed")
 	}
@@ -130,6 +130,10 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 				{
 					Name:  "**Username**",
 					Value: reactingMember.User.String(),
+				},
+				{
+					Name:  "**Channel**",
+					Value: fmt.Sprintf("<#%s>", message.ChannelID),
 				},
 			},
 			Color: 0xEE0000,
