@@ -18,8 +18,8 @@ var clearFromCommand = command{
 		"<startingID>",
 	},
 	[]string{
-		";clearfrom 724820450080849971",
-		";clearfrom https://discordapp.com/channels/678795606906634281/724040027436351508/724820450080849971",
+		"724820450080849971",
+		"https://discordapp.com/channels/678795606906634281/724040027436351508/724820450080849971",
 	},
 }
 
@@ -35,6 +35,10 @@ func commandClearFromMessage(s *discordgo.Session, m *discordgo.MessageCreate, a
 	if _, err := s.ChannelMessage(m.ChannelID, startingID); err != nil {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to get the starting message Please make sure that you enter either the ID of the message or a link to the message."))
 		return errors.Wrap(err, "deleting message failed")
+	}
+	_, erro := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message ID received successfully"))
+	if erro != nil {
+		return errors.Wrap(erro, "sending message failed")
 	}
 
 	messages, err := s.ChannelMessages(m.ChannelID, 100, "", m.ID, "")
