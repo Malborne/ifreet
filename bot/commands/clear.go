@@ -26,20 +26,12 @@ var clearCommand = command{
 
 //commandClearMessages Clears a number of messages.
 func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	number, _ := args.Int("<number>")
+	number, err := args.Int("<number>")
 
-	// guildID := m.GuildID
-
-	// guild, err := heimdallr.GetGuild(s, guildID)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
-	// if err != nil {
-	// 	_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", author.User.ID))
-	// 	return errors.Wrap(err, "sending message failed")
-	// }
+	if err != nil || number == 0 {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Incorrect use of command. Type the number of messages you wish to be deleted"))
+		return errors.Wrap(err, "deleting message failed")
+	}
 
 	if number > 99 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot delete more than 99 messages at a time"))
