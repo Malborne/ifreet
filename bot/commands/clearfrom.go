@@ -35,10 +35,6 @@ func commandClearFromMessage(s *discordgo.Session, m *discordgo.MessageCreate, a
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to get the starting message Please make sure that you enter either the ID of the message or a link to the message."))
 		return errors.Wrap(err, "deleting message failed")
 	}
-	_, erro := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message ID received successfully"))
-	if erro != nil {
-		return errors.Wrap(erro, "sending message failed")
-	}
 
 	messages, err := s.ChannelMessages(m.ChannelID, 100, "", startingID, "")
 	if err != nil {
