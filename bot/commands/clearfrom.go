@@ -25,7 +25,7 @@ var clearFromCommand = command{
 
 //commandWarnUser warns another user and gives an infraction.
 func commandClearFromMessage(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	startingID, _ := args.String("<ID>")
+	startingID, _ := args.String("<startingID>")
 
 	if strings.Contains(startingID, "https://discordapp.com/channels") {
 		slices := strings.Split(m.Content, "/")
