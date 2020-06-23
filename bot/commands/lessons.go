@@ -9,7 +9,7 @@ import (
 var lessonsCommand = command{
 	"lessons",
 	commandLessons,
-	"Gives a link to the list of lessons.",
+	"Gives a link to the list of Tajweed lessons.",
 	[]string{
 		"",
 	},
