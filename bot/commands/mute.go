@@ -121,7 +121,7 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 
 	userChannel, err := s.UserChannelCreate(userID)
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but was successfully muted", infractor.Mention()))
+		// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but was successfully muted", infractor.Mention()))
 		return nil
 		// return errors.Wrap(err, "creating private channel failed")
 	}

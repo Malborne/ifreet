@@ -82,3 +82,9 @@ command_prefix = ";"
   id = "723189855202574418"
   name = "Malay"
   description = "A self-assignable role for those who speak Malay"
+
+  
+  [[role]]
+  id = "725177215935053855"
+  name = "Dutch"
+  description = "A self-assignable role for those who speak Dutch"
