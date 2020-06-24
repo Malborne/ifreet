@@ -106,3 +106,8 @@ command_prefix = ";"
   id = "725183280340795392"
   name = "Turkish"
   description = "A self-assignable role for those who speak Turkish"
+
+[[role]]
+  id = "725186911018418287"
+  name = "Finnish"
+  description = "A self-assignable role for those who speak Finnish"
