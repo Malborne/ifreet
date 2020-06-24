@@ -86,10 +86,13 @@ func roleGet(s *discordgo.Session, m *discordgo.MessageCreate, roleNames []strin
 			continue
 		}
 		if m.Author.ID == "550664345302859786" && roleID == "722098858288480267" { //Wasan trying to get Japanese
+			success = false
 			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("I am not going to let you get the Japanese role وسن 😒 you're still not worthy."))
-			heimdallr.LogIfError(s, errors.Wrap(err, "Adding role failed"))
-			return errors.Wrap(err, "Adding role failed")
-
+			if err != nil {
+				heimdallr.LogIfError(s, errors.Wrap(err, "Adding role failed"))
+				return errors.Wrap(err, "Adding role failed")
+			}
+			return nil
 		}
 		err = s.GuildMemberRoleAdd(guildID, m.Author.ID, roleID)
 
