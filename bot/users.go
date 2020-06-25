@@ -38,6 +38,7 @@ import (
 //UserJoinHandlerOriginal handles new users joining the server, and will welcome them.
 func UserJoinHandlerOriginal(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	_, _ = s.ChannelMessageSend(Config.WelcomeChannel, "Hello")
+	_, _ = s.ChannelMessageSend(Config.AdminLogChannel, "Hello")
 
 	welcomeMessage := Config.WelcomeMessage
 	if strings.Count(welcomeMessage, "%s") > 0 {
@@ -50,6 +51,7 @@ func UserJoinHandlerOriginal(s *discordgo.Session, g *discordgo.GuildMemberAdd) 
 //UserLeaveHandlerOriginal wishes ex members goodbye
 func UserLeaveHandlerOriginal(s *discordgo.Session, g *discordgo.GuildMemberRemove) {
 	_, _ = s.ChannelMessageSend(Config.WelcomeChannel, "Goodbye")
+	_, _ = s.ChannelMessageSend(Config.AdminLogChannel, "Goodbye")
 
 	var name string
 	if g.Nick != "" {
