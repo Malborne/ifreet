@@ -134,7 +134,7 @@ func AddInfraction(user discordgo.User, infraction Infraction) error {
 	return errors.Wrap(err, "inserting infraction failed")
 }
 
-//Adds a muted user to the list of users
+//AddMutedUser Adds a muted user to the list of users
 func AddMutedUser(user discordgo.User, time time.Time, roleIDs string) error {
 	err := AddUser(user)
 	if err != nil {
@@ -146,6 +146,7 @@ func AddMutedUser(user discordgo.User, time time.Time, roleIDs string) error {
 	return errors.Wrap(err, "inserting infraction failed")
 }
 
+//GetMutedUserRoles retrieves the muted roles of a muted member
 func GetMutedUserRoles(userID string) ([]string, error) {
 	var roles []string
 	var roleIDs string
@@ -175,7 +176,7 @@ func GetMutedUserRoles(userID string) ([]string, error) {
 	return roles, nil
 }
 
-//Removes a user from the database after being unmuted
+//RemoveMutedUser Removes a user from the database after being unmuted
 func RemoveMutedUser(userID string) error {
 	_, err := db.Query(
 		"DELETE FROM mutedUsers WHERE user_id=$1",
