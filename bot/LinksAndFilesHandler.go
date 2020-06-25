@@ -50,7 +50,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You are NOT allowed to send files yet. Please wait until you are on the server for a longer time."))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You are NOT allowed to send links yet. Please wait until you are on the server for a longer time."))
 		if err != nil {
 			LogIfError(s, err)
 			return
