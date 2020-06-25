@@ -15,11 +15,18 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	guildID := m.GuildID
+	guild, err := GetGuild(s, guildID)
+	if err != nil {
+		LogIfError(s, err)
+	}
 
 	author, err := GetMember(s, guildID, m.Author.ID)
 	if err != nil {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", m.Author.ID))
 		LogIfError(s, err)
+	}
+	if IsModOrHigher(author, guild) {
+		return
 	}
 	joinedAt, err := author.JoinedAt.Parse()
 	if err != nil {
