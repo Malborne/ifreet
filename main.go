@@ -52,8 +52,8 @@ func main() {
 	dg.AddHandler(commands.ReactionApprove)
 	dg.AddHandler(commands.ReactionPrompt)
 	// dg.AddHandler(commands.ReactionVerify)
-	dg.AddHandler(heimdallr.UserJoinHandlerOriginal)
-	dg.AddHandler(heimdallr.UserLeaveHandlerOriginal)
+	dg.AddHandler(heimdallr.UserJoinHandler)
+	dg.AddHandler(heimdallr.UserLeaveHandler)
 	dg.AddHandler(heimdallr.MemberBanAddHandler)
 
 	err = dg.Open()
