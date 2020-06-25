@@ -1,9 +1,9 @@
-package commands
+package heimdallr
 
 import (
 	"fmt"
 
-	heimdallr "github.com/Malborne/Luna/tree/master/bot"
+	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
 )
 
