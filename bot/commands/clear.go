@@ -72,7 +72,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		heimdallr.LogIfError(s, err)
 		return
 	}
-	if !heimdallr.IsModOrHigher(reactingMember, guild) {
+	if !heimdallr.IsSuperModOrHigher(reactingMember, guild) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You do NOT have permissions to delete messages"))
 		heimdallr.LogIfError(s, err)
 		return
