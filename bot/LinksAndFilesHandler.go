@@ -3,7 +3,6 @@ package heimdallr
 import (
 	"fmt"
 
-	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -16,7 +15,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if len(m.Attachments) > 0 { //sent a file
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("A file has been detected"))
 		if err != nil {
-			heimdallr.LogIfError(s, err)
+			LogIfError(s, err)
 			return
 		}
 	}
@@ -25,7 +24,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("A linke has been detected"))
 		if err != nil {
-			heimdallr.LogIfError(s, err)
+			LogIfError(s, err)
 			return
 		}
 		// s.ChannelMessageDelete(m.ChannelID, m.ID)
