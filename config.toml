@@ -27,70 +27,70 @@ command_prefix = ";"
   name = "tajweedlesson1"
   description = "A self-assignable role for those who wish to be reminded of the tajweed lesson session 1"
 
-  [[role]]
+[[role]]
   id = "714905008382017640"
   name = "tajweedlesson2"
   description = "A self-assignable role for those who wish to be reminded of the tajweed lesson session 2"
 
-   [[role]]
+[[role]]
   id = "722098745386205274"
   name = "English"
   description = "A self-assignable role for those who speak English"
 
-   [[role]]
+[[role]]
   id = "722098817507524678"
   name = "Arabic"
   description = "A self-assignable role for those who speak Arabic"
 
-  [[role]]
+[[role]]
   id = "722098858288480267"
   name = "Japanese"
   description = "A self-assignable role for those who speak Japanese"
 
-  [[role]]
+[[role]]
   id = "722098887854391306"
   name = "French"
   description = "A self-assignable role for those who speak French"
 
-  [[role]]
+[[role]]
   id = "722098945446248490"
   name = "Chinese"
   description = "A self-assignable role for those who speak Chinese"
 
-  [[role]]
+[[role]]
   id = "722098919684702218"
   name = "Urdu"
   description = "A self-assignable role for those who speak Urdu"
 
-  [[role]]
+[[role]]
   id = "722099260006334526"
   name = "Spanish"
   description = "A self-assignable role for those who speak Spanish"
 
-  [[role]]
+[[role]]
   id = "722099379779010610"
   name = "Norwegian"
   description = "A self-assignable role for those who speak Norwegian"
 
-  [[role]]
+[[role]]
   id = "722098976882688052"
   name = "Indonesian"
   description = "A self-assignable role for those who speak Indonesian"
 
   
-  [[role]]
+[[role]]
   id = "723189855202574418"
   name = "Malay"
   description = "A self-assignable role for those who speak Malay"
 
   
-  [[role]]
+[[role]]
   id = "725177215935053855"
   name = "Dutch"
   description = "A self-assignable role for those who speak Dutch"
 
   
-  [[role]]
+[[role]]
   id = "725180041859956829"
   name = "Somali"
   description = "A self-assignable role for those who speak Somali"
@@ -112,7 +112,7 @@ command_prefix = ";"
   name = "Finnish"
   description = "A self-assignable role for those who speak Finnish"
 
-  [[role]]
+[[role]]
   id = "725228341036187718"
   name = "Bangla"
   description = "A self-assignable role for those who speak Bangla"
