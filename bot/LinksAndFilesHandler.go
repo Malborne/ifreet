@@ -2,6 +2,7 @@ package heimdallr
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -19,10 +20,10 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 	}
-	if len(m.Embeds) > 0 { //sent a link
+	if len(m.Embeds) > 0 || strings.Contains(strings.ToLower(m.Content), "https://") || strings.Contains(strings.ToLower(m.Content), "http://") { //sent a link
 		// if strings.Contains(strings.ToLower(m.Content), "https://") || strings.Contains(strings.ToLower(m.Content), "http://") {
 
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("A linke has been detected"))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("A link has been detected"))
 		if err != nil {
 			LogIfError(s, err)
 			return
