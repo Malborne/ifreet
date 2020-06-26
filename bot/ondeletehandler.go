@@ -15,20 +15,20 @@ func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 	s.ChannelMessageSend(Config.AdminLogChannel, fmt.Sprintf("Message \"%s\" deletion detected", m.Content))
 	s.ChannelMessageSend(Config.ArchiveChannel, fmt.Sprintf("Message \"%s\" deletion detected", m.Message.Content))
 
-	guildID := m.GuildID
+	// guildID := m.GuildID
 
-	author, err := GetMember(s, guildID, m.Author.ID)
-	if err != nil {
-		_, err := s.ChannelMessageSend(Config.AdminLogChannel, fmt.Sprintf("Message Author with ID %s was not found.", m.Author.ID))
-		LogIfError(s, err)
-	}
+	// author, err := GetMember(s, guildID, m.Author.ID)
+	// if err != nil {
+	// 	_, err := s.ChannelMessageSend(Config.AdminLogChannel, fmt.Sprintf("Message Author with ID %s was not found.", m.Author.ID))
+	// 	LogIfError(s, err)
+	// }
 
-	_, err = s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
+	_, err := s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("A message was deleted"),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "Message Author",
-				Value: author.User.Username + "#" + author.User.Discriminator,
+				Value: m.Author.Username + "#" + m.Author.Discriminator,
 			},
 			{
 				Name:  "Channel",
@@ -45,12 +45,16 @@ func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 		},
 		Color: 0xEE0000,
 	})
+	if err != nil {
+		LogIfError(s, errors.Wrap(err, "sending embed failed"))
+
+	}
 	_, err = s.ChannelMessageSendEmbed(Config.ArchiveChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("A message was deleted"),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "Message Author",
-				Value: author.User.Username + "#" + author.User.Discriminator,
+				Value: m.Author.Username + "#" + m.Author.Discriminator,
 			},
 			{
 				Name:  "Channel",
