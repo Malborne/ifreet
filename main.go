@@ -56,6 +56,7 @@ func main() {
 	dg.AddHandler(heimdallr.UserLeaveHandler)
 	dg.AddHandler(heimdallr.MemberBanAddHandler)
 	dg.AddHandler(heimdallr.LinksAndFilesHandler)
+	dg.AddHandler(heimdallr.OnDeleteHandler)
 
 	err = dg.Open()
 	if err != nil {
