@@ -23,6 +23,28 @@ func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 		LogIfError(s, err)
 	}
 
+	_, err = s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
+		Title: fmt.Sprintf("A message was deleted"),
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:  "Message Author",
+				Value: author.User.Username + "#" + author.User.Discriminator,
+			},
+			{
+				Name:  "Channel",
+				Value: fmt.Sprintf("<#%s>", m.ChannelID),
+			},
+			{
+				Name:  "Message ID",
+				Value: m.ID,
+			},
+			{
+				Name:  "Message Content",
+				Value: m.Content,
+			},
+		},
+		Color: 0xEE0000,
+	})
 	_, err = s.ChannelMessageSendEmbed(Config.ArchiveChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("A message was deleted"),
 		Fields: []*discordgo.MessageEmbedField{
