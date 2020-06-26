@@ -12,8 +12,7 @@ func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 	// if m.Author.Bot {
 	// 	return
 	// }
-	s.ChannelMessageSend(Config.AdminLogChannel, fmt.Sprintf("Message \"%s\" deletion detected", m.Content))
-	s.ChannelMessageSend(Config.ArchiveChannel, fmt.Sprintf("Message \"%s\" deletion detected", m.Message.Content))
+	s.ChannelMessageSend(Config.ArchiveChannel, fmt.Sprintf("Message \"%s\" deletion detected %s", m.Message.Content, m.Author.Username+"#"+m.Author.Discriminator))
 
 	// guildID := m.GuildID
 
