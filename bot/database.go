@@ -10,7 +10,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	// Register SQL driver
 	_ "github.com/lib/pq"
-	// _ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 //Infraction contains the reason and time for a user infraction
@@ -32,8 +32,8 @@ var db *sql.DB
 //OpenDb opens a connection to the database and creates the tables if they don't exist
 func OpenDb(file string) error {
 	var err error
-	// db, err = sql.Open("sqlite3", file)
-	db, err = sql.Open("postgres", file)
+	db, err = sql.Open("sqlite3", file)
+	// db, err = sql.Open("postgres", file)
 
 	if err != nil {
 		return errors.Wrap(err, "opening database failed")
