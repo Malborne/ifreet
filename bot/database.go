@@ -48,15 +48,15 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS infractions (
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	reason TEXT,
 	time_ timestamp,
 	user_id TEXT,
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
-
+  
 CREATE TABLE IF NOT EXISTS mutedUsers (
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	roleIDs TEXT,
 	time_ timestamp,
 	user_id TEXT,
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 );
 
 CREATE TABLE IF NOT EXISTS invites (
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	code TEXT,
 	time_ timestamp,
 	user_id TEXT,
@@ -72,13 +72,13 @@ CREATE TABLE IF NOT EXISTS invites (
 );
 
 CREATE TABLE IF NOT EXISTS resources (
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	name TEXT NOT NULL,
 	content TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS resource_tags (
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	name TEXT UNIQUE NOT NULL
 );
 
