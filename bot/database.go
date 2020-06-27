@@ -206,12 +206,12 @@ func AddInvite(user discordgo.User, invite discordgo.Invite) error {
 func AddUser(user discordgo.User) error {
 	// ON CONFLICT (id) DO UPDATE SET username=$2
 	// ON CONFLICT (id) IGNORE
-	_, err := db.Exec("INSERT INTO users (id,username) VALUES ($1, $2) ON CONFLICT (id) DO UPDATE SET username=$2", user.ID, user.Username)
-	// if err != nil {
-	return errors.Wrap(err, "inserting user failed")
-	// }
-	// _, err = db.Exec("UPDATE users SET username=$1 WHERE id=$2", user.Username, user.ID)
-	// return errors.Wrap(err, "updating user failed")
+	_, err := db.Exec("INSERT INTO users (id,username) VALUES ($1, $2) ON CONFLICT DO NOTHING", user.ID, user.Username)
+	if err != nil {
+		return errors.Wrap(err, "inserting user failed")
+	}
+	_, err = db.Exec("UPDATE users SET username=$1 WHERE id=$2", user.Username, user.ID)
+	return errors.Wrap(err, "updating user failed")
 }
 
 //GetResourceByID gets a resource from the database by ID
