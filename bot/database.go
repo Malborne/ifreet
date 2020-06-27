@@ -39,6 +39,8 @@ func OpenDb(file string) error {
 		return errors.Wrap(err, "opening database failed")
 	}
 	// id INTEGER PRIMARY KEY AUTOINCREMENT
+	//	time_ DATETIME,
+
 	createTableStatement := `
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
@@ -48,7 +50,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS infractions (
 	id INTEGER PRIMARY KEY,
 	reason TEXT,
-	time_ DATETIME,
+	time_ timestamp,
 	user_id TEXT,
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
@@ -56,7 +58,7 @@ CREATE TABLE IF NOT EXISTS infractions (
 CREATE TABLE IF NOT EXISTS mutedUsers (
 	id INTEGER PRIMARY KEY,
 	roleIDs TEXT,
-	time_ DATETIME,
+	time_ timestamp,
 	user_id TEXT,
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
@@ -64,7 +66,7 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 CREATE TABLE IF NOT EXISTS invites (
 	id INTEGER PRIMARY KEY,
 	code TEXT,
-	time_ DATETIME,
+	time_ timestamp,
 	user_id TEXT,
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
