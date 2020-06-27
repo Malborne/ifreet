@@ -79,8 +79,8 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		Title: fmt.Sprintf("%d User roles were successfully taken from the database.", len(roles)),
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:  "**Role #1**",
-				Value: roles[0],
+				Name:  "**Username**",
+				Value: user.Username + "#" + user.Discriminator,
 			},
 			{
 				Name:  "**User ID**",
