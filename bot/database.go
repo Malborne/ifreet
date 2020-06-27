@@ -204,13 +204,13 @@ func AddInvite(user discordgo.User, invite discordgo.Invite) error {
 
 //AddUser adds a user or updates the username if it already exists
 func AddUser(user discordgo.User) error {
-	_, err := db.Exec("INSERT OR REPLACE INTO users (id) VALUES ($1)", user.ID)
+	_, err := db.Exec("INSERT INTO users (id) VALUES ($1) ON CONFLICT ($1) DO UPDATE users SET username=$2 WHERE id=$1", user.ID, user.Username)
 	if err != nil {
 		return errors.Wrap(err, "inserting user failed")
 	}
-
-	_, err = db.Exec("UPDATE users SET username=$1 WHERE id=$2", user.Username, user.ID)
-	return errors.Wrap(err, "updating user failed")
+	return err
+	// _, err = db.Exec("UPDATE users SET username=$1 WHERE id=$2", user.Username, user.ID)
+	// return errors.Wrap(err, "updating user failed")
 }
 
 //GetResourceByID gets a resource from the database by ID
