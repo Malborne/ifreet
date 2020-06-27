@@ -66,7 +66,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	//remove the muted user from the database
 	err = heimdallr.RemoveMutedUser(infractor.User.ID)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Removing the Muted role failed")
 	}
 
 	//Add all the other user roles
@@ -89,6 +89,9 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		},
 		Color: 0xEE0000,
 	})
+	if err != nil {
+		return errors.Wrap(err, "Sending the database Embed Message failed.")
+	}
 	for _, role := range roles {
 		// if role != heimdallr.Config.MutedRole {
 		err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
