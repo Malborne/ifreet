@@ -129,6 +129,10 @@ func GetInfractions(userID string) ([]Infraction, error) {
 
 //AddInfraction adds an infraction for a user
 func AddInfraction(user discordgo.User, infraction Infraction) error {
+	if user.ID == "" {
+		var err error
+		return errors.Wrap(err, "The ID is empty, this is likely because the user passed to the function is not correct or doesn't exist")
+	}
 	err := AddUser(user)
 	if err != nil {
 		return err
