@@ -40,14 +40,13 @@ func OpenDb(file string) error {
 	}
 	// id INTEGER PRIMARY KEY AUTOINCREMENT
 	//	time_ DATETIME,
-	//DROP TABLE IF EXISTS users;
-	dropTables := `
-				  DROP TABLE IF EXISTS infractions;
-				  DROP TABLE IF EXISTS mutedUsers;
-				  DROP TABLE IF EXISTS resources;
-				  DROP TABLE IF EXISTS resource_tags;
-				  DROP TABLE IF EXISTS resource_tags_resources;
-				  DROP TABLE IF EXISTS invites;`
+	dropTables := `DROP TABLE IF EXISTS users cascade;
+				  DROP TABLE IF EXISTS infractions cascade;
+				  DROP TABLE IF EXISTS mutedUsers cascade;
+				  DROP TABLE IF EXISTS resources cascade;
+				  DROP TABLE IF EXISTS resource_tags cascade;
+				  DROP TABLE IF EXISTS resource_tags_resources cascade;
+				  DROP TABLE IF EXISTS invites cascade;`
 	createTableStatement := `
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
