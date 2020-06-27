@@ -158,7 +158,7 @@ func AddMutedUser(user discordgo.User, time time.Time, roleIDs string) error {
 
 	_, err = db.Exec("INSERT INTO mutedUsers (roleIDs, time_, user_id) VALUES ($1, $2, $3)",
 		roleIDs, time, user.ID)
-	return errors.Wrap(err, "inserting infraction failed")
+	return errors.Wrap(err, "muting user failed")
 }
 
 //GetMutedUserRoles retrieves the muted roles of a muted member
