@@ -10,7 +10,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	// Register SQL driver
 	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3"
+	// _ "github.com/mattn/go-sqlite3"
 )
 
 //Infraction contains the reason and time for a user infraction
@@ -32,13 +32,13 @@ var db *sql.DB
 //OpenDb opens a connection to the database and creates the tables if they don't exist
 func OpenDb(file string) error {
 	var err error
-	db, err = sql.Open("sqlite3", file)
-	// db, err = sql.Open("postgres", file)
+	// db, err = sql.Open("sqlite3", file)
+	db, err = sql.Open("postgres", file)
 
 	if err != nil {
 		return errors.Wrap(err, "opening database failed")
 	}
-
+	// id INTEGER PRIMARY KEY AUTOINCREMENT
 	createTableStatement := `
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS infractions (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	id INTEGER PRIMARY KEY,
 	reason TEXT,
 	time_ DATETIME,
 	user_id TEXT,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS infractions (
 );
 
 CREATE TABLE IF NOT EXISTS mutedUsers (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	id INTEGER PRIMARY KEY,
 	roleIDs TEXT,
 	time_ DATETIME,
 	user_id TEXT,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 );
 
 CREATE TABLE IF NOT EXISTS invites (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	id INTEGER PRIMARY KEY,
 	code TEXT,
 	time_ DATETIME,
 	user_id TEXT,
@@ -70,13 +70,13 @@ CREATE TABLE IF NOT EXISTS invites (
 );
 
 CREATE TABLE IF NOT EXISTS resources (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
 	content TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS resource_tags (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	id INTEGER PRIMARY KEY,
 	name TEXT UNIQUE NOT NULL
 );
 
