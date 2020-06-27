@@ -204,7 +204,9 @@ func AddInvite(user discordgo.User, invite discordgo.Invite) error {
 
 //AddUser adds a user or updates the username if it already exists
 func AddUser(user discordgo.User) error {
-	_, err := db.Exec("INSERT INTO users (id,username) VALUES ($1, $2) ON CONFLICT IGNORE", user.ID, user.Username)
+	// ON CONFLICT (id) DO UPDATE SET username=$2
+	// ON CONFLICT (id) IGNORE
+	_, err := db.Exec("INSERT INTO users (id,username) VALUES ($1, $2)", user.ID, user.Username)
 	if err != nil {
 		return errors.Wrap(err, "inserting user failed")
 	}
