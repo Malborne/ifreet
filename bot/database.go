@@ -40,14 +40,20 @@ func OpenDb(file string) error {
 	}
 	// id INTEGER PRIMARY KEY AUTOINCREMENT
 	//	time_ DATETIME,
-	// IF NOT EXISTS
+	dropTables := `DROP TABLE IF EXISTS users;
+				  DROP TABLE IF EXISTS infractions;
+				  DROP TABLE IF EXISTS mutedUsers;
+				  DROP TABLE IF EXISTS resources;
+				  DROP TABLE IF EXISTS resource_tags;
+				  DROP TABLE IF EXISTS resource_tags_resources;
+				  DROP TABLE IF EXISTS invites;`
 	createTableStatement := `
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
 	username TEXT
 );
 
-CREATE TABLE infractions (
+CREATE TABLE IF NOT EXISTS infractions (
 	id SERIAL PRIMARY KEY,
 	reason TEXT,
 	time_ timestamp,
@@ -55,7 +61,7 @@ CREATE TABLE infractions (
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
   
-CREATE TABLE mutedUsers (
+CREATE TABLE IF NOT EXISTS mutedUsers (
 	id SERIAL PRIMARY KEY,
 	roleIDs TEXT,
 	time_ timestamp,
@@ -63,7 +69,7 @@ CREATE TABLE mutedUsers (
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
-CREATE TABLE invites (
+CREATE TABLE IF NOT EXISTS invites (
 	id SERIAL PRIMARY KEY,
 	code TEXT,
 	time_ timestamp,
@@ -71,13 +77,13 @@ CREATE TABLE invites (
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
-CREATE TABLE resources (
+CREATE TABLE IF NOT EXISTS resources (
 	id SERIAL PRIMARY KEY,
 	name TEXT NOT NULL,
 	content TEXT NOT NULL
 );
 
-CREATE TABLE resource_tags (
+CREATE TABLE IF NOT EXISTS resource_tags (
 	id SERIAL PRIMARY KEY,
 	name TEXT UNIQUE NOT NULL
 );
@@ -90,6 +96,10 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	FOREIGN KEY(resource_tag_id) REFERENCES resource_tags(id)
 );
 `
+	_, err = db.Exec(dropTables)
+	if err != nil {
+		return errors.Wrap(err, "deleting database tables failed")
+	}
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
 }
