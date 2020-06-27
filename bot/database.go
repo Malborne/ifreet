@@ -40,13 +40,13 @@ func OpenDb(file string) error {
 	}
 	// id INTEGER PRIMARY KEY AUTOINCREMENT
 	//	time_ DATETIME,
-	// dropTables := `DROP TABLE IF EXISTS users cascade;
-	// 			  DROP TABLE IF EXISTS infractions cascade;
-	// 			  DROP TABLE IF EXISTS mutedUsers cascade;
-	// 			  DROP TABLE IF EXISTS resources cascade;
-	// 			  DROP TABLE IF EXISTS resource_tags cascade;
-	// 			  DROP TABLE IF EXISTS resource_tags_resources cascade;
-	// 			  DROP TABLE IF EXISTS invites cascade;`
+	dropTables := `DROP TABLE IF EXISTS users cascade;
+				  DROP TABLE IF EXISTS infractions cascade;
+				  DROP TABLE IF EXISTS mutedUsers cascade;
+				  DROP TABLE IF EXISTS resources cascade;
+				  DROP TABLE IF EXISTS resource_tags cascade;
+				  DROP TABLE IF EXISTS resource_tags_resources cascade;
+				  DROP TABLE IF EXISTS invites cascade;`
 	createTableStatement := `
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
@@ -96,10 +96,10 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	FOREIGN KEY(resource_tag_id) REFERENCES resource_tags(id)
 );
 `
-	// _, err = db.Exec(dropTables)
-	// if err != nil {
-	// 	return errors.Wrap(err, "deleting database tables failed")
-	// }
+	_, err = db.Exec(dropTables)
+	if err != nil {
+		return errors.Wrap(err, "deleting database tables failed")
+	}
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
 }
@@ -113,7 +113,7 @@ func CloseDb() error {
 func GetInfractions(userID string) ([]Infraction, error) {
 	var infractions []Infraction
 	rows, err := db.Query(
-		"SELECT reason, time_ FROM infractions WHERE user_id=$1 ORDER BY datetime(time_)",
+		"SELECT reason, time_ FROM infractions WHERE user_id=$1 ORDER BY time_",
 		userID,
 	)
 	if err != nil {
@@ -166,7 +166,7 @@ func GetMutedUserRoles(userID string) ([]string, error) {
 	var roles []string
 	var roleIDs string
 	rows, err := db.Query(
-		"SELECT roleIDs, time_ FROM mutedUsers WHERE user_id=$1 ORDER BY datetime(time_)",
+		"SELECT roleIDs, time_ FROM mutedUsers WHERE user_id=$1 ORDER BY time_",
 		userID,
 	)
 	if err != nil {
