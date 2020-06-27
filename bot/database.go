@@ -206,7 +206,7 @@ func AddInvite(user discordgo.User, invite discordgo.Invite) error {
 func AddUser(user discordgo.User) error {
 	// ON CONFLICT (id) DO UPDATE SET username=$2
 	// ON CONFLICT (id) IGNORE
-	_, err := db.Exec("INSERT INTO users (id,username) VALUES ($1, $2) ON CONFLICT (id) IGNORE", user.ID, user.Username)
+	_, err := db.Exec("INSERT INTO users (id,username) VALUES ($1, $2) ON CONFLICT (id) DO IGNORE", user.ID, user.Username)
 	if err != nil {
 		return errors.Wrap(err, "inserting user failed")
 	}
