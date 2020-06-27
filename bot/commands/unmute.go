@@ -80,7 +80,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Role #1**",
-				Value: roles[3],
+				Value: roles[0],
 			},
 			{
 				Name:  "**User ID**",
