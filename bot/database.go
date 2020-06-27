@@ -204,7 +204,7 @@ func AddInvite(user discordgo.User, invite discordgo.Invite) error {
 
 //AddUser adds a user or updates the username if it already exists
 func AddUser(user discordgo.User) error {
-	_, err := db.Exec("INSERT OR IGNORE INTO users (id) VALUES ($1)", user.ID)
+	_, err := db.Exec("INSERT OR REPLACE INTO users (id) VALUES ($1)", user.ID)
 	if err != nil {
 		return errors.Wrap(err, "inserting user failed")
 	}
@@ -345,7 +345,7 @@ func AddResource(resource Resource) (int64, error) {
 	}
 
 	for _, tag := range resource.Tags {
-		_, err = tx.Exec("INSERT OR IGNORE INTO resource_tags (name) VALUES ($1)", tag)
+		_, err = tx.Exec("INSERT OR REPLACE INTO resource_tags (name) VALUES ($1)", tag)
 		if err != nil {
 			if rollbackErr := tx.Rollback(); rollbackErr != nil {
 				err = errors.Wrap(rollbackErr, "rollback failed")
