@@ -15,6 +15,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.Bot {
 		return
 	}
+
 	guildID := m.GuildID
 	guild, err := GetGuild(s, guildID)
 	if err != nil {
@@ -27,6 +28,9 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		LogIfError(s, err)
 	}
 
+	if IsAdminOrHigher(author, guild) {
+		return
+	}
 	if hasBannedWord(m.Content) {
 		_, err = s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
 			Title: fmt.Sprintf("A user attempted to post a banned word"),
