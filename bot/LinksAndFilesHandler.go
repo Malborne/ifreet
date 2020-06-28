@@ -29,7 +29,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if hasBannedWord(m.Content) {
 		_, err = s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("%s attempted to post a banned word in <#%s>", author.Mention(), m.ChannelID),
+			Title: fmt.Sprintf("A user attempted to post a banned word"),
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "Message Author",
@@ -208,7 +208,7 @@ func muteUser(s *discordgo.Session, infractor *discordgo.Member, GuildID string)
 		// return errors.Wrap(err, "creating private channel failed")
 	}
 	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-		"You have been muted for attempted to post an inappropriate word in %s \n\nIf you think there was a mistake, please contact one of the Moderators\n\nYou cannot reply to this message.",
+		"You have been muted for attempting to post an inappropriate word in %s \n\nIf you think there was a mistake, please contact one of the Moderators\n\nYou cannot reply to this message.",
 		guild.Name,
 	))
 	if err != nil {
