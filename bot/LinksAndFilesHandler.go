@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/pkg/errors"
 )
 
 //LinksAndFilesHandler checks if someone sends a link and deletes the message if the user is new
@@ -25,6 +26,45 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", m.Author.ID))
 		LogIfError(s, err)
 	}
+
+	if hasBannedWord(m.Content) {
+		_, err = s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
+			Title: fmt.Sprintf("%s attempted to post a banned word in <#%s>", author.Mention(), m.ChannelID),
+			Fields: []*discordgo.MessageEmbedField{
+				{
+					Name:  "Message Author",
+					Value: m.Author.Username + "#" + m.Author.Discriminator,
+				},
+				{
+					Name:  "Channel",
+					Value: fmt.Sprintf("<#%s>", m.ChannelID),
+				},
+				{
+					Name:  "Message Content",
+					Value: m.Content,
+				},
+			},
+			Color: 0xEE0000,
+		})
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "sending embed failed"))
+			return
+		}
+		s.ChannelMessageDelete(m.ChannelID, m.ID)
+
+		err = muteUser(s, author, guildID)
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "sending message failed"))
+
+		}
+
+		err = AddInfraction(*author.User, Infraction{Reason: "Attempting to post an inappropriate word", Time: time.Now()})
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "Adding infraction failed"))
+			return
+		}
+	}
+
 	if IsModOrHigher(author, guild) {
 		return
 	}
@@ -36,12 +76,36 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	if len(m.Attachments) > 0 { //sent a file
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You are NOT allowed to send files yet. Please wait until you are on the server for a longer time."))
+
+		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
+			Title: fmt.Sprintf("%s attempted to post a file in <#%s>", author.Mention(), m.ChannelID),
+			Fields: []*discordgo.MessageEmbedField{
+				{
+					Name:  "Message Author",
+					Value: m.Author.Username + "#" + m.Author.Discriminator,
+				},
+				{
+					Name:  "Channel",
+					Value: fmt.Sprintf("<#%s>", m.ChannelID),
+				},
+				{
+					Name:  "Message Content",
+					Value: m.Content,
+				},
+			},
+			Color: 0xEE0000,
+		})
 		if err != nil {
-			LogIfError(s, err)
+			LogIfError(s, errors.Wrap(err, "sending embed failed"))
 			return
 		}
 		s.ChannelMessageDelete(m.ChannelID, m.ID)
+
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send files yet. Please wait until you are on the server for a longer time.", author.Mention()))
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "sending message failed"))
+			return
+		}
 
 	}
 	if len(m.Embeds) > 0 || strings.Contains(strings.ToLower(m.Content), "https://") || strings.Contains(strings.ToLower(m.Content), "http://") { //sent a link
@@ -50,13 +114,116 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
+		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
+			Title: fmt.Sprintf("%s attempted to post a file in <#%s>", author.Mention(), m.ChannelID),
+			Fields: []*discordgo.MessageEmbedField{
+				{
+					Name:  "Message Author",
+					Value: m.Author.Username + "#" + m.Author.Discriminator,
+				},
+				{
+					Name:  "Channel",
+					Value: fmt.Sprintf("<#%s>", m.ChannelID),
+				},
+				{
+					Name:  "Message Content",
+					Value: m.Content,
+				},
+			},
+			Color: 0xEE0000,
+		})
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "sending embed failed"))
+			return
+		}
+		s.ChannelMessageDelete(m.ChannelID, m.ID)
+
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You are NOT allowed to send links yet. Please wait until you are on the server for a longer time."))
 		if err != nil {
 			LogIfError(s, err)
 			return
 		}
-		s.ChannelMessageDelete(m.ChannelID, m.ID)
 
 	}
 
+}
+
+func hasBannedWord(content string) bool {
+	for _, word := range Config.BannedWords {
+		if strings.Contains(strings.ToLower(content), word) {
+			return true
+		}
+	}
+	return false
+}
+
+func muteUser(s *discordgo.Session, infractor *discordgo.Member, GuildID string) error {
+
+	guild, err := GetGuild(s, GuildID)
+
+	//Add the muted user's roles to the database
+
+	err = AddMutedUser(*infractor.User, time.Now(), getRoleIDs(infractor))
+	if err != nil {
+
+		return errors.Wrap(err, "Addin the user to the databaes failed")
+	}
+
+	//Remove all the other user roles
+	for _, role := range infractor.Roles {
+		err = s.GuildMemberRoleRemove(GuildID, infractor.User.ID, role)
+		if err != nil {
+			return errors.Wrap(err, "removing role failed")
+		}
+
+	}
+	//Add the muted role
+	err = s.GuildMemberRoleAdd(GuildID, infractor.User.ID, Config.MutedRole)
+	if err != nil {
+		return errors.Wrap(err, "adding user role failed")
+	}
+
+	if err != nil {
+		return errors.Wrap(err, "getting user failed")
+	}
+	_, err = s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
+		Title: "User was muted.",
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:  "**Username**",
+				Value: infractor.User.Username + "#" + infractor.User.Discriminator,
+			},
+			{
+				Name:  "**User ID**",
+				Value: infractor.User.ID,
+			},
+		},
+		Color: 0xEE0000,
+	})
+
+	userChannel, err := s.UserChannelCreate(infractor.User.ID)
+	if err != nil {
+		// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but was successfully muted", infractor.Mention()))
+		return nil
+		// return errors.Wrap(err, "creating private channel failed")
+	}
+	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
+		"You have been muted for attempted to post an inappropriate word in %s \n\nIf you think there was a mistake, please contact one of the Moderators\n\nYou cannot reply to this message.",
+		guild.Name,
+	))
+	if err != nil {
+		// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but has been muted", infractor.Mention()))
+		return nil
+		// return errors.Wrap(err, "sending message failed")
+	}
+
+	return errors.Wrap(err, "Sending Message failed")
+}
+
+func getRoleIDs(m *discordgo.Member) string {
+	var roleIDs = ""
+	for _, role := range m.Roles {
+		roleIDs = roleIDs + role + ","
+	}
+	return roleIDs
 }

@@ -1,6 +1,6 @@
 token = "NzE1MTMwODExMTU4MTAyMDQ4.XvgjjA.Vq-Vk-q5Gs4pUreUcR72ALlgNa4"
 welcome_channel = "714908405969453178"
-log_channel = "714961254518882366"
+log_channel = "726666813529915463"
 admin_channel = "715788916132937728"
 bot_channel = "710648266790010970"
 rules_channel = "679065466173390910"
@@ -22,6 +22,8 @@ approval_message = "You now have full access to the server %s! On Saturdays, we 
 
 command_prefix = ";"
 
+
+banned_words = [ "anal ","biatch", "blowjob", "blow job", "buttplug ", "cunt ", "dildo", " fag", "faggot", " penis", "scrotum", "slut", "turd", "vagina", "whore", "fellatio", "f u c k", "clitoris" "anus", "fuck", "mother fucker", "suck my dick", "f*ck", "f**k", "bitch", "nigger", "nigga" "n**ger", "n*gga"]
 
 [[role]]
   id = "714905000748515338"
@@ -132,3 +134,5 @@ command_prefix = ";"
   id = "726024240586817577"
   name = "Albanian"
   description = "A self-assignable role for those who speak Albanian"
+
+  

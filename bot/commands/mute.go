@@ -139,6 +139,7 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 
 }
 
+//getRoleIDs returns the IDs of the roles of a given member
 func getRoleIDs(m *discordgo.Member) string {
 	var roleIDs = ""
 	for _, role := range m.Roles {

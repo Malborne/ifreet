@@ -35,6 +35,8 @@ type BotConfig struct {
 
 	Roles []Role `toml:"role"`
 
+	BannedWords []string `toml:"banned_words"`
+
 	WelcomeMessage  string `toml:"welcome_message"`
 	ApprovalMessage string `toml:"approval_message"`
 
