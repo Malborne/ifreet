@@ -82,7 +82,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if len(m.Attachments) > 0 { //sent a file
 
 		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("%s attempted to post a file in <#%s>", author.Mention(), m.ChannelID),
+			Title: fmt.Sprintf("A user attempted to post a file."),
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "Message Author",
@@ -91,10 +91,6 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				{
 					Name:  "Channel",
 					Value: fmt.Sprintf("<#%s>", m.ChannelID),
-				},
-				{
-					Name:  "Message Content",
-					Value: m.Content,
 				},
 			},
 			Color: 0xEE0000,
@@ -119,7 +115,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("%s attempted to post a file in <#%s>", author.Mention(), m.ChannelID),
+			Title: fmt.Sprintf("A user attempted to post a link. Beaware of suspicious links don't click them"),
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "Message Author",
@@ -142,7 +138,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageDelete(m.ChannelID, m.ID)
 
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You are NOT allowed to send links yet. Please wait until you are on the server for a longer time."))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send links yet. Please wait until you are on the server for a longer time.", author.Mention()))
 		if err != nil {
 			LogIfError(s, err)
 			return
