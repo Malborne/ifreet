@@ -69,6 +69,14 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS whitelistedUsers (
+	id SERIAL PRIMARY KEY,
+	time_ timestamp,
+	user_id TEXT,
+	FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+
 CREATE TABLE IF NOT EXISTS invites (
 	id SERIAL PRIMARY KEY,
 	code TEXT,
@@ -159,6 +167,26 @@ func AddMutedUser(user discordgo.User, time time.Time, roleIDs string) error {
 	_, err = db.Exec("INSERT INTO mutedUsers (roleIDs, time_, user_id) VALUES ($1, $2, $3)",
 		roleIDs, time, user.ID)
 	return errors.Wrap(err, "muting user failed")
+}
+
+//AddWhitelistedUser Adds a user to the whitelist to be able to post links
+func AddWhitelistedUser(user discordgo.User, time time.Time) error {
+	err := AddUser(user)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec("INSERT INTO mutedUsers (time_, user_id) VALUES ($1, $2)",
+		time, user.ID)
+	return errors.Wrap(err, "muting user failed")
+}
+
+//IsuserWhitelisted checks if a user is whitelisted
+func IsuserWhitelisted(userID string) (bool, error) {
+	_, err := db.Exec("SELECT EXISTS (SELECT 1 from whitelistedUsers where user_id=$1)", userID)
+	if err != nil {
+		return false, errors.Wrap(err, "fetching infractions failed")
+	}
 }
 
 //GetMutedUserRoles retrieves the muted roles of a muted member

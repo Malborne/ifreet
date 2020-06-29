@@ -69,7 +69,7 @@ func commandViewInfractions(s *discordgo.Session, m *discordgo.MessageCreate, ar
 		title += " Showing the last 25."
 	}
 
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminChannel, &discordgo.MessageEmbed{
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
 		Author: &discordgo.MessageEmbedAuthor{
 			Name:    user.Username,
 			IconURL: user.AvatarURL(""),
