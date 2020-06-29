@@ -38,8 +38,14 @@ func OpenDb(file string) error {
 	if err != nil {
 		return errors.Wrap(err, "opening database failed")
 	}
-	// id INTEGER PRIMARY KEY AUTOINCREMENT
-	//	time_ DATETIME,
+
+	// CREATE TABLE IF NOT EXISTS whitelistedUsers (
+	// 	id SERIAL PRIMARY KEY,
+	// 	time_ timestamp,
+	// 	user_id TEXT,
+	// 	FOREIGN KEY(user_id) REFERENCES users(id)
+	// );
+
 	// dropTables := `DROP TABLE IF EXISTS users cascade;
 	// 			  DROP TABLE IF EXISTS infractions cascade;
 	// 			  DROP TABLE IF EXISTS mutedUsers cascade;
@@ -47,6 +53,8 @@ func OpenDb(file string) error {
 	// 			  DROP TABLE IF EXISTS resource_tags cascade;
 	// 			  DROP TABLE IF EXISTS resource_tags_resources cascade;
 	// 			  DROP TABLE IF EXISTS invites cascade;`
+	dropTables := `DROP TABLE IF EXISTS invites cascade;
+	DROP TABLE IF EXISTS whitelistedUsers cascade;`
 	createTableStatement := `
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
@@ -69,21 +77,8 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
-CREATE TABLE IF NOT EXISTS whitelistedUsers (
-	id SERIAL PRIMARY KEY,
-	time_ timestamp,
-	user_id TEXT,
-	FOREIGN KEY(user_id) REFERENCES users(id)
-);
 
 
-CREATE TABLE IF NOT EXISTS invites (
-	id SERIAL PRIMARY KEY,
-	code TEXT,
-	time_ timestamp,
-	user_id TEXT,
-	FOREIGN KEY(user_id) REFERENCES users(id)
-);
 
 CREATE TABLE IF NOT EXISTS resources (
 	id SERIAL PRIMARY KEY,
@@ -104,10 +99,10 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	FOREIGN KEY(resource_tag_id) REFERENCES resource_tags(id)
 );
 `
-	// _, err = db.Exec(dropTables)
-	// if err != nil {
-	// 	return errors.Wrap(err, "deleting database tables failed")
-	// }
+	_, err = db.Exec(dropTables)
+	if err != nil {
+		return errors.Wrap(err, "deleting database tables failed")
+	}
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
 }
@@ -170,24 +165,24 @@ func AddMutedUser(user discordgo.User, time time.Time, roleIDs string) error {
 }
 
 //AddWhitelistedUser Adds a user to the whitelist to be able to post links
-func AddWhitelistedUser(user discordgo.User, time time.Time) error {
-	err := AddUser(user)
-	if err != nil {
-		return err
-	}
+// func AddWhitelistedUser(user discordgo.User, time time.Time) error {
+// 	err := AddUser(user)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	_, err = db.Exec("INSERT INTO mutedUsers (time_, user_id) VALUES ($1, $2)",
-		time, user.ID)
-	return errors.Wrap(err, "muting user failed")
-}
+// 	_, err = db.Exec("INSERT INTO mutedUsers (time_, user_id) VALUES ($1, $2)",
+// 		time, user.ID)
+// 	return errors.Wrap(err, "muting user failed")
+// }
 
 //IsuserWhitelisted checks if a user is whitelisted
-func IsuserWhitelisted(userID string) (bool, error) {
-	_, err := db.Exec("SELECT EXISTS (SELECT 1 from whitelistedUsers where user_id=$1)", userID)
-	if err != nil {
-		return false, errors.Wrap(err, "fetching infractions failed")
-	}
-}
+// func IsuserWhitelisted(userID string) (bool, error) {
+// 	_, err := db.Exec("SELECT EXISTS (SELECT 1 from whitelistedUsers where user_id=$1)", userID)
+// 	if err != nil {
+// 		return false, errors.Wrap(err, "fetching infractions failed")
+// 	}
+// }
 
 //GetMutedUserRoles retrieves the muted roles of a muted member
 func GetMutedUserRoles(userID string) ([]string, error) {
@@ -226,18 +221,6 @@ func RemoveMutedUser(userID string) error {
 		userID,
 	)
 	return errors.Wrap(err, "deleting user failed")
-}
-
-//AddInvite adds an invite for a user
-func AddInvite(user discordgo.User, invite discordgo.Invite) error {
-	err := AddUser(user)
-	if err != nil {
-		return err
-	}
-
-	_, err = db.Exec("INSERT INTO invites (code, time_, user_id) VALUES ($1, $2, $3)",
-		invite.Code, invite.CreatedAt, user.ID)
-	return errors.Wrap(err, "inserting user failed")
 }
 
 //AddUser adds a user or updates the username if it already exists
