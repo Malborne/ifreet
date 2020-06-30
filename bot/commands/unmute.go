@@ -48,7 +48,8 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	}
 
 	if !isMuted(infractor) {
-		return nil
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s is NOT muted in the first place", user.Mention()))
+		return errors.Wrap(err, "sending message failed")
 	}
 
 	author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
@@ -88,12 +89,12 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	// }
 
 	for _, role := range roles {
-		// if role != heimdallr.Config.MutedRole {
-		err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
-		// }
+		if role != heimdallr.Config.ServerBoosterRole {
+			err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
+		}
 
 		if err != nil {
-			// return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
+			return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
 		}
 
 	}
@@ -140,7 +141,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		guild.Name,
 	))
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but has been unmuted", infractor.Mention()))
+		// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but has been unmuted", infractor.Mention()))
 		return nil
 		// return errors.Wrap(err, "sending message failed")
 	}
