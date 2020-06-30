@@ -91,12 +91,11 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	for _, role := range roles {
 		if role != heimdallr.Config.ServerBoosterRole {
 			err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
-		}
 
-		if err != nil {
-			return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
+			if err != nil {
+				return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
+			}
 		}
-
 	}
 	//remove the muted user from the database
 	err = heimdallr.RemoveMutedUser(infractor.User.ID)
