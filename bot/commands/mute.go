@@ -145,7 +145,9 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 func getRoleIDs(m *discordgo.Member) string {
 	var roleIDs = ""
 	for _, role := range m.Roles {
-		roleIDs = roleIDs + role + ","
+		if role != heimdallr.Config.ServerBoosterRole {
+			roleIDs = roleIDs + role + ","
+		}
 	}
 	return roleIDs
 }
