@@ -40,6 +40,13 @@ banned_words = [ "asshole","biatch", "Scumbag","pain in the ass", "shit","blowjo
   name = "recitetogether"
   description = "A self-assignable role for those who want to recite together in the voice chat or listen to others recite."
 
+  [[role]]
+  id = "727349233921032212"
+  name = "events"
+  description = "A self-assignable role for those who want to be notified about new events such as Quran quizzes, Islamic Quzzies, lectures, etc."
+
+
+
 
 
    [[role]]
