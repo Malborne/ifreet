@@ -56,17 +56,19 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageDelete(m.ChannelID, m.ID)
 
-		err = muteUser(s, author, guildID)
-		if err != nil {
-			LogIfError(s, errors.Wrap(err, "sending message failed"))
+		if hasRole(author, Config.UserRole) {
+			err = muteUser(s, author, guildID)
+			if err != nil {
+				LogIfError(s, errors.Wrap(err, "Muting user failed"))
 
+			}
 		}
-
 		err = AddInfraction(*author.User, Infraction{Reason: "Attempting to post an inappropriate word", Time: time.Now()})
 		if err != nil {
 			LogIfError(s, errors.Wrap(err, "Adding infraction failed"))
 			return
 		}
+
 	}
 
 	if IsModOrHigher(author, guild) {
