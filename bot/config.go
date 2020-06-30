@@ -31,7 +31,9 @@ type BotConfig struct {
 	FemaleRole         string `toml:"female_role_id"`
 	VerifiedMaleRole   string `toml:"verified_male_role_id"`
 	VerifiedFemaleRole string `toml:"verified_female_role_id"`
-	MutedRole          string `toml:"muted_role_id"`
+	ServerBoosterRole  string `toml:"server_booster_id"`
+
+	MutedRole string `toml:"muted_role_id"`
 
 	Roles []Role `toml:"role"`
 

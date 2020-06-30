@@ -87,11 +87,13 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 
 	//Remove all the other user roles
 	for _, role := range infractor.Roles {
-		err = s.GuildMemberRoleRemove(m.GuildID, infractor.User.ID, role)
-		if err != nil {
-			return errors.Wrap(err, "removing role failed")
-		}
+		if role != heimdallr.Config.ServerBoosterRole {
+			err = s.GuildMemberRoleRemove(m.GuildID, infractor.User.ID, role)
 
+			if err != nil {
+				return errors.Wrap(err, "removing role failed")
+			}
+		}
 	}
 	//Add the muted role
 	err = s.GuildMemberRoleAdd(guildID, userID, heimdallr.Config.MutedRole)
