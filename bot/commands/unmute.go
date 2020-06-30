@@ -90,12 +90,14 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 
 	for _, role := range roles {
 		if role != heimdallr.Config.ServerBoosterRole {
-			err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
+			if role != "" {
+				err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
+			}
 
 			if err != nil {
-				s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("No role with ID %s found", role))
+				// s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("No role with ID %s found", role))
 
-				// return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
+				return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
 			}
 		}
 	}
