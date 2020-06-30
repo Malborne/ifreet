@@ -93,7 +93,9 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 			err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
 
 			if err != nil {
-				return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
+				s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("No role with ID %s found", role))
+
+				// return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
 			}
 		}
 	}
