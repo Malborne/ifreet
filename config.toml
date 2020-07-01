@@ -36,6 +36,13 @@ banned_words = [ "asshole","biatch", "Scumbag","pain in the ass", "shit","blowjo
   name = "tajweedlesson2"
   description = "A self-assignable role for those who wish to be reminded of the tajweed lesson session 2"
 
+  
+ [[role]]
+  id = "727701054128390165"
+  name = "arabiclesson"
+  description = "A self-assignable role for those who wish to be reminded of the Arabic lesson"
+
+
   [[role]]
   id = "727340877072171048"
   name = "recitetogether"
