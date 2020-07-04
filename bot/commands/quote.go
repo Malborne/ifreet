@@ -36,11 +36,6 @@ func commandQuote(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.
 		messageID = slices[len(slices)-1]
 	}
 
-	if _, err := s.ChannelMessage(m.ChannelID, messageID); err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to get the starting message Please make sure that you enter either the ID of the message or a link to the message."))
-		return errors.Wrap(err, "deleting message failed")
-	}
-
 	var message *discordgo.Message
 	var quoteChannel *discordgo.Channel
 	// If we're very unlucky we might get the wrong message here,
