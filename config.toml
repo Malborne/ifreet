@@ -167,3 +167,9 @@ banned_words = [ "asshole","biatch", "Scumbag","pain in the ass", "shit","blowjo
   id = "728814577478795271"
   name = "German"
   description = "A self-assignable role for those who speak German"
+
+  
+         [[role]]
+  id = "729035923605684267"
+  name = "Hebrew"
+  description = "A self-assignable role for those who speak Hebrew"
