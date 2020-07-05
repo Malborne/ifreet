@@ -110,10 +110,11 @@ func init() {
 		helpCommand,
 		quoteCommand,
 		tajweedLessonCommand,
-		// isItSundayCommand,s
+		arabicLessonCommand,
 		roleCommand,
 		versionCommand,
 		lessonsCommand,
+		arabiclessonsCommand,
 		// searchResourcesCommand,
 		channelLinkCommand,
 	}

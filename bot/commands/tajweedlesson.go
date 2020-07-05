@@ -20,7 +20,7 @@ var tajweedLessonCommand = command{
 	},
 }
 
-//tajweedlesson gives information about the weekly Sunday calls.
+//tajweedlesson gives information about the weekly Tajweed lesson.
 func tajweedlesson(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "Tajweed Lesson",
