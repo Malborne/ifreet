@@ -105,7 +105,7 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return errors.Wrap(err, "getting user failed")
 	}
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: "User was muted.",
+		Title: fmt.Sprintf("User was muted by %s.", author.Mention()),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",

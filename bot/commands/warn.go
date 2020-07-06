@@ -86,8 +86,8 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	if err != nil {
 		return errors.Wrap(err, "getting user failed")
 	}
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: "User was warned.",
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
+		Title: fmt.Sprintf("User was warned by %s.", author.Mention()),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",
@@ -109,7 +109,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 
 	userChannel, err := s.UserChannelCreate(userID)
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but the warning was successfully registered", infractor.Mention()))
+		s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s Does NOT ACCEPT DMs but the warning was successfully registered", infractor.Mention()))
 		return nil
 		// return errors.Wrap(err, "creating private channel failed")
 	}

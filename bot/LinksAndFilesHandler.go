@@ -32,8 +32,8 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	if hasBannedWord(m.Content) {
-		_, err = s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("A user attempted to post a banned word"),
+		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
+			Title: fmt.Sprintf("A user attempted to post an inappropriate word"),
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "Message Author",
@@ -188,8 +188,8 @@ func muteUser(s *discordgo.Session, infractor *discordgo.Member, GuildID string)
 	if err != nil {
 		return errors.Wrap(err, "getting user failed")
 	}
-	_, err = s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: "User was muted.",
+	_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
+		Title: "User was automatically muted by Ifreet.",
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",

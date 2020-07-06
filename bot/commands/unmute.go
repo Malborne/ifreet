@@ -116,8 +116,8 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	if err != nil {
 		return errors.Wrap(err, "getting user failed")
 	}
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: "User was unmuted.",
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
+		Title: fmt.Sprintf("User was unmuted by %s.", author.Mention()),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",
@@ -135,7 +135,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 
 	userChannel, err := s.UserChannelCreate(userID)
 	if err != nil {
-		// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but was sucessfully unmuted", infractor.Mention()))
+		s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s Does NOT ACCEPT DMs but was sucessfully unmuted", infractor.Mention()))
 		return nil
 		// return errors.Wrap(err, "creating private channel failed")
 	}
