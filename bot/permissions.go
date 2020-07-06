@@ -1,10 +1,11 @@
 package heimdallr
 
 import (
-	"github.com/bwmarrin/discordgo"
-	"github.com/pkg/errors"
 	"log"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
+	"github.com/pkg/errors"
 )
 
 //CheckPermissions checks if Heimdallr has the permissions it needs
@@ -87,6 +88,15 @@ func IsOwner(member *discordgo.Member, guild *discordgo.Guild) bool {
 	return guild.OwnerID == member.User.ID
 }
 
+//IsVerified checks whether a user is verified
+func IsVerified(m *discordgo.Member) bool {
+	for _, role := range m.Roles {
+		if role == Config.VerifiedMaleRole || role == Config.VerifiedFemaleRole {
+			return true
+		}
+	}
+	return false
+}
 func getRoleByID(roleID string, roles []*discordgo.Role) (*discordgo.Role, error) {
 	for _, role := range roles {
 		if roleID == role.ID {

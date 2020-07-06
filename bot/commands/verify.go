@@ -32,7 +32,7 @@ func commandVerify(s *discordgo.Session, m *discordgo.MessageCreate, args docopt
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No member was found with ID %s.", userID))
 		return errors.Wrap(err, "sending message failed")
 	}
-	if isVerified(member) {
+	if heimdallr.IsVerified(member) {
 		return nil
 	}
 
@@ -100,7 +100,7 @@ func ReactionVerify(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		heimdallr.LogIfError(s, err)
 		return
 	}
-	if isVerified(member) {
+	if heimdallr.IsVerified(member) {
 		return
 	}
 

@@ -147,7 +147,8 @@ func isApproved(m *discordgo.Member) bool {
 	return false
 }
 
-func isVerified(m *discordgo.Member) bool {
+//IsVerified checks whether a user is verified
+func IsVerified(m *discordgo.Member) bool {
 	for _, role := range m.Roles {
 		if role == heimdallr.Config.VerifiedMaleRole || role == heimdallr.Config.VerifiedFemaleRole {
 			return true

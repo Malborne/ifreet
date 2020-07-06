@@ -31,7 +31,7 @@ func commandDMUnverified(s *discordgo.Session, m *discordgo.MessageCreate, args 
 	var count int = 0
 	for _, member := range guild.Members {
 
-		if !isVerified(member) && member.User.ID != s.State.User.ID {
+		if !heimdallr.IsVerified(member) && member.User.ID != s.State.User.ID {
 			userChannel, err := s.UserChannelCreate(member.User.ID)
 			if err != nil {
 				return errors.Wrap(err, "creating private channel failed")
