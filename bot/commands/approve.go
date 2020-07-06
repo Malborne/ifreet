@@ -173,12 +173,3 @@ func isFemale(m *discordgo.Member) bool {
 	}
 	return false
 }
-
-func isMuted(m *discordgo.Member) bool {
-	for _, role := range m.Roles {
-		if role == heimdallr.Config.MutedRole {
-			return true
-		}
-	}
-	return false
-}
