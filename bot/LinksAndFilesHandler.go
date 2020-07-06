@@ -78,7 +78,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if err != nil {
 		LogIfError(s, err)
 	}
-	if joinedAt.Before(time.Now().AddDate(0, 0, -1)) || (IsVerified(author) && joinedAt.Before(time.Now().Add(time.Minute*60))) { //If they joined the server more than 24 ago, or is verified and joined more than an hour ago, just ignore it
+	if joinedAt.Before(time.Now().AddDate(0, 0, -1)) || (IsVerified(author) && joinedAt.Before(time.Now().Add(time.Minute*1))) { //If they joined the server more than 24 ago, or is verified and joined more than an hour ago, just ignore it
 		return
 	}
 	if len(m.Attachments) > 0 { //sent a file
