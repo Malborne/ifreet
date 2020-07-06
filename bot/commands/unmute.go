@@ -117,7 +117,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		return errors.Wrap(err, "getting user failed")
 	}
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
-		Title: fmt.Sprintf("User was unmuted by %s.", author.Mention()),
+		Title: fmt.Sprintf("User was unmuted by %s.", author.User.Username+"#"+author.User.Discriminator),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",
