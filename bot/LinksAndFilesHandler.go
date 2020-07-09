@@ -56,11 +56,19 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageDelete(m.ChannelID, m.ID)
 
-		if hasRole(author, Config.UserRole) {
+		if hasRole(author, Config.UserRole) { //If they are approved, muted them
 			err = muteUser(s, author, guildID)
 			if err != nil {
 				LogIfError(s, errors.Wrap(err, "Muting user failed"))
 
+			}
+		} else {
+			//If they are not approved, just kick them out of the server
+			err = s.GuildMemberDeleteWithReason(guildID, author.User.ID, "Attempting to post an inappropriate word")
+
+			if err != nil {
+				LogIfError(s, errors.Wrap(err, "kick failed"))
+				return
 			}
 		}
 		err = AddInfraction(*author.User, Infraction{Reason: "Attempting to post an inappropriate word", Time: time.Now()})
