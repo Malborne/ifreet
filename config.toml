@@ -163,13 +163,20 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "shit
   name = "Kurdish"
   description = "A self-assignable role for those who speak Kurdish"
 
-       [[role]]
+    [[role]]
   id = "728814577478795271"
   name = "German"
   description = "A self-assignable role for those who speak German"
 
   
-         [[role]]
+    [[role]]
   id = "729035923605684267"
   name = "Hebrew"
   description = "A self-assignable role for those who speak Hebrew"
+
+  
+
+   [[role]]
+  id = "732125349789565048"
+  name = "Portuguese"
+  description = "A self-assignable role for those who speak Portuguese"
