@@ -36,8 +36,9 @@ func commandSay(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Op
 	}
 	if hasRole(author, heimdallr.Config.AdminRole) {
 		_, err := s.ChannelMessageSend(channelID, fmt.Sprintf(message))
-
-		return errors.Wrap(err, "sending message failed")
+		if err != nil {
+			return errors.Wrap(err, "sending message failed")
+		}
 
 	}
 
