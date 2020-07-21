@@ -25,7 +25,7 @@ var infractionsCommand = command{
 
 //commandViewInfractions lists a user's infractions
 func commandViewInfractions(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<user>"].(string))
+	userID := getIDFromMaybeMention(args["<user>"].(string), s)
 
 	guildID := m.GuildID
 	var user *discordgo.User

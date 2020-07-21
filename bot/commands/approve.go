@@ -25,8 +25,8 @@ var approveCommand = command{
 
 //commandApprove gives a member the User role.
 func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<Member>"].(string)) //Changed from user to Member
-	gender := getIDFromMaybeMention(args["<gender>"].(string))
+	userID := getIDFromMaybeMention(args["<Member>"].(string), s) //Changed from user to Member
+	gender := getIDFromMaybeMention(args["<gender>"].(string), s)
 
 	guildID := m.GuildID
 	member, err := heimdallr.GetMember(s, guildID, userID)

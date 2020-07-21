@@ -24,7 +24,7 @@ var whitelistCommand = command{
 
 //commandMuteUser mues another user
 func commandWhitelist(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<user>"].(string))
+	userID := getIDFromMaybeMention(args["<user>"].(string), s)
 	// number, _ := args.Int("<no>")
 	var user *discordgo.User
 

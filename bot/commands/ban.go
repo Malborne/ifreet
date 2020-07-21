@@ -25,7 +25,7 @@ var banCommand = command{
 
 //commandBanUser bans a user from the server.
 func commandBanUser(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<user>"].(string))
+	userID := getIDFromMaybeMention(args["<user>"].(string), s)
 	reason, _ := args.String("<reason>")
 
 	guildID := m.GuildID

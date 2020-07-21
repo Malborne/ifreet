@@ -25,7 +25,7 @@ var warnCommand = command{
 
 //commandWarnUser warns another user and gives an infraction.
 func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<user>"].(string))
+	userID := getIDFromMaybeMention(args["<user>"].(string), s)
 	reason, _ := args.String("<reason>")
 	var user *discordgo.User
 

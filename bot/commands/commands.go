@@ -320,8 +320,13 @@ func splitCommands(s string) []string {
 }
 
 // Allows both mentions and plain IDs
-func getIDFromMaybeMention(maybeMention string) string {
-	re := regexp.MustCompile(`<@[!&]?(\d+)>`)
+func getIDFromMaybeMention(maybeMention string, s *discordgo.Session) string {
+	re, err := regexp.Compile(`<@[!&]?(\d+)>`)
+
+	if err != nil {
+		heimdallr.LogIfError(s, err)
+
+	}
 	if submatch := re.FindStringSubmatch(maybeMention); len(submatch) == 2 {
 		return submatch[1]
 	}

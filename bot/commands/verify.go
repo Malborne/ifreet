@@ -24,7 +24,7 @@ var verifyCommand = command{
 
 //commandVerify gives a member the Verified Male/Female role.
 func commandVerify(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<Member>"].(string)) //Changed from user to Member
+	userID := getIDFromMaybeMention(args["<Member>"].(string), s) //Changed from user to Member
 
 	guildID := m.GuildID
 	member, err := heimdallr.GetMember(s, guildID, userID)
