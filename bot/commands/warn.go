@@ -81,7 +81,7 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 			return errors.Wrap(err, "sending message failed")
 		}
 	}
-	err = heimdallr.AddInfraction(*infractor.User, heimdallr.Infraction{Reason: reason, Time: time.Now()})
+	err = heimdallr.AddInfraction(*user, heimdallr.Infraction{Reason: reason, Time: time.Now()})
 	if err != nil {
 		return err
 	}
