@@ -41,5 +41,6 @@ func commandSay(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Op
 
 	}
 
-	return errors.Wrap(err, "sending message failed")
+	err = s.ChannelMessageDelete(m.ChannelID, m.ID)
+	return errors.Wrap(err, "deleting message failed")
 }
