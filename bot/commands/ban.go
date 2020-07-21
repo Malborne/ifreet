@@ -39,12 +39,10 @@ func commandBanUser(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	if err != nil {
 
 		user, err = s.User(userID)
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("heimdallr.GetMember returned an error, getting the user through s.User(), the username is: %s", user.Username+"#"+user.Discriminator))
 		if err != nil {
 			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No user was found with ID %s.", userID))
 			return errors.Wrap(err, "sending message failed")
 		}
-		//If we get here, this means the user doesn't exist in the server i.e. the member = nil, and that's why the IsAdminOrHigher will cause a crash
 	} else {
 		user = member.User
 	}
