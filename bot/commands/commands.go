@@ -141,6 +141,7 @@ func init() {
 		pruneCommand,
 		DMUnapprovedCommand,
 		DMUnverifiedCommand,
+		sayCommand,
 		// castSihrCommand,
 	}
 
