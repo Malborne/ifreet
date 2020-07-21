@@ -37,6 +37,7 @@ func commandBanUser(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	member, err := heimdallr.GetMember(s, guildID, userID)
 	var user *discordgo.User
 	if err != nil {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("heimdallr.GetMember returned an error"))
 		user, err = s.User(userID)
 		if err != nil {
 			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No user was found with ID %s.", userID))
