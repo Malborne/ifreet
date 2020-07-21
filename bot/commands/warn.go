@@ -59,11 +59,12 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	if heimdallr.IsAdminOrHigher(infractor, guild) {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot warn the admin. 👎"))
-		return errors.Wrap(err, "sending message failed")
+	if infractor != nil {
+		if heimdallr.IsAdminOrHigher(infractor, guild) {
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot warn the admin. 👎"))
+			return errors.Wrap(err, "sending message failed")
+		}
 	}
-
 	if m.Author.ID == user.ID && userID == "550664345302859786" { // Wasan's ID
 		_, err := s.ChannelMessageSend(m.ChannelID, "I'm not going to let you warn yourself, silly. 😉 I'm looking at you, وسن. I had to make this because of you 😒")
 		return errors.Wrap(err, "sending message failed")
@@ -72,12 +73,14 @@ func commandWarnUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	if isOneLowerThanTwo(author, infractor) {
-		// _, _ = s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s the infractor has rank of: %s and %s the author has rank of: %s", infractor.Mention(), getHighestRole(infractor), author.Mention(), getHighestRole(author)))
-		_, err := s.ChannelMessageSend(m.ChannelID, "You cannot warn a user that has the same or a role higher than you")
-		return errors.Wrap(err, "sending message failed")
-	}
+	if infractor != nil {
 
+		if isOneLowerThanTwo(author, infractor) {
+			// _, _ = s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s the infractor has rank of: %s and %s the author has rank of: %s", infractor.Mention(), getHighestRole(infractor), author.Mention(), getHighestRole(author)))
+			_, err := s.ChannelMessageSend(m.ChannelID, "You cannot warn a user that has the same or a role higher than you")
+			return errors.Wrap(err, "sending message failed")
+		}
+	}
 	err = heimdallr.AddInfraction(*infractor.User, heimdallr.Infraction{Reason: reason, Time: time.Now()})
 	if err != nil {
 		return err
