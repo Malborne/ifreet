@@ -44,6 +44,7 @@ func commandBanUser(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No user was found with ID %s.", userID))
 			return errors.Wrap(err, "sending message failed")
 		}
+		//If we get here, this means the user doesn't exist in the server i.e. the member = nil, and that's why the IsAdminOrHigher will cause a crash
 	} else {
 		user = member.User
 	}
@@ -57,11 +58,12 @@ func commandBanUser(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	if heimdallr.IsAdminOrHigher(member, guild) {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot ban the admin. 👎"))
-		return errors.Wrap(err, "sending message failed")
+	if member != nil {
+		if heimdallr.IsAdminOrHigher(member, guild) {
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot ban the admin. 👎"))
+			return errors.Wrap(err, "sending message failed")
+		}
 	}
-
 	if m.Author.ID == user.ID && userID == "550664345302859786" { // Wasan's ID
 		_, err := s.ChannelMessageSend(m.ChannelID, "I'm not going to let you ban yourself, silly. 😉\nI'm looking at you, وسن. I had to make this because of you 😒")
 		return errors.Wrap(err, "sending message failed")
@@ -70,10 +72,12 @@ func commandBanUser(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		_, err := s.ChannelMessageSend(m.ChannelID, "I'm not going to let you ban yourself, silly. 😉")
 		return errors.Wrap(err, "sending message failed")
 	}
-	if isOneLowerThanTwo(author, member) {
-		// _, _ = s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s the infractor has rank of: %s and %s the author has rank of: %s", infractor.Mention(), getHighestRole(infractor), author.Mention(), getHighestRole(author)))
-		_, err := s.ChannelMessageSend(m.ChannelID, "You cannot ban a user that has the same or a role higher than you")
-		return errors.Wrap(err, "sending message failed")
+	if member != nil {
+		if isOneLowerThanTwo(author, member) {
+			// _, _ = s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s the infractor has rank of: %s and %s the author has rank of: %s", infractor.Mention(), getHighestRole(infractor), author.Mention(), getHighestRole(author)))
+			_, err := s.ChannelMessageSend(m.ChannelID, "You cannot ban a user that has the same or a role higher than you")
+			return errors.Wrap(err, "sending message failed")
+		}
 	}
 	err = s.GuildBanCreateWithReason(guildID, userID, reason, 0)
 	if err != nil {
