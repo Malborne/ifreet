@@ -93,23 +93,25 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			return
 		}
 		for mess := range messages {
-			_, err = s.ChannelMessageSendEmbed(heimdallr.Config.ArchiveChannel, &discordgo.MessageEmbed{
-				Title: fmt.Sprintf("This Message  was cleared by %s", reactingMember.User.String()),
-				Fields: []*discordgo.MessageEmbedField{
-					{
-						Name:  "**Message Author**",
-						Value: messages[mess].Author.String(),
+			if !messages[mess].Author.Bot {
+				_, err = s.ChannelMessageSendEmbed(heimdallr.Config.ArchiveChannel, &discordgo.MessageEmbed{
+					Title: fmt.Sprintf("This Message  was cleared by %s", reactingMember.User.String()),
+					Fields: []*discordgo.MessageEmbedField{
+						{
+							Name:  "**Message Author**",
+							Value: messages[mess].Author.String(),
+						},
+						{
+							Name:  "**Message Content**",
+							Value: messages[mess].Content,
+						},
 					},
-					{
-						Name:  "**Message Content**",
-						Value: messages[mess].Content,
-					},
-				},
-				Color: 0x00FF00,
-			})
-			if err != nil {
-				heimdallr.LogIfError(s, err)
-				return
+					Color: 0x00FF00,
+				})
+				if err != nil {
+					heimdallr.LogIfError(s, err)
+					return
+				}
 			}
 			//TODO Add Delete message from database code here
 			s.ChannelMessageDelete(message.ChannelID, messages[mess].ID)
