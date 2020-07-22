@@ -107,6 +107,7 @@ END;
 $body$
 LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS tr_check_number_of_row on archive
 CREATE TRIGGER tr_check_number_of_row 
 BEFORE INSERT ON archive
 FOR EACH ROW EXECUTE PROCEDURE check_number_of_row();
