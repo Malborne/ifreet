@@ -77,18 +77,18 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if !IsModOrHigher(author, guild) {
-
+		isNew := true
 		joinedAt, err := author.JoinedAt.Parse()
 		if err != nil {
 			LogIfError(s, err)
 		}
 		if IsVerified(author) && joinedAt.Before(time.Now().Add(time.Minute*-60)) { //if verified and joined more than an hour ago, just ignore it
-			return
+			isNew = false
 		}
 		if joinedAt.Before(time.Now().AddDate(0, 0, -1)) { //If they joined the server more than 24 ago, just ignore it
-			return
+			isNew = false
 		}
-		if len(m.Attachments) > 0 { //sent a file
+		if len(m.Attachments) > 0 && isNew { //sent a file
 
 			_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
 				Title: fmt.Sprintf("A user attempted to post a file."),
@@ -117,42 +117,42 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 
 		}
-		if len(m.Embeds) > 0 || strings.Contains(strings.ToLower(m.Content), "https://") || strings.Contains(strings.ToLower(m.Content), "http://") { //sent a link
-
+		if len(m.Embeds) > 0 || strings.Contains(strings.ToLower(m.Content), "https://") || strings.Contains(strings.ToLower(m.Content), "http://") && isNew { //sent a link
+			isYouTube := false
 			if strings.Contains(strings.ToLower(m.Content), "youtube.com") || strings.Contains(strings.ToLower(m.Content), "https://youtu.be/") { //Ignore YouTube videos
-				return
+				isYouTube = true
 			}
+			if !isYouTube && isNew {
+				_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
+					Title: fmt.Sprintf("A user attempted to post a link. Beaware of suspicious links don't click them"),
+					Fields: []*discordgo.MessageEmbedField{
+						{
+							Name:  "Message Author",
+							Value: m.Author.Username + "#" + m.Author.Discriminator,
+						},
+						{
+							Name:  "Channel",
+							Value: fmt.Sprintf("<#%s>", m.ChannelID),
+						},
+						{
+							Name:  "Message Content",
+							Value: m.Content,
+						},
+					},
+					Color: 0xEE0000,
+				})
+				if err != nil {
+					LogIfError(s, errors.Wrap(err, "sending embed failed"))
+					return
+				}
+				s.ChannelMessageDelete(m.ChannelID, m.ID)
 
-			_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
-				Title: fmt.Sprintf("A user attempted to post a link. Beaware of suspicious links don't click them"),
-				Fields: []*discordgo.MessageEmbedField{
-					{
-						Name:  "Message Author",
-						Value: m.Author.Username + "#" + m.Author.Discriminator,
-					},
-					{
-						Name:  "Channel",
-						Value: fmt.Sprintf("<#%s>", m.ChannelID),
-					},
-					{
-						Name:  "Message Content",
-						Value: m.Content,
-					},
-				},
-				Color: 0xEE0000,
-			})
-			if err != nil {
-				LogIfError(s, errors.Wrap(err, "sending embed failed"))
-				return
+				_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send links yet. Please wait until you are on the server for a longer time.", author.Mention()))
+				if err != nil {
+					LogIfError(s, err)
+					return
+				}
 			}
-			s.ChannelMessageDelete(m.ChannelID, m.ID)
-
-			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send links yet. Please wait until you are on the server for a longer time.", author.Mention()))
-			if err != nil {
-				LogIfError(s, err)
-				return
-			}
-
 		}
 	}
 

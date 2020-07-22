@@ -21,7 +21,7 @@ func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 	}
 	author, err := s.User(message.userID)
 	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No user was found with ID %s.", message.userID))
+		_, err := s.ChannelMessageSend(Config.AdminLogChannel, fmt.Sprintf("No user was found with ID %s.", message.userID))
 		LogIfError(s, errors.Wrap(err, "Failed to get the author of the message."))
 		return
 	}
