@@ -12,7 +12,7 @@ import (
 
 var removeInfractionCommand = command{
 	"removeinfraction",
-	commandWarnUser,
+	commandRemoveInfraction,
 	"Removes an infraction from a user.",
 	[]string{
 		"<user> <timestamp>",
