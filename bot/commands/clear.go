@@ -107,31 +107,31 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			return
 		}
 		for mess := range messages {
-			if !messages[mess].Author.Bot && !strings.HasPrefix(messages[mess].Content, ";") {
-				_, err = s.ChannelMessageSendEmbed(heimdallr.Config.ArchiveChannel, &discordgo.MessageEmbed{
-					Title: fmt.Sprintf("This Message  was cleared by %s", reactingMember.User.String()),
-					Fields: []*discordgo.MessageEmbedField{
-						{
-							Name:  "**Message Author**",
-							Value: messages[mess].Author.String(),
-						},
-						{
-							Name:  "**Message Content**",
-							Value: messages[mess].Content,
-						},
-						{
-							Name:  "**Channel**",
-							Value: fmt.Sprintf("<#%s>", messages[mess].ChannelID),
-						},
-					},
-					Color: 0x00FF00,
-				})
-				if err != nil {
-					heimdallr.LogIfError(s, err)
-					return
-				}
-			}
-			//TODO Add Delete message from database code here
+			// if !messages[mess].Author.Bot && !strings.HasPrefix(messages[mess].Content, ";") {
+			// 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.ArchiveChannel, &discordgo.MessageEmbed{
+			// 		Title: fmt.Sprintf("This Message  was cleared by %s", reactingMember.User.String()),
+			// 		Fields: []*discordgo.MessageEmbedField{
+			// 			{
+			// 				Name:  "**Message Author**",
+			// 				Value: messages[mess].Author.String(),
+			// 			},
+			// 			{
+			// 				Name:  "**Message Content**",
+			// 				Value: messages[mess].Content,
+			// 			},
+			// 			{
+			// 				Name:  "**Channel**",
+			// 				Value: fmt.Sprintf("<#%s>", messages[mess].ChannelID),
+			// 			},
+			// 		},
+			// 		Color: 0x00FF00,
+			// 	})
+			// 	if err != nil {
+			// 		heimdallr.LogIfError(s, err)
+			// 		return
+			// 	}
+			// }
+
 			s.ChannelMessageDelete(message.ChannelID, messages[mess].ID)
 
 		}
