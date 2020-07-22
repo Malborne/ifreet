@@ -187,7 +187,7 @@ func RemoveInfraction(timestamp time.Time) error {
 		"DELETE FROM infractions WHERE time_=$1",
 		timestamp,
 	)
-	return errors.Wrap(err, "deleting message failed")
+	return errors.Wrap(err, "deleting infraction failed")
 }
 
 //AddtoArchive adds a message to the archive table

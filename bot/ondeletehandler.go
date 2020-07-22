@@ -2,6 +2,7 @@ package heimdallr
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/pkg/errors"
@@ -9,63 +10,43 @@ import (
 
 //OnDeleteHandler keeps a copy of deleted messages
 func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
-	// if m.Author.Bot {
-	// 	return
-	// }
-	s.ChannelMessageSend(Config.ArchiveChannel, fmt.Sprintf("Message \"%s\" deletion detected %s", m.Message.Content, m.Author.Username+"#"+m.Author.Discriminator))
+	if m.Author.Bot {
+		return
+	}
 
-	// guildID := m.GuildID
-
-	// author, err := GetMember(s, guildID, m.Author.ID)
-	// if err != nil {
-	// 	_, err := s.ChannelMessageSend(Config.AdminLogChannel, fmt.Sprintf("Message Author with ID %s was not found.", m.Author.ID))
-	// 	LogIfError(s, err)
-	// }
-
-	_, err := s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: fmt.Sprintf("A message was deleted"),
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:  "Message Author",
-				Value: m.Author.Username + "#" + m.Author.Discriminator,
-			},
-			{
-				Name:  "Channel",
-				Value: fmt.Sprintf("<#%s>", m.ChannelID),
-			},
-			{
-				Name:  "Message ID",
-				Value: m.ID,
-			},
-			{
-				Name:  "Message Content",
-				Value: m.Content,
-			},
-		},
-		Color: 0xEE0000,
-	})
+	message, err := GetFromArchive(m.ID)
 	if err != nil {
-		LogIfError(s, errors.Wrap(err, "sending embed failed"))
-
+		LogIfError(s, errors.Wrap(err, "Getting the message failed from the database."))
+		return
+	}
+	author, err := s.User(message.userID)
+	if err != nil {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No user was found with ID %s.", message.userID))
+		LogIfError(s, errors.Wrap(err, "Failed to get the author of the message."))
+		return
 	}
 	_, err = s.ChannelMessageSendEmbed(Config.ArchiveChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("A message was deleted"),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "Message Author",
-				Value: m.Author.Username + "#" + m.Author.Discriminator,
+				Value: author.String(),
 			},
 			{
 				Name:  "Channel",
-				Value: fmt.Sprintf("<#%s>", m.ChannelID),
+				Value: fmt.Sprintf("<#%s>", message.channelID),
+			},
+			{
+				Name:  "Time sent",
+				Value: fmt.Sprintf("%s", message.Time.Format(time.RFC1123)),
 			},
 			{
 				Name:  "Message ID",
-				Value: m.ID,
+				Value: message.messageID,
 			},
 			{
 				Name:  "Message Content",
-				Value: m.Content,
+				Value: message.content,
 			},
 		},
 		Color: 0xEE0000,
@@ -73,6 +54,12 @@ func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 	if err != nil {
 		LogIfError(s, errors.Wrap(err, "sending embed failed"))
 		return
-	}
 
+	}
+	err = RemovefromArchive(message.messageID)
+	if err != nil {
+		LogIfError(s, errors.Wrap(err, "sending embed failed"))
+		return
+
+	}
 }

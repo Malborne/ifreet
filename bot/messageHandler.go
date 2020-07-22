@@ -10,8 +10,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-//LinksAndFilesHandler checks if someone sends a link and deletes the message if the user is new
-func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+//MessageHandler checks if someone sends a link or a file and deletes the message if the user is new, scans the message for banned words, and adds it to the archive
+func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.Bot {
 		return
 	}
@@ -28,10 +28,7 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		LogIfError(s, err)
 	}
 
-	if IsAdminOrHigher(author, guild) {
-		return
-	}
-	if hasBannedWord(m.Content) {
+	if hasBannedWord(m.Content) && !IsAdminOrHigher(author, guild) {
 		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
 			Title: fmt.Sprintf("A user attempted to post an inappropriate word"),
 			Fields: []*discordgo.MessageEmbedField{
@@ -79,86 +76,88 @@ func LinksAndFilesHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	}
 
-	if IsModOrHigher(author, guild) {
-		return
-	}
-	joinedAt, err := author.JoinedAt.Parse()
-	if err != nil {
-		LogIfError(s, err)
-	}
-	if IsVerified(author) && joinedAt.Before(time.Now().Add(time.Minute*-60)) { //if verified and joined more than an hour ago, just ignore it
-		return
-	}
-	if joinedAt.Before(time.Now().AddDate(0, 0, -1)) { //If they joined the server more than 24 ago, just ignore it
-		return
-	}
-	if len(m.Attachments) > 0 { //sent a file
+	if !IsModOrHigher(author, guild) {
 
-		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("A user attempted to post a file."),
-			Fields: []*discordgo.MessageEmbedField{
-				{
-					Name:  "Message Author",
-					Value: m.Author.Username + "#" + m.Author.Discriminator,
-				},
-				{
-					Name:  "Channel",
-					Value: fmt.Sprintf("<#%s>", m.ChannelID),
-				},
-			},
-			Color: 0xEE0000,
-		})
-		if err != nil {
-			LogIfError(s, errors.Wrap(err, "sending embed failed"))
-			return
-		}
-		s.ChannelMessageDelete(m.ChannelID, m.ID)
-
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send files yet. Please wait until you are on the server for a longer time.", author.Mention()))
-		if err != nil {
-			LogIfError(s, errors.Wrap(err, "sending message failed"))
-			return
-		}
-
-	}
-	if len(m.Embeds) > 0 || strings.Contains(strings.ToLower(m.Content), "https://") || strings.Contains(strings.ToLower(m.Content), "http://") { //sent a link
-
-		if strings.Contains(strings.ToLower(m.Content), "youtube.com") || strings.Contains(strings.ToLower(m.Content), "https://youtu.be/") { //Ignore YouTube videos
-			return
-		}
-
-		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("A user attempted to post a link. Beaware of suspicious links don't click them"),
-			Fields: []*discordgo.MessageEmbedField{
-				{
-					Name:  "Message Author",
-					Value: m.Author.Username + "#" + m.Author.Discriminator,
-				},
-				{
-					Name:  "Channel",
-					Value: fmt.Sprintf("<#%s>", m.ChannelID),
-				},
-				{
-					Name:  "Message Content",
-					Value: m.Content,
-				},
-			},
-			Color: 0xEE0000,
-		})
-		if err != nil {
-			LogIfError(s, errors.Wrap(err, "sending embed failed"))
-			return
-		}
-		s.ChannelMessageDelete(m.ChannelID, m.ID)
-
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send links yet. Please wait until you are on the server for a longer time.", author.Mention()))
+		joinedAt, err := author.JoinedAt.Parse()
 		if err != nil {
 			LogIfError(s, err)
+		}
+		if IsVerified(author) && joinedAt.Before(time.Now().Add(time.Minute*-60)) { //if verified and joined more than an hour ago, just ignore it
 			return
 		}
+		if joinedAt.Before(time.Now().AddDate(0, 0, -1)) { //If they joined the server more than 24 ago, just ignore it
+			return
+		}
+		if len(m.Attachments) > 0 { //sent a file
 
+			_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
+				Title: fmt.Sprintf("A user attempted to post a file."),
+				Fields: []*discordgo.MessageEmbedField{
+					{
+						Name:  "Message Author",
+						Value: m.Author.Username + "#" + m.Author.Discriminator,
+					},
+					{
+						Name:  "Channel",
+						Value: fmt.Sprintf("<#%s>", m.ChannelID),
+					},
+				},
+				Color: 0xEE0000,
+			})
+			if err != nil {
+				LogIfError(s, errors.Wrap(err, "sending embed failed"))
+				return
+			}
+			s.ChannelMessageDelete(m.ChannelID, m.ID)
+
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send files yet. Please wait until you are on the server for a longer time.", author.Mention()))
+			if err != nil {
+				LogIfError(s, errors.Wrap(err, "sending message failed"))
+				return
+			}
+
+		}
+		if len(m.Embeds) > 0 || strings.Contains(strings.ToLower(m.Content), "https://") || strings.Contains(strings.ToLower(m.Content), "http://") { //sent a link
+
+			if strings.Contains(strings.ToLower(m.Content), "youtube.com") || strings.Contains(strings.ToLower(m.Content), "https://youtu.be/") { //Ignore YouTube videos
+				return
+			}
+
+			_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
+				Title: fmt.Sprintf("A user attempted to post a link. Beaware of suspicious links don't click them"),
+				Fields: []*discordgo.MessageEmbedField{
+					{
+						Name:  "Message Author",
+						Value: m.Author.Username + "#" + m.Author.Discriminator,
+					},
+					{
+						Name:  "Channel",
+						Value: fmt.Sprintf("<#%s>", m.ChannelID),
+					},
+					{
+						Name:  "Message Content",
+						Value: m.Content,
+					},
+				},
+				Color: 0xEE0000,
+			})
+			if err != nil {
+				LogIfError(s, errors.Wrap(err, "sending embed failed"))
+				return
+			}
+			s.ChannelMessageDelete(m.ChannelID, m.ID)
+
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send links yet. Please wait until you are on the server for a longer time.", author.Mention()))
+			if err != nil {
+				LogIfError(s, err)
+				return
+			}
+
+		}
 	}
 
+	//Add the message to the archive
+	AddtoArchive(*author.User, m)
 }
 
 func hasBannedWord(content string) bool {
