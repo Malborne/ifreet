@@ -16,6 +16,9 @@ func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 		LogIfError(s, errors.Wrap(err, "Getting the message failed from the database."))
 		return
 	}
+	if message.userID == s.State.User.ID { //The deleted message was sent by the bot himself
+		return
+	}
 	author, err := s.User(message.userID)
 	if err != nil {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No user was found with ID %s.", message.userID))
