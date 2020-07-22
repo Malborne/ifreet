@@ -38,6 +38,20 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 		return errors.Wrap(err, "deleting message failed")
 	}
 
+	author, err := heimdallr.GetMember(s, m.GuildID, m.Author.ID)
+	if err != nil {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", m.Author.ID))
+		return errors.Wrap(err, "getting the author failed")
+	}
+	guild, err := heimdallr.GetGuild(s, m.GuildID)
+	if err != nil {
+		return err
+	}
+	if m.ChannelID == heimdallr.Config.StaffChannel && !heimdallr.IsAdminOrHigher(author, guild) {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot clear messages in the <#%s>.", heimdallr.Config.StaffChannel))
+		return errors.Wrap(err, "clearing messages failed")
+	}
+
 	messages, err := s.ChannelMessages(m.ChannelID, number, m.ID, "", "")
 	if err != nil {
 		return errors.Wrap(err, "getting messages failed")

@@ -19,6 +19,7 @@ type BotConfig struct {
 	AdminChannel    string `toml:"admin_channel"`
 	AdminLogChannel string `toml:"admin_log_channel"`
 	ArchiveChannel  string `toml:"archive_channel"`
+	StaffChannel    string `toml:"staff_channel"`
 
 	BotChannel   string `toml:"bot_channel"`
 	RulesChannel string `toml:"rules_channel"`
