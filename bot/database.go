@@ -106,7 +106,6 @@ BEGIN
     END IF;
 END;
 $body$
-LANGUAGE plpgsql;
 
 CREATE TRIGGER tr_check_number_of_row 
 BEFORE INSERT ON archive
