@@ -226,7 +226,7 @@ func GetFromArchive(messageID string) (Message, error) {
 		if err != nil {
 			return message, errors.Wrap(err, "parsing infraction row failed")
 		}
-		message = Message{messageID, channelID, content, Time, userID}
+		message = Message{messageID, channelID, content, messageTime, userID}
 	}
 
 	if err = rows.Err(); err != nil {
