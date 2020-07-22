@@ -76,7 +76,11 @@ func commandRemoveInfraction(s *discordgo.Session, m *discordgo.MessageCreate, a
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Could not find the infraction for the user with the timestamp specified"))
 		return errors.Wrap(err, "Finding infraction failed")
 	}
-	heimdallr.RemoveInfraction(infractionTime)
+	err = heimdallr.RemoveInfraction(infractionTime)
+	if err != nil {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to remove the infractino from the Database"))
+		return errors.Wrap(err, "Removing infraction failed")
+	}
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("An infraction was removed by %s.", author.User.Username+"#"+author.User.Discriminator),
 
