@@ -104,6 +104,7 @@ BEGIN
 	DELETE FROM archive
 	WHERE id IN (SELECT id FROM archive ORDER BY time_ asc LIMIT 1) 
 	END IF;
+	RETURN new;
 END;
 $body$
 LANGUAGE plpgsql;
