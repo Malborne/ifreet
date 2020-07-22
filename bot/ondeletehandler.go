@@ -10,9 +10,6 @@ import (
 
 //OnDeleteHandler keeps a copy of deleted messages
 func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
-	if m.Author.Bot {
-		return
-	}
 
 	message, err := GetFromArchive(m.ID)
 	if err != nil {
@@ -25,6 +22,10 @@ func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 		LogIfError(s, errors.Wrap(err, "Failed to get the author of the message."))
 		return
 	}
+	if author.Bot {
+		return
+	}
+
 	_, err = s.ChannelMessageSendEmbed(Config.ArchiveChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("A message was deleted"),
 		Fields: []*discordgo.MessageEmbedField{
