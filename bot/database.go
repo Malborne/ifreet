@@ -103,9 +103,10 @@ BEGIN
     THEN 
 	DELETE FROM archive
 	WHERE id IN (SELECT id FROM archive ORDER BY time_ asc LIMIT 1) 
-    END IF;
+	END IF;
 END;
 $body$
+LANGUAGE plpgsql;
 
 CREATE TRIGGER tr_check_number_of_row 
 BEFORE INSERT ON archive
