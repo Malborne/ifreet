@@ -30,12 +30,12 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 
 	if err != nil || number == 0 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Incorrect use of command. Type the number of messages you wish to be deleted"))
-		return errors.Wrap(err, "deleting message failed")
+		return errors.Wrap(err, "clearing message failed")
 	}
 
 	if number > 99 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot delete more than 99 messages at a time"))
-		return errors.Wrap(err, "deleting message failed")
+		return errors.Wrap(err, "clearing message failed")
 	}
 
 	author, err := heimdallr.GetMember(s, m.GuildID, m.Author.ID)

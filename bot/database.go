@@ -19,6 +19,15 @@ type Infraction struct {
 	Time   time.Time
 }
 
+//Message contains the basic information about the message
+type Message struct {
+	messageID string
+	channelID string
+	content   string
+	Time      time.Time
+	userID    string
+}
+
 //Resource represents a learning resource
 type Resource struct {
 	ID      int
@@ -76,8 +85,29 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS archive (
+	id SERIAL PRIMARY KEY,
+	messageID TEXT,
+	channelID TEXT,
+	content TEXT,
+	time_ timestamp,
+	user_id TEXT,
+	FOREIGN KEY(user_id) REFERENCES users(id)
+);
 
+CREATE OR REPLACE FUNCTION check_number_of_row()
+RETURNS TRIGGER AS
+BEGIN
+    IF (SELECT count(*) FROM archive) > 1000
+    THEN 
+	DELETE FROM archive
+	WHERE id IN (SELECT id FROM archive ORDER BY time_ asc LIMIT 1) 
+    END IF;
+END;
 
+CREATE TRIGGER tr_check_number_of_row 
+BEFORE INSERT ON archive
+FOR EACH ROW EXECUTE PROCEDURE check_number_of_row();
 
 CREATE TABLE IF NOT EXISTS resources (
 	id SERIAL PRIMARY KEY,
@@ -149,6 +179,66 @@ func AddInfraction(user discordgo.User, infraction Infraction) error {
 	_, err = db.Exec("INSERT INTO infractions (reason, time_, user_id) VALUES ($1, $2, $3)",
 		infraction.Reason, infraction.Time, user.ID)
 	return errors.Wrap(err, "inserting infraction failed")
+}
+
+//RemoveInfraction removes an infraction for a user
+func RemoveInfraction(timestamp time.Time) error {
+	_, err := db.Query(
+		"DELETE FROM infractions WHERE time_=$1",
+		timestamp,
+	)
+	return errors.Wrap(err, "deleting message failed")
+}
+
+//AddtoArchive adds a message to the archive table
+func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
+	err := AddUser(user)
+	if err != nil {
+		return errors.Wrap(err, "Adding user failed")
+	}
+
+	_, err = db.Exec("INSERT INTO archive (messageID, channelID, content, time_, user_id) VALUES ($1, $2, $3, $4, $5)",
+		m.ID, m.ChannelID, m.Content, time.Now(), user.ID)
+	return errors.Wrap(err, "inserting infraction failed")
+}
+
+//GetFromArchive gets a message from the archive table
+func GetFromArchive(messageID string) (Message, error) {
+	var message Message
+	rows, err := db.Query(
+		"SELECT reason, time_ FROM archive WHERE messageID=$1 ORDER BY time_",
+		messageID,
+	)
+	if err != nil {
+		return message, errors.Wrap(err, "fetching message from archive failed")
+	}
+
+	for rows.Next() {
+		var channelID string
+		var content string
+		var Time time.Time
+		var userID string
+		err = rows.Scan(&channelID, &content, &Time, &userID)
+		if err != nil {
+			return message, errors.Wrap(err, "parsing infraction row failed")
+		}
+		message = Message{messageID, channelID, content, Time, userID}
+	}
+
+	if err = rows.Err(); err != nil {
+		return message, errors.WithStack(err)
+	}
+
+	return message, nil
+}
+
+//RemovefromArchive Removes a message from the archive table
+func RemovefromArchive(messageID string) error {
+	_, err := db.Query(
+		"DELETE FROM archive WHERE messageID=$1",
+		messageID,
+	)
+	return errors.Wrap(err, "deleting message failed")
 }
 
 //AddMutedUser Adds a muted user to the list of users
