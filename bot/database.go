@@ -210,7 +210,7 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
 	rows, err := db.Query(
-		"SELECT reason, time_ FROM archive WHERE messageID=$1 ORDER BY time_",
+		"SELECT channelID, time_, content, userID FROM archive WHERE messageID=$1 ORDER BY time_",
 		messageID,
 	)
 	if err != nil {
