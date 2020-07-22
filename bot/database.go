@@ -220,9 +220,9 @@ func GetFromArchive(messageID string) (Message, error) {
 	for rows.Next() {
 		var channelID string
 		var content string
-		var Time time.Time
+		var messageTime time.Time
 		var userID string
-		err = rows.Scan(&channelID, &content, &Time, &userID)
+		err = rows.Scan(&channelID, &messageTime, &content, &userID)
 		if err != nil {
 			return message, errors.Wrap(err, "parsing infraction row failed")
 		}
