@@ -78,7 +78,7 @@ func commandRemoveInfraction(s *discordgo.Session, m *discordgo.MessageCreate, a
 	}
 	err = heimdallr.RemoveInfraction(infractionTime)
 	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to remove the infractino from the Database"))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to remove the infraction from the Database"))
 		return errors.Wrap(err, "Removing infraction failed")
 	}
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
@@ -97,6 +97,9 @@ func commandRemoveInfraction(s *discordgo.Session, m *discordgo.MessageCreate, a
 		Color: 0xEE0000,
 	})
 
+	if err != nil {
+		return errors.Wrap(err, "Failed to send the message Embed to the log channel")
+	}
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 
 	return errors.Wrap(err, "adding reaction failed")
