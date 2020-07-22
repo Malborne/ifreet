@@ -30,7 +30,7 @@ func commandRemoveInfraction(s *discordgo.Session, m *discordgo.MessageCreate, a
 
 	infractionTime, err := time.Parse(timestamp, time.RFC1123)
 	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to parse the time entered. Please make sure you enter the time in this format: Mon, 29 Jun 2020 05:45:51 +0000"))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to parse the time entered %s. Please make sure you enter the time in this format: Mon, 29 Jun 2020 05:45:51 +0000", timestamp))
 
 		return err
 	}
