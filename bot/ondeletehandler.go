@@ -1,6 +1,7 @@
 package heimdallr
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -12,11 +13,13 @@ import (
 func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 
 	message, err := GetFromArchive(m.ID)
-	if err != nil {
+	if err == sql.ErrNoRows { //The message is not logged in the archive
+		return
+	} else if err != nil {
 		LogIfError(s, errors.Wrap(err, "Getting the message failed from the database."))
 		return
 	}
-	if message.userID == "" { //The message is not logged in the archive
+	if message.userID == "" {
 		return
 	}
 	author, err := s.User(message.userID)
