@@ -221,8 +221,8 @@ func GetFromArchive(messageID string) (Message, error) {
 	var messageTime time.Time
 	var userID string
 	err := row.Scan(&channelID, &messageTime, &content, &userID)
-	if err != nil {
-		return message, errors.Wrap(err, "parsing infraction row failed")
+	if err != nil { //If there is an error, that means the message does NOT exist in the database and it will be handled by ondeletehandler instead
+		return message, err
 	}
 	message = Message{messageID, channelID, content, messageTime, userID}
 
