@@ -226,7 +226,7 @@ func GetFromArchive(messageID string) (Message, error) {
 	}
 	message = Message{messageID, channelID, content, messageTime, userID}
 
-	if err = rows.Err(); err != nil {
+	if err != nil {
 		return message, errors.WithStack(err)
 	}
 
