@@ -100,10 +100,10 @@ CREATE OR REPLACE FUNCTION check_number_of_row()
 RETURNS TRIGGER AS
 $body$
 BEGIN
-    IF (SELECT count(*) FROM archive) > 1000 THEN 
+    IF (SELECT count(*) FROM archive) >= 1000 THEN 
 	DELETE FROM archive WHERE id IN (SELECT id FROM archive ORDER BY time_ asc LIMIT 1); 
 	END IF;
-	RETURN NEW;
+	RETURN NULL;
 END;
 $body$
 LANGUAGE plpgsql;
