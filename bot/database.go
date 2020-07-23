@@ -63,6 +63,7 @@ func OpenDb(file string) error {
 	// 			  DROP TABLE IF EXISTS resource_tags_resources cascade;
 	// 			  DROP TABLE IF EXISTS invites cascade;`
 
+	// dropTables := `DROP TABLE IF EXISTS archive cascade;`
 	createTableStatement := `
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
@@ -111,7 +112,7 @@ DROP TRIGGER IF EXISTS tr_check_number_of_row ON archive;
 
 CREATE TRIGGER tr_check_number_of_row 
 BEFORE INSERT ON archive
-FOR EACH ROW EXECUTE PROCEDURE check_number_of_row();
+FOR EACH STATEMENT EXECUTE PROCEDURE check_number_of_row();
 
 CREATE TABLE IF NOT EXISTS resources (
 	id SERIAL PRIMARY KEY,
