@@ -137,6 +137,7 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// if err != nil {
 	// 	return errors.Wrap(err, "deleting database tables failed")
 	// }
+	db.SetConnMaxLifetime(time.Millisecond * 200)
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
 }
@@ -210,25 +211,20 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 //GetFromArchive gets a message from the archive table
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
-	rows, err := db.Query(
+	row := db.QueryRow(
 		"SELECT channelID, time_, content, user_id FROM archive WHERE messageID=$1 ORDER BY time_",
 		messageID,
 	)
-	if err != nil {
-		return message, errors.Wrap(err, "fetching message from archive failed")
-	}
 
-	for rows.Next() {
-		var channelID string
-		var content string
-		var messageTime time.Time
-		var userID string
-		err = rows.Scan(&channelID, &messageTime, &content, &userID)
-		if err != nil {
-			return message, errors.Wrap(err, "parsing infraction row failed")
-		}
-		message = Message{messageID, channelID, content, messageTime, userID}
+	var channelID string
+	var content string
+	var messageTime time.Time
+	var userID string
+	err := row.Scan(&channelID, &messageTime, &content, &userID)
+	if err != nil {
+		return message, errors.Wrap(err, "parsing infraction row failed")
 	}
+	message = Message{messageID, channelID, content, messageTime, userID}
 
 	if err = rows.Err(); err != nil {
 		return message, errors.WithStack(err)
