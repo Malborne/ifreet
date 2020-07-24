@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// 	return errors.Wrap(err, "deleting database tables failed")
 	// }
 	db.SetMaxIdleConns(2)
-	db.SetMaxOpenConns(10)
+	db.SetMaxOpenConns(5)
 	db.SetConnMaxLifetime(time.Second)
 
 	_, err = db.Exec(createTableStatement)
