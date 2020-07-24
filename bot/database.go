@@ -174,7 +174,7 @@ func GetInfractions(userID string) ([]Infraction, error) {
 	if err = rows.Err(); err != nil {
 		return infractions, errors.WithStack(err)
 	}
-
+	rows.Close()
 	return infractions, nil
 }
 
@@ -234,7 +234,7 @@ func GetFromArchive(messageID string) (Message, error) {
 		message = Message{messageID, channelID, content, messageTime, userID}
 
 	}
-
+	rows.Close()
 	return message, nil
 }
 
@@ -305,7 +305,7 @@ func GetMutedUserRoles(userID string) ([]string, error) {
 	if err = rows.Err(); err != nil {
 		return roles, errors.WithStack(err)
 	}
-
+	rows.Close()
 	return roles, nil
 }
 
@@ -367,6 +367,7 @@ func GetResourceByName(name string) (*Resource, error) {
 	if err != nil {
 		return nil, err
 	}
+	rows.Close()
 	return resources[0], nil
 }
 
@@ -429,7 +430,7 @@ func getResources(rows *sql.Rows) ([]*Resource, error) {
 	if err := rows.Err(); err != nil {
 		return nil, errors.WithStack(err)
 	}
-
+	rows.Close()
 	return resources, nil
 }
 
