@@ -103,7 +103,7 @@ BEGIN
     IF (SELECT count(*) FROM archive) >= 1000 THEN 
 	DELETE FROM archive WHERE id IN (SELECT id FROM archive ORDER BY time_ asc LIMIT 1); 
 	END IF;
-	RETURN NULL;
+	RETURN NEW;
 END;
 $body$
 LANGUAGE plpgsql;
@@ -226,6 +226,11 @@ func GetFromArchive(messageID string) (Message, error) {
 	}
 	message = Message{messageID, channelID, content, messageTime, userID}
 
+	if err != nil {
+		return message, errors.WithStack(err)
+	}
+
+	_, err = db.Exec("EXEC SQL DISCONNECT")
 	if err != nil {
 		return message, errors.WithStack(err)
 	}
