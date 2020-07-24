@@ -191,7 +191,7 @@ func AddInfraction(user discordgo.User, infraction Infraction) error {
 //RemoveInfraction removes an infraction for a user
 func RemoveInfraction(timestamp time.Time) error {
 	_, err := db.Query(
-		"DELETE FROM infractions WHERE time_=$1",
+		"DELETE FROM infractions WHERE time_>$1",
 		timestamp,
 	)
 	return errors.Wrap(err, "deleting infraction failed")
@@ -213,24 +213,26 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
 
-	row := db.QueryRow(
+	rows, err := db.Query(
 		"SELECT channelID, time_, content, user_id FROM archive WHERE messageID=$1 ORDER BY time_",
 		messageID,
 	)
-
-	var channelID string
-	var content string
-	var messageTime time.Time
-	var userID string
-	err := row.Scan(&channelID, &messageTime, &content, &userID)
-	if err != nil { //If there is an error, that means the message does NOT exist in the database and it will be handled by ondeletehandler instead
-		return message, err
-	}
-	message = Message{messageID, channelID, content, messageTime, userID}
-
 	if err != nil {
-		return message, errors.WithStack(err)
+		return message, errors.Wrap(err, "fetching message failed")
 	}
+	for rows.Next() {
+		var channelID string
+		var content string
+		var messageTime time.Time
+		var userID string
+		err := rows.Scan(&channelID, &messageTime, &content, &userID)
+		if err != nil {
+			return message, err
+		}
+		message = Message{messageID, channelID, content, messageTime, userID}
+
+	}
+
 	return message, nil
 }
 
