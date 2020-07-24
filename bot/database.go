@@ -137,8 +137,8 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// if err != nil {
 	// 	return errors.Wrap(err, "deleting database tables failed")
 	// }
-	db.SetMaxIdleConns(5)
-	db.SetMaxOpenConns(5)
+	db.SetMaxIdleConns(2)
+	db.SetMaxOpenConns(10)
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
 }
