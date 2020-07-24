@@ -138,8 +138,8 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// if err != nil {
 	// 	return errors.Wrap(err, "deleting database tables failed")
 	// }
-	db.SetMaxIdleConns(2)
-	db.SetMaxOpenConns(5)
+	db.SetMaxIdleConns(0)
+	db.SetMaxOpenConns(10)
 
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
@@ -215,11 +215,11 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
 
-	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections {
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
 		db.Close()
 		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
-		db.SetMaxIdleConns(2)
-		db.SetMaxOpenConns(5)
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
 	}
 	rows, err := db.Query(
 		"SELECT channelID, time_, content, user_id FROM archive WHERE messageID=$1 ORDER BY time_",
