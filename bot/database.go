@@ -139,6 +139,7 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// }
 	db.SetMaxIdleConns(2)
 	db.SetMaxOpenConns(10)
+	db.SetConnMaxLifetime(time.Millisecond * 200)
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
 }
@@ -191,7 +192,7 @@ func AddInfraction(user discordgo.User, infraction Infraction) error {
 //RemoveInfraction removes an infraction for a user
 func RemoveInfraction(timestamp time.Time) error {
 	_, err := db.Query(
-		"DELETE FROM infractions WHERE time_>$1",
+		"DELETE FROM infractions WHERE time_=$1",
 		timestamp,
 	)
 	return errors.Wrap(err, "deleting infraction failed")
