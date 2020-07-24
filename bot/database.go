@@ -215,7 +215,7 @@ func GetFromArchive(messageID string) (Message, error) {
 	var message Message
 	conn, err := db.Conn(ctx)
 	if err != nil {
-		return message, errors.WithStack(err)
+		return message, errors.Wrap(err, "Creating the connection object failed")
 	}
 	defer conn.Close() // Return the connection to the pool.
 	row := conn.QueryRowContext(ctx,
