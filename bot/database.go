@@ -38,7 +38,7 @@ type Resource struct {
 }
 
 var db *sql.DB
-var ctx context.Context
+var ctx context.Context = context.Background()
 
 //OpenDb opens a connection to the database and creates the tables if they don't exist
 func OpenDb(file string) error {
