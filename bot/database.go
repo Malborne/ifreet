@@ -1,6 +1,7 @@
 package heimdallr
 
 import (
+	"context"
 	"database/sql"
 	"strings"
 	"time"
@@ -37,6 +38,7 @@ type Resource struct {
 }
 
 var db *sql.DB
+var ctx context.Context
 
 //OpenDb opens a connection to the database and creates the tables if they don't exist
 func OpenDb(file string) error {
@@ -137,7 +139,7 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// if err != nil {
 	// 	return errors.Wrap(err, "deleting database tables failed")
 	// }
-	db.SetConnMaxLifetime(time.Millisecond * 200)
+
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
 }
@@ -211,7 +213,7 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 //GetFromArchive gets a message from the archive table
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
-	row := db.QueryRow(
+	row := db.QueryRowContext(ctx,
 		"SELECT channelID, time_, content, user_id FROM archive WHERE messageID=$1 ORDER BY time_",
 		messageID,
 	)
@@ -230,10 +232,12 @@ func GetFromArchive(messageID string) (Message, error) {
 		return message, errors.WithStack(err)
 	}
 
-	_, err = db.Exec(`EXEC SQL DISCONNECT;`)
+	Conn, err := db.Conn(ctx)
+
 	if err != nil {
 		return message, errors.WithStack(err)
 	}
+	Conn.Close()
 
 	return message, nil
 }
