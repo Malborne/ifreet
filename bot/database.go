@@ -215,7 +215,7 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
 
-	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections {
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections {
 		db.Close()
 		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
 		db.SetMaxIdleConns(2)
