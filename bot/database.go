@@ -213,7 +213,12 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 //GetFromArchive gets a message from the archive table
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
-	row := db.QueryRowContext(ctx,
+	conn, err := db.Conn(ctx)
+	if err != nil {
+		return message, errors.WithStack(err)
+	}
+	defer conn.Close() // Return the connection to the pool.
+	row := conn.QueryRowContext(ctx,
 		"SELECT channelID, time_, content, user_id FROM archive WHERE messageID=$1 ORDER BY time_",
 		messageID,
 	)
@@ -222,7 +227,7 @@ func GetFromArchive(messageID string) (Message, error) {
 	var content string
 	var messageTime time.Time
 	var userID string
-	err := row.Scan(&channelID, &messageTime, &content, &userID)
+	err = row.Scan(&channelID, &messageTime, &content, &userID)
 	if err != nil { //If there is an error, that means the message does NOT exist in the database and it will be handled by ondeletehandler instead
 		return message, err
 	}
@@ -231,13 +236,6 @@ func GetFromArchive(messageID string) (Message, error) {
 	if err != nil {
 		return message, errors.WithStack(err)
 	}
-
-	Conn, err := db.Conn(ctx)
-
-	if err != nil {
-		return message, errors.WithStack(err)
-	}
-	Conn.Close()
 
 	return message, nil
 }
