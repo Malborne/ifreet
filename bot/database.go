@@ -139,7 +139,8 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// }
 	db.SetMaxIdleConns(2)
 	db.SetMaxOpenConns(10)
-	db.SetConnMaxLifetime(time.Millisecond * 200)
+	db.SetConnMaxLifetime(time.Second)
+
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
 }
