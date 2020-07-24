@@ -217,7 +217,7 @@ func GetFromArchive(messageID string) (Message, error) {
 	if err != nil {
 		return message, errors.Wrap(err, "Creating the connection object failed")
 	}
-	defer conn.Close() // Return the connection to the pool.
+
 	row := conn.QueryRowContext(ctx,
 		"SELECT channelID, time_, content, user_id FROM archive WHERE messageID=$1 ORDER BY time_",
 		messageID,
@@ -236,7 +236,7 @@ func GetFromArchive(messageID string) (Message, error) {
 	if err != nil {
 		return message, errors.WithStack(err)
 	}
-
+	conn.Close() // Return the connection to the pool.
 	return message, nil
 }
 
