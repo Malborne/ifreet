@@ -2,6 +2,7 @@ package heimdallr
 
 import (
 	"database/sql"
+	"os"
 	"strings"
 	"time"
 
@@ -139,7 +140,6 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// }
 	db.SetMaxIdleConns(2)
 	db.SetMaxOpenConns(5)
-	db.SetConnMaxLifetime(0)
 
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
@@ -215,6 +215,12 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
 
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections {
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(2)
+		db.SetMaxOpenConns(5)
+	}
 	rows, err := db.Query(
 		"SELECT channelID, time_, content, user_id FROM archive WHERE messageID=$1 ORDER BY time_",
 		messageID,
