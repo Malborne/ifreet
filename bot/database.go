@@ -139,7 +139,8 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// if err != nil {
 	// 	return errors.Wrap(err, "deleting database tables failed")
 	// }
-
+	db.SetMaxIdleConns(5)
+	db.SetMaxOpenConns(5)
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
 }
@@ -213,6 +214,7 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 //GetFromArchive gets a message from the archive table
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
+
 	conn, err := db.Conn(ctx)
 	if err != nil {
 		return message, errors.Wrap(err, "Creating the connection object failed")
