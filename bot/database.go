@@ -230,7 +230,7 @@ func GetFromArchive(messageID string) (Message, error) {
 		return message, errors.WithStack(err)
 	}
 
-	_, err = db.Exec("SQL DISCONNECT")
+	_, err = db.Exec("DISCONNECT")
 	if err != nil {
 		return message, errors.WithStack(err)
 	}
