@@ -19,7 +19,7 @@ func OnDeleteHandler(s *discordgo.Session, m *discordgo.MessageDelete) {
 		LogIfError(s, errors.Wrap(err, "Getting the message failed from the database."))
 		return
 	}
-	if message.userID == "" {
+	if message.userID == "" || message.content == "" || message.channelID == "" {
 		return
 	}
 	author, err := s.User(message.userID)
