@@ -163,6 +163,7 @@ func init() {
 
 	var commands []command
 	commands = append(commands, userCommands...)
+	commands = append(commands, trialModeratorCommands...)
 	commands = append(commands, moderatorCommands...)
 	commands = append(commands, superModeratorCommands...)
 	commands = append(commands, adminCommands...)
