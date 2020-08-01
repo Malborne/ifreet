@@ -15,25 +15,18 @@ var removeInfractionCommand = command{
 	commandRemoveInfraction,
 	"Removes an infraction from a user.",
 	[]string{
-		"<user> <timestamp>",
+		"<user> <infractionID>",
 	},
 	[]string{
-		"@username \"Mon, 29 Jun 2020 05:45:51 +0000\"",
-		"245207597929480192 \"Mon, 29 Jun 2020 05:45:51 +0000\"",
+		"@username 22",
+		"245207597929480192 20",
 	},
 }
 
 //commandRemoveInfraction Removes an infraction from a user.
 func commandRemoveInfraction(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	userID := getIDFromMaybeMention(args["<user>"].(string), s)
-	timestamp, _ := args.String("<timestamp>")
-
-	infractionTime, err := time.Parse(time.RFC1123, timestamp)
-	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to parse the time entered %s. Please make sure you enter the time in this format: Mon, 29 Jun 2020 05:45:51 +0000", timestamp))
-
-		return err
-	}
+	infractionID, _ := args.String("<infractionID>")
 
 	guildID := m.GuildID
 
@@ -67,16 +60,16 @@ func commandRemoveInfraction(s *discordgo.Session, m *discordgo.MessageCreate, a
 	var infraction heimdallr.Infraction
 	found := false
 	for _, infrac := range infractions {
-		if infrac.Time.Format(time.RFC1123) == infractionTime.Format(time.RFC1123) {
+		if infrac.ID == infractionID {
 			infraction = infrac
 			found = true
 		}
 	}
 	if !found {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Could not find the infraction for the user with the timestamp specified"))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Could not find the infraction for the user with the ID specified"))
 		return errors.Wrap(err, "Finding infraction failed")
 	}
-	err = heimdallr.RemoveInfraction(infractionTime)
+	err = heimdallr.RemoveInfraction(infractionID)
 	if err != nil {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to remove the infraction from the Database"))
 		return errors.Wrap(err, "Removing infraction failed")
