@@ -193,10 +193,10 @@ func AddInfraction(user discordgo.User, infraction Infraction) error {
 }
 
 //RemoveInfraction removes an infraction for a user
-func RemoveInfraction(timestamp time.Time) error {
+func RemoveInfraction(ID string) error {
 	_, err := db.Query(
-		"DELETE FROM infractions WHERE time_>=$1",
-		timestamp,
+		"DELETE FROM infractions WHERE id==$1",
+		ID,
 	)
 	return errors.Wrap(err, "deleting infraction failed")
 }
