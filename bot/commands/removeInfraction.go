@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
@@ -26,8 +27,14 @@ var removeInfractionCommand = command{
 //commandRemoveInfraction Removes an infraction from a user.
 func commandRemoveInfraction(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	userID := getIDFromMaybeMention(args["<user>"].(string), s)
-	infractionID, _ := args.String("<infractionID>")
-
+	infractionStringID, _ := args.String("<infractionID>")
+	var infractionID int
+	if n, err := strconv.Atoi(infractionStringID); err == nil {
+		infractionID = n
+	} else {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to convert the infraction ID %s into a number. Make sure you enter an integer.", userID))
+		return errors.Wrap(err, "sending message failed")
+	}
 	guildID := m.GuildID
 
 	guild, err := heimdallr.GetGuild(s, guildID)

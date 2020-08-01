@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
@@ -52,7 +53,7 @@ func commandViewInfractions(s *discordgo.Session, m *discordgo.MessageCreate, ar
 	var fields []*discordgo.MessageEmbedField
 	for _, infraction := range infractions {
 		fields = append(fields, &discordgo.MessageEmbedField{
-			Name:  infraction.ID + "\n" + infraction.Time.Format(time.RFC1123),
+			Name:  strconv.Itoa(infraction.ID) + "\n" + infraction.Time.Format(time.RFC1123),
 			Value: infraction.Reason,
 		})
 	}
