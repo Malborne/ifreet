@@ -52,7 +52,7 @@ func commandViewInfractions(s *discordgo.Session, m *discordgo.MessageCreate, ar
 	var fields []*discordgo.MessageEmbedField
 	for _, infraction := range infractions {
 		fields = append(fields, &discordgo.MessageEmbedField{
-			Name:  infraction.Time.Format(time.RFC1123),
+			Name:  infraction.ID + "\n" + infraction.Time.Format(time.RFC1123),
 			Value: infraction.Reason,
 		})
 	}

@@ -16,6 +16,7 @@ import (
 
 //Infraction contains the reason and time for a user infraction
 type Infraction struct {
+	ID     string
 	Reason string
 	Time   time.Time
 }
@@ -154,7 +155,7 @@ func CloseDb() error {
 func GetInfractions(userID string) ([]Infraction, error) {
 	var infractions []Infraction
 	rows, err := db.Query(
-		"SELECT reason, time_ FROM infractions WHERE user_id=$1 ORDER BY time_",
+		"SELECT id, reason, time_ FROM infractions WHERE user_id=$1 ORDER BY time_",
 		userID,
 	)
 	if err != nil {
@@ -162,13 +163,14 @@ func GetInfractions(userID string) ([]Infraction, error) {
 	}
 
 	for rows.Next() {
+		var infractionID string
 		var infractionReason string
 		var infractionTime time.Time
-		err = rows.Scan(&infractionReason, &infractionTime)
+		err = rows.Scan(&infractionID, &infractionReason, &infractionTime)
 		if err != nil {
 			return nil, errors.Wrap(err, "parsing infraction row failed")
 		}
-		infractions = append(infractions, Infraction{infractionReason, infractionTime})
+		infractions = append(infractions, Infraction{infractionID, infractionReason, infractionTime})
 	}
 
 	if err = rows.Err(); err != nil {
