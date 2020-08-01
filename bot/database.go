@@ -16,7 +16,7 @@ import (
 
 //Infraction contains the reason and time for a user infraction
 type Infraction struct {
-	ID     int
+	ID     string
 	Reason string
 	Time   time.Time
 }
@@ -163,7 +163,7 @@ func GetInfractions(userID string) ([]Infraction, error) {
 	}
 
 	for rows.Next() {
-		var infractionID int
+		var infractionID string
 		var infractionReason string
 		var infractionTime time.Time
 		err = rows.Scan(&infractionID, &infractionReason, &infractionTime)
@@ -193,9 +193,9 @@ func AddInfraction(user discordgo.User, infraction Infraction) error {
 }
 
 //RemoveInfraction removes an infraction for a user
-func RemoveInfraction(ID int) error {
+func RemoveInfraction(ID string) error {
 	_, err := db.Query(
-		"DELETE FROM infractions WHERE id==$1",
+		"DELETE FROM infractions WHERE id::text==$1",
 		ID,
 	)
 	return errors.Wrap(err, "deleting infraction failed")
