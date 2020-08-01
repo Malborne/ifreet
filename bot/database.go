@@ -195,7 +195,7 @@ func AddInfraction(user discordgo.User, infraction Infraction) error {
 //RemoveInfraction removes an infraction for a user
 func RemoveInfraction(ID string) error {
 	_, err := db.Query(
-		"DELETE FROM infractions WHERE id::text==$1::text",
+		"DELETE FROM infractions WHERE id::text LIKE $1::text",
 		ID,
 	)
 	return errors.Wrap(err, "deleting infraction failed")
