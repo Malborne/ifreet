@@ -68,6 +68,11 @@ func hasRole(m *discordgo.Member, r string) bool {
 	return false
 }
 
+//IsTrialModOrHigher returns whether the member has mod permissions or higher
+func IsTrialModOrHigher(member *discordgo.Member, guild *discordgo.Guild) bool {
+	return hasRole(member, Config.TrialModRole) || IsModOrHigher(member, guild)
+}
+
 //IsModOrHigher returns whether the member has mod permissions or higher
 func IsModOrHigher(member *discordgo.Member, guild *discordgo.Guild) bool {
 	return hasRole(member, Config.ModRole) || IsSuperModOrHigher(member, guild)

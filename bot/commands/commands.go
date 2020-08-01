@@ -99,6 +99,7 @@ func (command *command) parse(args []string) (docopt.Opts, error) {
 }
 
 var userCommands []command
+var trialModeratorCommands []command
 var moderatorCommands []command
 var superModeratorCommands []command
 var adminCommands []command
@@ -119,6 +120,14 @@ func init() {
 		channelLinkCommand,
 	}
 
+	trialModeratorCommands = []command{
+		warnCommand,
+		infractionsCommand,
+		approveCommand,
+		verifyCommand,
+		muteCommand,
+		unmuteCommand,
+	}
 	moderatorCommands = []command{
 		warnCommand,
 		infractionsCommand,
@@ -151,6 +160,8 @@ func init() {
 		setChannelCommand,
 	}
 
+	requireRoleForCommands("trial moderator", trialModeratorCommands)
+	requireRoleForCommands("moderator", moderatorCommands)
 	requireRoleForCommands("moderator", moderatorCommands)
 	requireRoleForCommands("admin", adminCommands)
 	requireRoleForCommands("admin", ownerCommands)
@@ -199,6 +210,8 @@ func requireRoleForCommand(role string, originalCommand command) command {
 
 func getPrivilegeChecker(role string) func(*discordgo.Member, *discordgo.Guild) bool {
 	switch role {
+	case "trial moderator":
+		return heimdallr.IsTrialModOrHigher
 	case "moderator":
 		return heimdallr.IsModOrHigher
 	case "supermoderator":
@@ -225,6 +238,10 @@ func getHighestRole(m *discordgo.Member) int {
 	for _, role := range m.Roles {
 		switch role {
 		case heimdallr.Config.UserRole:
+			if highestRole > 5 {
+				highestRole = 5
+			}
+		case heimdallr.Config.TrialModRole:
 			if highestRole > 4 {
 				highestRole = 4
 			}
