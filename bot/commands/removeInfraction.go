@@ -78,8 +78,8 @@ func commandRemoveInfraction(s *discordgo.Session, m *discordgo.MessageCreate, a
 	}
 	err = heimdallr.RemoveInfraction(infractionID)
 	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to remove the infraction from the Database"))
 		heimdallr.LogIfError(s, err)
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Failed to remove the infraction from the Database"))
 		return errors.Wrap(err, "Removing infraction failed")
 	}
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
