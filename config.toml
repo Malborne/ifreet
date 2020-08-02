@@ -187,3 +187,8 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blow
   id = "738477337934430239"
   name = "Tamazight"
   description = "A self-assignable role for those who speak Tamazight"
+
+       [[role]]
+  id = "739391683074064484"
+  name = "Swahili"
+  description = "A self-assignable role for those who speak Swahili"
