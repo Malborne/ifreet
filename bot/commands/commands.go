@@ -99,6 +99,7 @@ func (command *command) parse(args []string) (docopt.Opts, error) {
 }
 
 var userCommands []command
+var helperCommands []command
 var trialModeratorCommands []command
 var moderatorCommands []command
 var superModeratorCommands []command
@@ -117,7 +118,12 @@ func init() {
 		lessonsCommand,
 		arabiclessonsCommand,
 		// searchResourcesCommand,
-		channelLinkCommand,
+		getSheetLinkCommand,
+	}
+
+	helperCommands = []command{
+		addStudentCommand,
+		removeStudentCommand,
 	}
 
 	trialModeratorCommands = []command{
@@ -154,6 +160,7 @@ func init() {
 		setChannelCommand,
 	}
 
+	requireRoleForCommands("helper", helperCommands)
 	requireRoleForCommands("trial moderator", trialModeratorCommands)
 	requireRoleForCommands("moderator", moderatorCommands)
 	requireRoleForCommands("moderator", moderatorCommands)
@@ -163,6 +170,7 @@ func init() {
 
 	var commands []command
 	commands = append(commands, userCommands...)
+	commands = append(commands, helperCommands...)
 	commands = append(commands, trialModeratorCommands...)
 	commands = append(commands, moderatorCommands...)
 	commands = append(commands, superModeratorCommands...)
@@ -205,6 +213,8 @@ func requireRoleForCommand(role string, originalCommand command) command {
 
 func getPrivilegeChecker(role string) func(*discordgo.Member, *discordgo.Guild) bool {
 	switch role {
+	case "helper":
+		return heimdallr.IsHelper
 	case "trial moderator":
 		return heimdallr.IsTrialModOrHigher
 	case "moderator":

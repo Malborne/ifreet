@@ -55,6 +55,12 @@ func helpAll(s *discordgo.Session, m *discordgo.MessageCreate) error {
 	if err != nil {
 		return err
 	}
+	if heimdallr.IsHelper(member, guild) {
+		fields = append(fields, &discordgo.MessageEmbedField{
+			Name:  "Helper commands",
+			Value: strings.Join(getHelpMessages(helperCommands), "\n"),
+		})
+	}
 	if heimdallr.IsTrialModOrHigher(member, guild) {
 		fields = append(fields, &discordgo.MessageEmbedField{
 			Name:  "Trial Moderator commands",

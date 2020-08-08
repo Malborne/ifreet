@@ -93,6 +93,11 @@ func IsOwner(member *discordgo.Member, guild *discordgo.Guild) bool {
 	return guild.OwnerID == member.User.ID
 }
 
+//IsHelper returns whether the member is a brothers or sisters helper
+func IsHelper(member *discordgo.Member, guild *discordgo.Guild) bool {
+	return hasRole(member, Config.BrothersHelperRole) || hasRole(member, Config.SistersHelperRole)
+}
+
 //IsVerified checks whether a user is verified
 func IsVerified(m *discordgo.Member) bool {
 	for _, role := range m.Roles {

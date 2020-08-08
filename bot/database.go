@@ -21,6 +21,13 @@ type Infraction struct {
 	Time   time.Time
 }
 
+//Student contains the information about each student in the Hifz circles
+type Student struct {
+	ID        string
+	circle    string
+	sheetLink string
+}
+
 //Message contains the basic information about the message
 type Message struct {
 	messageID string
@@ -88,6 +95,13 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
+
+CREATE TABLE IF NOT EXISTS students (
+	userID TEXT PRIMARY KEY,
+	circle TEXT,
+	sheetLink TEXT,
+);
+
 CREATE TABLE IF NOT EXISTS archive (
 	id SERIAL PRIMARY KEY,
 	messageID TEXT,
@@ -140,7 +154,7 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	// 	return errors.Wrap(err, "deleting database tables failed")
 	// }
 	db.SetMaxIdleConns(0)
-	db.SetMaxOpenConns(10)
+	db.SetMaxOpenConns(19)
 
 	_, err = db.Exec(createTableStatement)
 	return errors.Wrap(err, "creating database tables failed")
@@ -154,6 +168,12 @@ func CloseDb() error {
 //GetInfractions gets the list of infractions for a user
 func GetInfractions(userID string) ([]Infraction, error) {
 	var infractions []Infraction
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
 	rows, err := db.Query(
 		"SELECT id, reason, time_ FROM infractions WHERE user_id=$1 ORDER BY time_",
 		userID,
@@ -195,10 +215,60 @@ func AddInfraction(user discordgo.User, infraction Infraction) error {
 //RemoveInfraction removes an infraction for a user
 func RemoveInfraction(ID string) error {
 	_, err := db.Query(
-		"DELETE FROM infractions WHERE id::text LIKE $1::text",
+		"DELETE FROM infractions WHERE id::text = $1::text",
 		ID,
 	)
 	return errors.Wrap(err, "deleting infraction failed")
+}
+
+//AddStudent adds a new student to the database
+func AddStudent(userID string, circle string, sheetLink string) error {
+
+	_, err := db.Exec("INSERT INTO students (userID, circle, sheetLink) VALUES ($1, $2, $3)",
+		userID, circle, sheetLink)
+	return errors.Wrap(err, "adding student failed")
+}
+
+//GetStudent retrieve a student information from the database
+func GetStudent(userID string) (Student, error) {
+	var student Student
+
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
+	rows, err := db.Query(
+		"SELECT userID, circle, sheetLink FROM students WHERE userID=$1",
+		userID,
+	)
+	if err != nil {
+		return student, errors.Wrap(err, "getting student failed")
+	}
+	for rows.Next() {
+		var userID string
+		var circle string
+		var sheetLink string
+
+		err := rows.Scan(&userID, &circle, &sheetLink)
+		if err != nil {
+			return student, err
+		}
+		student = Student{userID, circle, sheetLink}
+
+	}
+	rows.Close()
+	return student, nil
+}
+
+//RemoveStudent removes a student from the database
+func RemoveStudent(userID string) error {
+	_, err := db.Query(
+		"DELETE FROM students WHERE userID = $1",
+		userID,
+	)
+	return errors.Wrap(err, "deleting student failed")
 }
 
 //AddtoArchive adds a message to the archive table
@@ -291,6 +361,12 @@ func AddMutedUser(user discordgo.User, time time.Time, roleIDs string) error {
 func GetMutedUserRoles(userID string) ([]string, error) {
 	var roles []string
 	var roleIDs string
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
 	rows, err := db.Query(
 		"SELECT roleIDs, time_ FROM mutedUsers WHERE user_id=$1 ORDER BY time_",
 		userID,
@@ -340,6 +416,12 @@ func AddUser(user discordgo.User) error {
 
 //GetResourceByID gets a resource from the database by ID
 func GetResourceByID(id int) (*Resource, error) {
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
 	rows, err := db.Query(
 		"SELECT resources.id, resources.name, content, resource_tags.name AS tag"+
 			" FROM resources"+
@@ -360,6 +442,12 @@ func GetResourceByID(id int) (*Resource, error) {
 
 //GetResourceByName gets a resource frm the database by name
 func GetResourceByName(name string) (*Resource, error) {
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
 	rows, err := db.Query(
 		"SELECT resources.id, resources.name, content, resource_tags.name AS tag"+
 			" FROM resources"+
@@ -381,6 +469,12 @@ func GetResourceByName(name string) (*Resource, error) {
 
 //SearchResources searches the database for resources matching the search terms
 func SearchResources(searchTerms []string) ([]*Resource, error) {
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
 	query := "SELECT resources.id, resources.name, content, resource_tags.name AS tag" +
 		" FROM resources" +
 		" 	LEFT JOIN resource_tags_resources ON resource_id = resources.id" +
