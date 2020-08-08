@@ -47,7 +47,7 @@ func commandAddStudent(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	err = heimdallr.AddStudent(userID, circle, sheetLink)
+	err = heimdallr.AddStudent(*user, circle, sheetLink)
 	if err != nil {
 		return errors.Wrap(err, "adding student failed")
 	}

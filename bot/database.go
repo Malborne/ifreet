@@ -100,7 +100,8 @@ CREATE TABLE IF NOT EXISTS students (
 	id SERIAL PRIMARY KEY,
 	user_id TEXT,
 	circle TEXT,
-	sheetLink TEXT,	
+	sheetLink TEXT,
+	FOREIGN KEY(user_id) REFERENCES users(id)	
 );
 
 CREATE TABLE IF NOT EXISTS archive (
@@ -223,10 +224,14 @@ func RemoveInfraction(ID string) error {
 }
 
 //AddStudent adds a new student to the database
-func AddStudent(userID string, circle string, sheetLink string) error {
+func AddStudent(user discordgo.User, circle string, sheetLink string) error {
+	err := AddUser(user)
+	if err != nil {
+		return errors.Wrap(err, "Adding user failed")
+	}
 
-	_, err := db.Exec("INSERT INTO students (user_id, circle, sheetLink) VALUES ($1, $2, $3)",
-		userID, circle, sheetLink)
+	_, err = db.Exec("INSERT INTO students (user_id, circle, sheetLink) VALUES ($1, $2, $3)",
+		user.ID, circle, sheetLink)
 	return errors.Wrap(err, "adding student failed")
 }
 
