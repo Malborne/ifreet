@@ -96,7 +96,12 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 );
 
 
-
+CREATE TABLE IF NOT EXISTS students (
+	user_id TEXT PRIMARY KEY,
+	circle TEXT,
+	sheetLink TEXT,
+	
+);
 
 CREATE TABLE IF NOT EXISTS archive (
 	id SERIAL PRIMARY KEY,
@@ -220,7 +225,7 @@ func RemoveInfraction(ID string) error {
 //AddStudent adds a new student to the database
 func AddStudent(userID string, circle string, sheetLink string) error {
 
-	_, err := db.Exec("INSERT INTO students (userID, circle, sheetLink) VALUES ($1, $2, $3)",
+	_, err := db.Exec("INSERT INTO students (user_id, circle, sheetLink) VALUES ($1, $2, $3)",
 		userID, circle, sheetLink)
 	return errors.Wrap(err, "adding student failed")
 }
@@ -236,7 +241,7 @@ func GetStudent(userID string) (Student, error) {
 		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
 	}
 	rows, err := db.Query(
-		"SELECT userID, circle, sheetLink FROM students WHERE userID=$1",
+		"SELECT user_id, circle, sheetLink FROM students WHERE user_id=$1",
 		userID,
 	)
 	if err != nil {
@@ -261,7 +266,7 @@ func GetStudent(userID string) (Student, error) {
 //RemoveStudent removes a student from the database
 func RemoveStudent(userID string) error {
 	_, err := db.Query(
-		"DELETE FROM students WHERE userID = $1",
+		"DELETE FROM students WHERE user_id = $1",
 		userID,
 	)
 	return errors.Wrap(err, "deleting student failed")
