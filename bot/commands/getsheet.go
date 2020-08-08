@@ -9,9 +9,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-var getSheetLinkCommand = command{
-	"getsheetlink",
-	commandGetSheetLink,
+var getSheetCommand = command{
+	"getsheet",
+	commandGetSheet,
 	"gives a link to the Google docs sheet for a particular student",
 	[]string{
 		"<user>",
@@ -22,8 +22,8 @@ var getSheetLinkCommand = command{
 	},
 }
 
-//commandGetSheetLink gives a link to the Google docs sheet for a particular student
-func commandGetSheetLink(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
+//commandGetSheet gives a link to the Google docs sheet for a particular student
+func commandGetSheet(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	userID := getIDFromMaybeMention(args["<user>"].(string), s)
 
 	guildID := m.GuildID

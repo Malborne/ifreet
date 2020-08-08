@@ -118,7 +118,7 @@ func init() {
 		lessonsCommand,
 		arabiclessonsCommand,
 		// searchResourcesCommand,
-		getSheetLinkCommand,
+		getSheetCommand,
 	}
 
 	helperCommands = []command{
