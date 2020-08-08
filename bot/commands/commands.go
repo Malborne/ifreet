@@ -114,7 +114,7 @@ func init() {
 		tajweedLessonCommand,
 		arabicLessonCommand,
 		roleCommand,
-		versionCommand,
+		// versionCommand,
 		lessonsCommand,
 		arabiclessonsCommand,
 		// searchResourcesCommand,

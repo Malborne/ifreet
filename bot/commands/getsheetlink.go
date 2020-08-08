@@ -52,10 +52,13 @@ func commandGetSheetLink(s *discordgo.Session, m *discordgo.MessageCreate, args 
 	student, err := heimdallr.GetStudent(userID)
 	if err != nil {
 		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student is not registered in the database."))
-		return errors.Wrap(err, "adding student failed")
+		return errors.Wrap(err, "getting the sheetLink failed")
 	}
 	if student.ID != "" {
 		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf(student.SheetLink))
+	} else {
+		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student is not registered in the database. Make sure you add the student first."))
+		return errors.Wrap(err, "getting the sheetLink failed")
 	}
 	return errors.Wrap(err, "sending message failed")
 
