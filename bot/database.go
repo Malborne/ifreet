@@ -97,10 +97,10 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 
 
 CREATE TABLE IF NOT EXISTS students (
-	user_id TEXT PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
+	user_id TEXT,
 	circle TEXT,
-	sheetLink TEXT,
-	
+	sheetLink TEXT,	
 );
 
 CREATE TABLE IF NOT EXISTS archive (
