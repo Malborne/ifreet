@@ -24,8 +24,8 @@ type Infraction struct {
 //Student contains the information about each student in the Hifz circles
 type Student struct {
 	ID        string
-	circle    string
-	sheetLink string
+	Circle    string
+	SheetLink string
 }
 
 //Message contains the basic information about the message

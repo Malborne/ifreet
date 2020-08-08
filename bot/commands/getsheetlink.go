@@ -55,7 +55,7 @@ func commandGetSheetLink(s *discordgo.Session, m *discordgo.MessageCreate, args 
 		return errors.Wrap(err, "adding student failed")
 	}
 	if student.ID != "" {
-		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf(student.sheetLink))
+		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf(student.SheetLink))
 	}
 	return errors.Wrap(err, "sending message failed")
 
