@@ -50,7 +50,7 @@ func commandRemoveStudent(s *discordgo.Session, m *discordgo.MessageCreate, args
 		return errors.Wrap(err, "removing student failed")
 	}
 
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("A student was removed by %s.", author.User.Username+"#"+author.User.Discriminator),
 		Fields: []*discordgo.MessageEmbedField{
 			{

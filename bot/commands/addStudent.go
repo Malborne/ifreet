@@ -52,7 +52,7 @@ func commandAddStudent(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		return errors.Wrap(err, "adding student failed")
 	}
 
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("User was added to %s cirlce by %s.", circle, author.User.Username+"#"+author.User.Discriminator),
 		Fields: []*discordgo.MessageEmbedField{
 			{
