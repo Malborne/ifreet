@@ -95,7 +95,7 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 			err = s.GuildMemberRoleRemove(m.GuildID, infractor.User.ID, role)
 
 			if err != nil {
-				return errors.Wrap(err, "removing role failed")
+				heimdallr.LogIfError(s, err)
 			}
 		}
 	}
