@@ -124,6 +124,7 @@ func init() {
 	helperCommands = []command{
 		addStudentCommand,
 		removeStudentCommand,
+		mystudentsCommand,
 	}
 
 	trialModeratorCommands = []command{
