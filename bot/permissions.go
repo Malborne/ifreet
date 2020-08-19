@@ -98,6 +98,11 @@ func IsHelper(member *discordgo.Member, guild *discordgo.Guild) bool {
 	return hasRole(member, Config.BrothersHelperRole) || hasRole(member, Config.SistersHelperRole)
 }
 
+//IsCircleMember returns whether the member is in a circle or not
+func IsCircleMember(member *discordgo.Member, guild *discordgo.Guild) bool {
+	return hasRole(member, Config.OmerIbnAlKhattabRole) || hasRole(member, Config.AbuBakrAlSiddeeqRole) || hasRole(member, Config.AliBinAbiTaalibRole) || hasRole(member, Config.SistersCircleRole)
+}
+
 //IsVerified checks whether a user is verified
 func IsVerified(m *discordgo.Member) bool {
 	for _, role := range m.Roles {

@@ -133,6 +133,7 @@ func ReactionVerify(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 }
 func hasRole(m *discordgo.Member, r string) bool {
+
 	for _, role := range m.Roles {
 		if role == r {
 			return true

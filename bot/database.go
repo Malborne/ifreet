@@ -238,7 +238,6 @@ func AddStudent(user discordgo.User, circle string, sheetLink string) error {
 //GetStudent retrieve a student information from the database
 func GetStudent(userID string) (Student, error) {
 	var student Student
-
 	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
 		db.Close()
 		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
@@ -266,6 +265,38 @@ func GetStudent(userID string) (Student, error) {
 	}
 	rows.Close()
 	return student, nil
+}
+
+//GetStudents retrieve all the students information of a cirtain circle from the database
+func GetStudents(circleName string) ([]Student, error) {
+	var students []Student
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
+	rows, err := db.Query(
+		"SELECT user_id, circle, sheetLink FROM students WHERE circle=$1",
+		circleName,
+	)
+	if err != nil {
+		return students, errors.Wrap(err, "getting student failed")
+	}
+	for rows.Next() {
+		var userID string
+		var circle string
+		var sheetLink string
+
+		err := rows.Scan(&userID, &circle, &sheetLink)
+		if err != nil {
+			return students, err
+		}
+		students = append(students, Student{userID, circle, sheetLink})
+
+	}
+	rows.Close()
+	return students, nil
 }
 
 //RemoveStudent removes a student from the database
@@ -324,6 +355,7 @@ func GetFromArchive(messageID string) (Message, error) {
 
 //RemovefromArchive Removes a message from the archive table
 func RemovefromArchive(messageID string) error {
+
 	_, err := db.Query(
 		"DELETE FROM archive WHERE messageID=$1",
 		messageID,

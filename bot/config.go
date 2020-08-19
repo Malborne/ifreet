@@ -29,6 +29,11 @@ type BotConfig struct {
 	ModRole      string `toml:"mod_role_id"`
 	TrialModRole string `toml:"trial_mod_rol_id"`
 
+	OmerIbnAlKhattabRole string `toml:"Omer_Ibn_Al_Khattab_Circle_id"`
+	AbuBakrAlSiddeeqRole string `toml:"abu_bakar_alsiddeeq_circle_id"`
+	AliBinAbiTaalibRole  string `toml:"ali_bin_abi_talib_id"`
+	SistersCircleRole    string `toml:"sisters_circle_id"`
+
 	CricleLeaderRole   string `toml:"circle_leader_role_id"`
 	BrothersHelperRole string `toml:"brothers_helper_role_id"`
 	SistersHelperRole  string `toml:"sisters_helper_role_id"`
