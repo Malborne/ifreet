@@ -62,7 +62,7 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		for _, student := range students {
 			// member, _ := heimdallr.GetMember(s, guildID, student.ID)
 			fields = append(fields, &discordgo.MessageEmbedField{
-				Name:  fmt.Sprintf("<@%s>", student.ID),
+				Name:  fmt.Sprintf("<@!%s>", student.ID),
 				Value: student.SheetLink,
 			})
 		}
