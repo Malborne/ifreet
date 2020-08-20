@@ -37,7 +37,7 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	if isApproved(member) {
 		return nil
 	}
-	user := member.User
+	// user := member.User
 	err = s.GuildMemberRoleAdd(guildID, userID, heimdallr.Config.UserRole)
 	if err != nil {
 		return errors.Wrap(err, "adding user role failed")
@@ -58,11 +58,15 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
 		if strings.Count(approvalMessage, "%s") > 0 {
-			approvalMessage = fmt.Sprintf(approvalMessage, user.Mention(), heimdallr.Config.BotChannel)
-
+			approvalMessage = fmt.Sprintf(approvalMessage, member.Mention(), heimdallr.Config.BotChannel)
 		}
-		_, err := s.ChannelMessageSend(m.ChannelID, approvalMessage)
-		return errors.Wrap(err, "sending message failed")
+		userChannel, err := s.UserChannelCreate(member.User.ID)
+		if err != nil {
+			s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New user %s Does NOT ACCEPT DMs", member.Mention()))
+		}
+		_, err = s.ChannelMessageSend(userChannel.ID, approvalMessage)
+		heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
+
 	}
 	return nil
 }
@@ -133,8 +137,13 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		if strings.Count(approvalMessage, "%s") > 0 {
 			approvalMessage = fmt.Sprintf(approvalMessage, message.Author.Mention(), heimdallr.Config.BotChannel)
 		}
-		_, err := s.ChannelMessageSend(m.ChannelID, approvalMessage)
+		userChannel, err := s.UserChannelCreate(member.User.ID)
+		if err != nil {
+			s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New User %s Does NOT ACCEPT DMs", member.Mention()))
+		}
+		_, err = s.ChannelMessageSend(userChannel.ID, approvalMessage)
 		heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
+
 	}
 }
 
