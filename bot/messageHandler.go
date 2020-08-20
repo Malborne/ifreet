@@ -67,6 +67,20 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				LogIfError(s, errors.Wrap(err, "kick failed"))
 				return
 			}
+			_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
+				Title: "User ws automatically kicked by Ifreet.",
+				Fields: []*discordgo.MessageEmbedField{
+					{
+						Name:  "**Username**",
+						Value: author.User.Username + "#" + author.User.Discriminator,
+					},
+					{
+						Name: "**User ID**",
+						Value: author.User.ID,
+					},
+				},
+				Color: 0xEE0000,
+			})
 		}
 		err = AddInfraction(*author.User, Infraction{Reason: "Attempting to post an inappropriate word", Time: time.Now()})
 		if err != nil {
@@ -184,10 +198,10 @@ func muteUser(s *discordgo.Session, infractor *discordgo.Member, GuildID string)
 	//Remove all the other user roles
 	for _, role := range infractor.Roles {
 		if role != Config.ServerBoosterRole {
-		err = s.GuildMemberRoleRemove(GuildID, infractor.User.ID, role)
-		if err != nil {
-			LogIfError(s, err)
-		}
+			err = s.GuildMemberRoleRemove(GuildID, infractor.User.ID, role)
+			if err != nil {
+				LogIfError(s, err)
+			}
 		}
 	}
 	//Add the muted role
