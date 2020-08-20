@@ -28,11 +28,17 @@ func commandRemoveStudent(s *discordgo.Session, m *discordgo.MessageCreate, args
 
 	guildID := m.GuildID
 	member, err := heimdallr.GetMember(s, guildID, userID)
+	var user *discordgo.User
 	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No member was found with ID %s.", userID))
-		return errors.Wrap(err, "sending message failed")
+
+		user, err = s.User(userID)
+		if err != nil {
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No user was found with ID %s.", userID))
+			return errors.Wrap(err, "sending message failed")
+		}
+	} else {
+		user = member.User
 	}
-	user := member.User
 
 	author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
 	if err != nil {
