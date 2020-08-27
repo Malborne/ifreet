@@ -61,35 +61,13 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	if students[0].ID != "" {
 		var fields []*discordgo.MessageEmbedField
 		for i, student := range students {
-			_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("This is the student number: %d\nwith ID: %s", i, students[i].ID))
+			// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("This is the student number: %d\nwith ID: %s", i, students[i].ID))
 
 			member, erro := heimdallr.GetMember(s, guildID, student.ID)
 			if erro != nil {
-				return errors.Wrap(err, "getting member failed")
+				heimdallr.LogIfError(s, erro)
+				continue
 			}
-
-			// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student's info:\nName: %s\nCircle: %s\nSheet: %s\n", member.User.String(), student.Circle, student.SheetLink))
-			_, err = s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-				Author: &discordgo.MessageEmbedAuthor{
-					Name:    author.User.Username,
-					IconURL: author.User.AvatarURL(""),
-				},
-				Title: circleName,
-				Fields: []*discordgo.MessageEmbedField{
-					{
-						Name:  "**Username**",
-						Value: member.User.String(),
-					},
-					{
-						Name:  "**User ID**",
-						Value: student.ID,
-					},
-					{
-						Name:  "**Sheet Link**",
-						Value: student.SheetLink,
-					},
-				},
-			})
 			if err != nil {
 				return errors.Wrap(err, "sending the message failed")
 			}
