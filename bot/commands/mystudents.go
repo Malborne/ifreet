@@ -47,6 +47,7 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		circleName = "Omer Ibn Al Khattab's Circle"
 	} else if hasRole(author, heimdallr.Config.AbuBakrAlSiddeeqRole) {
 		circleName = "Abu Bakr Al Siddeeq's Circle"
+		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The user has the role. circle name has been set to %s", circleName))
 	} else if hasRole(author, heimdallr.Config.AliBinAbiTaalibRole) {
 		circleName = "Ali Ibn Abi Talib's Circle"
 	} else if hasRole(author, heimdallr.Config.SistersCircleRole) {
