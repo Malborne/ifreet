@@ -66,7 +66,28 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 			if erro != nil {
 				return errors.Wrap(err, "getting member failed")
 			}
-			_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student's info:\nName: %s\nCircle: %s\nSheet: %s\n", member.User.String(), student.Circle, student.SheetLink))
+			// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student's info:\nName: %s\nCircle: %s\nSheet: %s\n", member.User.String(), student.Circle, student.SheetLink))
+			_, err = s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
+				Author: &discordgo.MessageEmbedAuthor{
+					Name:    author.User.Username,
+					IconURL: author.User.AvatarURL(""),
+				},
+				Title: circleName,
+				Fields: []*discordgo.MessageEmbedField{
+					{
+						Name:  "**Username**",
+						Value: member.User.String(),
+					},
+					{
+						Name:  "**User ID**",
+						Value: student.ID,
+					},
+					{
+						Name:  "**Sheet Link**",
+						Value: student.SheetLink,
+					},
+				},
+			})
 			if err != nil {
 				return errors.Wrap(err, "sending the message failed")
 			}
@@ -86,6 +107,7 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		if err != nil {
 			return errors.Wrap(err, "sending the embed failed")
 		}
+
 	} else {
 		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student is not registered in the database. Make sure you add the student first."))
 		return errors.Wrap(err, "getting the sheetLink failed")
