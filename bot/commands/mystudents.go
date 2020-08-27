@@ -57,11 +57,12 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Could not find the circle members in the database."))
 		return errors.Wrap(err, "getting the sheetLink failed")
 	}
-	_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The first student's info: ID: %s\nCircle: %s\nSheet: %s\n", students[0].ID, students[0].Circle, students[0].SheetLink))
 
 	if students[0].ID != "" {
 		var fields []*discordgo.MessageEmbedField
 		for _, student := range students {
+			_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student's info: ID: %s\nCircle: %s\nSheet: %s\n", student.ID, student.Circle, student.SheetLink))
+
 			member, _ := heimdallr.GetMember(s, guildID, student.ID)
 			fields = append(fields, &discordgo.MessageEmbedField{
 				Name:  member.User.String(),
@@ -76,6 +77,9 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 			Title:  circleName,
 			Fields: fields,
 		})
+		if err != nil {
+			return errors.Wrap(err, "sending the embed failed")
+		}
 	} else {
 		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student is not registered in the database. Make sure you add the student first."))
 		return errors.Wrap(err, "getting the sheetLink failed")
