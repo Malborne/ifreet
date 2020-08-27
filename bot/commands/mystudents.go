@@ -84,6 +84,5 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student is not registered in the database. Make sure you add the student first."))
 		return errors.Wrap(err, "getting the sheetLink failed")
 	}
-	return errors.Wrap(err, "sending message failed")
-
+	return nil
 }
