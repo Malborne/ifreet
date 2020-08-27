@@ -61,12 +61,13 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	if students[0].ID != "" {
 		var fields []*discordgo.MessageEmbedField
 		for _, student := range students {
-			_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student's info: ID: %s\nCircle: %s\nSheet: %s\n", student.ID, student.Circle, student.SheetLink))
 
 			member, erro := heimdallr.GetMember(s, guildID, student.ID)
 			if erro != nil {
 				return errors.Wrap(err, "getting member failed")
 			}
+			_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student's info: ID: %s\nCircle: %s\nSheet: %s\n", student.ID, student.Circle, student.SheetLink))
+
 			fields = append(fields, &discordgo.MessageEmbedField{
 				Name:  member.User.String(),
 				Value: student.SheetLink,
