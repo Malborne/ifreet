@@ -66,6 +66,8 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 			if erro != nil {
 				return errors.Wrap(err, "getting member failed")
 			}
+			_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The length of students array: %d\n", len(students)))
+
 			// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student's info:\nName: %s\nCircle: %s\nSheet: %s\n", member.User.String(), student.Circle, student.SheetLink))
 			_, err = s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 				Author: &discordgo.MessageEmbedAuthor{
