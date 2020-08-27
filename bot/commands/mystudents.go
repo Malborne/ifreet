@@ -66,7 +66,7 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 			if erro != nil {
 				return errors.Wrap(err, "getting member failed")
 			}
-			_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student's info: ID: %s\nCircle: %s\nSheet: %s\n", student.ID, student.Circle, student.SheetLink))
+			_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The student's info:\nName: %s\nCircle: %s\nSheet: %s\n", member.User.String(), student.Circle, student.SheetLink))
 			if err != nil {
 				return errors.Wrap(err, "sending the message failed")
 			}
