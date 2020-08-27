@@ -47,7 +47,6 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		circleName = "Omer Ibn Al Khattab's Circle"
 	} else if hasRole(author, heimdallr.Config.AbuBakrAlSiddeeqRole) {
 		circleName = "Abu Bakr Al Siddeeq's Circle"
-		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The user has the role. circle name has been set to %s", circleName))
 	} else if hasRole(author, heimdallr.Config.AliBinAbiTaalibRole) {
 		circleName = "Ali Ibn Abi Talib's Circle"
 	} else if hasRole(author, heimdallr.Config.SistersCircleRole) {
@@ -58,6 +57,8 @@ func commandMystudents(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Could not find the circle members in the database."))
 		return errors.Wrap(err, "getting the sheetLink failed")
 	}
+	_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The first student's info: ID: %s\nCircle: %s\nSheet: %s\n", students[0].ID, students[0].Circle, students[0].SheetLink))
+
 	if students[0].ID != "" {
 		var fields []*discordgo.MessageEmbedField
 		for _, student := range students {
