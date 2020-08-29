@@ -122,7 +122,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	}
 
 	if strings.Contains(strings.ToLower(message.Content), "female") && strings.Contains(strings.ToLower(message.Content), "male") {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("More than one gender was  found in the content of the message. Please make sure that you react to a message that contains a signle gender."))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("More than one gender was  found in the content of the message. Please make sure that you react to a message that contains a single gender or use the `;approve` command instead"))
 		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
 		return
 	}
