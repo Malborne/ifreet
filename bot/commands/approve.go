@@ -146,7 +146,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("New User %s has been approved", member.Mention()))
+	s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New User %s has been approved", member.Mention()))
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
