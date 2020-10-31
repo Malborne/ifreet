@@ -116,7 +116,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	if strings.Contains(strings.ToLower(message.Content), "female") && strings.Contains(strings.ToLower(strings.Replace(message.Content, "female", "", -1)), "male") {
+	if strings.Contains(strings.ToLower(message.Content), "female") && strings.Contains(strings.ToLower(strings.Replace(strings.ToLower(message.Content), "female", "", -1)), "male") {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("More than one gender was  found in the content of the message. Use the `;approve` command instead"))
 		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
 		return
@@ -146,7 +146,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New User %s has been approved", member.Mention()))
+	//s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New User %s has been approved", member.Mention()))
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
