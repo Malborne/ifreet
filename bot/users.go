@@ -11,6 +11,7 @@ import (
 
 //UserJoinHandler handles new users joining the server, and will welcome them.
 func UserJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
+	s.AddHandler(UserJoinHandler)
 	_, _ = s.ChannelMessageSend(Config.WelcomeChannel, fmt.Sprintf("User has joined the building."))
 
 	welcomeMessage := Config.WelcomeMessage
