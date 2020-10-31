@@ -18,7 +18,7 @@ func UserJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	}
 	_, err := s.ChannelMessageSend(Config.AdminLogChannel, "A new User has joined the building.")
 
-	_, err := s.ChannelMessageSend(Config.WelcomeChannel, welcomeMessage)
+	_, err = s.ChannelMessageSend(Config.WelcomeChannel, welcomeMessage)
 	LogIfError(s, errors.Wrap(err, "sending message failed"))
 }
 
