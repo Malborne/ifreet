@@ -1,6 +1,6 @@
 module github.com/Malborne/ifreet/tree/master
 
-go 1.12.17
+go 1.12.10
 
 require (
 github.com/BurntSushi/toml v0.3.1
