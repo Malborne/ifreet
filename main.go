@@ -55,6 +55,8 @@ func main() {
 	dg.AddHandler(commands.ReactionPrompt)
 	dg.AddHandler(heimdallr.UserJoinHandler)
 	dg.AddHandler(heimdallr.UserLeaveHandler)
+	_, _ = s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("handlers have been added"))
+
 	dg.AddHandler(heimdallr.MemberBanAddHandler)
 	dg.AddHandler(heimdallr.MessageHandler)
 	dg.AddHandler(heimdallr.OnDeleteHandler)
