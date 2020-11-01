@@ -2,9 +2,9 @@ github.com/BurntSushi/toml v0.3.0 h1:e1/Ivsx3Z0FVTV0NSOv/aVgbUWyQuzj7DDnFblkRvsY
 github.com/BurntSushi/toml v0.3.0/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Malborne/Ifreet v0.0.0-20200528054750-950ea444f438 h1:K4xaV5yvTkY+zlaMUHYhYwJtI0YODdUNed/7MjBLGTE=
-github.com/Malborne/Ifreet/tree/master v0.1.2 h1:H1eccNIjNrH5y4WC4ariBPqDqNA4UjAV93mh9PNFPh0=
-github.com/Malborne/Ifreet/tree/master v0.1.2 h1:H1eccNIjNrH5y4WC4ariBPqDqNA4UjAV93mh9PNFPh0=
+github.com/Malborne/ifreet v0.0.0-20200528054750-950ea444f438 h1:K4xaV5yvTkY+zlaMUHYhYwJtI0YODdUNed/7MjBLGTE=
+github.com/Malborne/ifreet/tree/master v0.1.2 h1:H1eccNIjNrH5y4WC4ariBPqDqNA4UjAV93mh9PNFPh0=
+github.com/Malborne/ifreet/tree/master v0.1.2 h1:H1eccNIjNrH5y4WC4ariBPqDqNA4UjAV93mh9PNFPh0=
 github.com/bwmarrin/discordgo v0.20.2 h1:nA7jiTtqUA9lT93WL2jPjUp8ZTEInRujBdx1C9gkr20=
 github.com/bwmarrin/discordgo v0.20.2/go.mod h1:O9S4p+ofTFwB02em7jkpkV8M3R0/PUVOwN61zSZ0r4Q=
 github.com/bwmarrin/discordgo v0.20.3 h1:AxjcHGbyBFSC0a3Zx5nDQwbOjU7xai5dXjRnZ0YB7nU=
