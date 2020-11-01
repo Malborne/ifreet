@@ -58,6 +58,7 @@ func main() {
 	dg.AddHandler(heimdallr.MemberBanAddHandler)
 	dg.AddHandler(heimdallr.MessageHandler)
 	dg.AddHandler(heimdallr.OnDeleteHandler)
+	_, _ = dg.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("The handlers have been added."))
 
 	err = dg.Open()
 	if err != nil {
