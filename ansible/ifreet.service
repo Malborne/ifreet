@@ -1,5 +1,5 @@
 [Unit]
-Description=Ifreet Discord bot for Learn/Memorize Quran
+Description=Ifreet Discord bot for Quran learning center
 
 [Service]
 WorkingDirectory=/home/ifreet/ifreet/{{ ENVIRONMENT }}
