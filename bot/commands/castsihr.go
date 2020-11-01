@@ -24,7 +24,7 @@ var castSihrCommand = command{
 
 //Casts Sihr on the user by changing their nickname to Mashoor.
 func commandcastSihr(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<user>"].(string), s)
+	userID := getIDFromMaybeMention(args["<user>"].(string))
 	var user *discordgo.User
 
 	guildID := m.GuildID

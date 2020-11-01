@@ -30,26 +30,12 @@ func commandClearMessages(s *discordgo.Session, m *discordgo.MessageCreate, args
 
 	if err != nil || number == 0 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Incorrect use of command. Type the number of messages you wish to be deleted"))
-		return errors.Wrap(err, "clearing message failed")
+		return errors.Wrap(err, "deleting message failed")
 	}
 
 	if number > 99 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot delete more than 99 messages at a time"))
-		return errors.Wrap(err, "clearing message failed")
-	}
-
-	author, err := heimdallr.GetMember(s, m.GuildID, m.Author.ID)
-	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", m.Author.ID))
-		return errors.Wrap(err, "getting the author failed")
-	}
-	guild, err := heimdallr.GetGuild(s, m.GuildID)
-	if err != nil {
-		return err
-	}
-	if m.ChannelID == heimdallr.Config.StaffChannel && !heimdallr.IsAdminOrHigher(author, guild) {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot clear messages in the <#%s>.", heimdallr.Config.StaffChannel))
-		return errors.Wrap(err, "clearing messages failed")
+		return errors.Wrap(err, "deleting message failed")
 	}
 
 	messages, err := s.ChannelMessages(m.ChannelID, number, m.ID, "", "")
@@ -86,8 +72,8 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		heimdallr.LogIfError(s, err)
 		return
 	}
-	if !heimdallr.IsSuperModOrHigher(reactingMember, guild) {
-		// _, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You do NOT have permissions to delete messages"))
+	if !heimdallr.IsModOrHigher(reactingMember, guild) {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You do NOT have permissions to delete messages"))
 		heimdallr.LogIfError(s, err)
 		return
 	}
@@ -107,30 +93,6 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			return
 		}
 		for mess := range messages {
-			// if !messages[mess].Author.Bot && !strings.HasPrefix(messages[mess].Content, ";") {
-			// 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.ArchiveChannel, &discordgo.MessageEmbed{
-			// 		Title: fmt.Sprintf("This Message  was cleared by %s", reactingMember.User.String()),
-			// 		Fields: []*discordgo.MessageEmbedField{
-			// 			{
-			// 				Name:  "**Message Author**",
-			// 				Value: messages[mess].Author.String(),
-			// 			},
-			// 			{
-			// 				Name:  "**Message Content**",
-			// 				Value: messages[mess].Content,
-			// 			},
-			// 			{
-			// 				Name:  "**Channel**",
-			// 				Value: fmt.Sprintf("<#%s>", messages[mess].ChannelID),
-			// 			},
-			// 		},
-			// 		Color: 0x00FF00,
-			// 	})
-			// 	if err != nil {
-			// 		heimdallr.LogIfError(s, err)
-			// 		return
-			// 	}
-			// }
 
 			s.ChannelMessageDelete(message.ChannelID, messages[mess].ID)
 
