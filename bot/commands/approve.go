@@ -53,6 +53,9 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		if err != nil {
 			return errors.Wrap(err, "adding gender role failed")
 		}
+	} else {
+		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The gender must be either Male or Female."))
+		return errors.Wrap(err, "adding gender role failed")
 	}
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 	if err != nil {
