@@ -24,7 +24,7 @@ var unmuteCommand = command{
 
 //commandWarnUser warns another user and gives an infraction.
 func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<user>"].(string))
+	userID := getIDFromMaybeMention(args["<user>"].(string), s)
 	// number, _ := args.Int("<no>")
 	var user *discordgo.User
 
@@ -48,7 +48,8 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	}
 
 	if !isMuted(infractor) {
-		return nil
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s is NOT muted in the first place", user.Mention()))
+		return errors.Wrap(err, "sending message failed")
 	}
 
 	author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
@@ -63,12 +64,6 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		return errors.Wrap(err, "sending message failed")
 	}
 
-	//remove the muted user from the database
-	err = heimdallr.RemoveMutedUser(infractor.User.ID)
-	if err != nil {
-		return err
-	}
-
 	//Add all the other user roles
 	roles, err := heimdallr.GetMutedUserRoles(infractor.User.ID)
 	if err != nil {
@@ -79,8 +74,8 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	// 	Title: fmt.Sprintf("%d User roles were successfully taken from the database.", len(roles)),
 	// 	Fields: []*discordgo.MessageEmbedField{
 	// 		{
-	// 			Name:  "**Role #1**",
-	// 			Value: roles[3],
+	// 			Name:  "**Username**",
+	// 			Value: user.Username + "#" + user.Discriminator,
 	// 		},
 	// 		{
 	// 			Name:  "**User ID**",
@@ -89,16 +84,29 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	// 	},
 	// 	Color: 0xEE0000,
 	// })
+	// if err != nil {
+	// 	return errors.Wrap(err, "Sending the database Embed Message failed.")
+	// }
+
 	for _, role := range roles {
-		// if role != heimdallr.Config.MutedRole {
-		err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
-		// }
+		if role != heimdallr.Config.ServerBoosterRole {
+			if role != "" {
+				err = s.GuildMemberRoleAdd(m.GuildID, infractor.User.ID, role)
+			}
 
-		if err != nil {
-			// return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
+			if err != nil {
+				// s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("No role with ID %s found", role))
+
+				return errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role))
+			}
 		}
-
 	}
+	//remove the muted user from the database
+	err = heimdallr.RemoveMutedUser(infractor.User.ID)
+	if err != nil {
+		return errors.Wrap(err, "Removing the Muted user from the database failed")
+	}
+
 	//Remove the muted role
 	err = s.GuildMemberRoleRemove(guildID, userID, heimdallr.Config.MutedRole)
 	if err != nil {
@@ -108,8 +116,8 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 	if err != nil {
 		return errors.Wrap(err, "getting user failed")
 	}
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: "User was unmuted.",
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
+		Title: fmt.Sprintf("User was unmuted by %s.", author.User.Username+"#"+author.User.Discriminator),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",
@@ -127,7 +135,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 
 	userChannel, err := s.UserChannelCreate(userID)
 	if err != nil {
-		// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but was sucessfully unmuted", infractor.Mention()))
+		s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s Does NOT ACCEPT DMs but was sucessfully unmuted", infractor.Mention()))
 		return nil
 		// return errors.Wrap(err, "creating private channel failed")
 	}
@@ -136,7 +144,7 @@ func commandUnmuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args do
 		guild.Name,
 	))
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but has been unmuted", infractor.Mention()))
+		// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs but has been unmuted", infractor.Mention()))
 		return nil
 		// return errors.Wrap(err, "sending message failed")
 	}

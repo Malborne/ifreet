@@ -99,6 +99,8 @@ func (command *command) parse(args []string) (docopt.Opts, error) {
 }
 
 var userCommands []command
+var helperCommands []command
+var trialModeratorCommands []command
 var moderatorCommands []command
 var superModeratorCommands []command
 var adminCommands []command
@@ -110,23 +112,32 @@ func init() {
 		helpCommand,
 		quoteCommand,
 		tajweedLessonCommand,
-		// isItSundayCommand,s
+		arabicLessonCommand,
 		roleCommand,
-		versionCommand,
+		// versionCommand,
 		lessonsCommand,
+		arabiclessonsCommand,
 		// searchResourcesCommand,
-		channelLinkCommand,
+		getSheetCommand,
 	}
 
-	moderatorCommands = []command{
+	helperCommands = []command{
+		addStudentCommand,
+		removeStudentCommand,
+		mystudentsCommand,
+	}
+
+	trialModeratorCommands = []command{
 		warnCommand,
 		infractionsCommand,
-		kickCommand,
-		banCommand,
 		approveCommand,
 		verifyCommand,
 		muteCommand,
 		unmuteCommand,
+	}
+	moderatorCommands = []command{
+		kickCommand,
+		banCommand,
 	}
 
 	superModeratorCommands = []command{
@@ -140,6 +151,8 @@ func init() {
 		pruneCommand,
 		DMUnapprovedCommand,
 		DMUnverifiedCommand,
+		sayCommand,
+		removeInfractionCommand,
 		// castSihrCommand,
 	}
 
@@ -148,6 +161,9 @@ func init() {
 		setChannelCommand,
 	}
 
+	requireRoleForCommands("helper", helperCommands)
+	requireRoleForCommands("trial moderator", trialModeratorCommands)
+	requireRoleForCommands("moderator", moderatorCommands)
 	requireRoleForCommands("moderator", moderatorCommands)
 	requireRoleForCommands("admin", adminCommands)
 	requireRoleForCommands("admin", ownerCommands)
@@ -155,6 +171,8 @@ func init() {
 
 	var commands []command
 	commands = append(commands, userCommands...)
+	commands = append(commands, helperCommands...)
+	commands = append(commands, trialModeratorCommands...)
 	commands = append(commands, moderatorCommands...)
 	commands = append(commands, superModeratorCommands...)
 	commands = append(commands, adminCommands...)
@@ -196,6 +214,10 @@ func requireRoleForCommand(role string, originalCommand command) command {
 
 func getPrivilegeChecker(role string) func(*discordgo.Member, *discordgo.Guild) bool {
 	switch role {
+	case "helper":
+		return heimdallr.IsHelper
+	case "trial moderator":
+		return heimdallr.IsTrialModOrHigher
 	case "moderator":
 		return heimdallr.IsModOrHigher
 	case "supermoderator":
@@ -222,6 +244,10 @@ func getHighestRole(m *discordgo.Member) int {
 	for _, role := range m.Roles {
 		switch role {
 		case heimdallr.Config.UserRole:
+			if highestRole > 5 {
+				highestRole = 5
+			}
+		case heimdallr.Config.TrialModRole:
 			if highestRole > 4 {
 				highestRole = 4
 			}
@@ -319,8 +345,13 @@ func splitCommands(s string) []string {
 }
 
 // Allows both mentions and plain IDs
-func getIDFromMaybeMention(maybeMention string) string {
-	re := regexp.MustCompile(`<@[!&]?(\d+)>`)
+func getIDFromMaybeMention(maybeMention string, s *discordgo.Session) string {
+	re, err := regexp.Compile(`<@[!&]?(\d+)>`)
+
+	if err != nil {
+		heimdallr.LogIfError(s, err)
+
+	}
 	if submatch := re.FindStringSubmatch(maybeMention); len(submatch) == 2 {
 		return submatch[1]
 	}

@@ -26,7 +26,7 @@ var muteCommand = command{
 
 //commandMuteUser mues another user
 func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<user>"].(string))
+	userID := getIDFromMaybeMention(args["<user>"].(string), s)
 	// number, _ := args.Int("<no>")
 	var user *discordgo.User
 
@@ -43,26 +43,30 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		user, err = s.User(userID)
 		if err != nil {
 			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No user was found with ID %s.", userID))
-			return errors.Wrap(err, "sending message failed")
+			return errors.Wrap(err, "getting the infractor failed")
 		}
 	} else {
 		user = infractor.User
 	}
 
+	if isMuted(infractor) {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s is already muted", user.Mention()))
+		return errors.Wrap(err, "muting user failed")
+	}
 	author, err := heimdallr.GetMember(s, guildID, m.Author.ID)
 	if err != nil {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Author with ID %s was not found.", userID))
-		return errors.Wrap(err, "sending message failed")
+		return errors.Wrap(err, "getting the author failed")
 	}
 
 	if userID == s.State.User.ID {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("I'm not going to mute myself, silly. 😉"))
-		return errors.Wrap(err, "sending message failed")
+		return errors.Wrap(err, "muting user failed")
 	}
 
 	if heimdallr.IsAdminOrHigher(infractor, guild) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You cannot mute the admin. 👎"))
-		return errors.Wrap(err, "sending message failed")
+		return errors.Wrap(err, "muting the admin cannot be done")
 	}
 
 	if m.Author.ID == user.ID && userID == "550664345302859786" { // Wasan's ID
@@ -87,11 +91,13 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 
 	//Remove all the other user roles
 	for _, role := range infractor.Roles {
-		err = s.GuildMemberRoleRemove(m.GuildID, infractor.User.ID, role)
-		if err != nil {
-			return errors.Wrap(err, "removing role failed")
-		}
+		if role != heimdallr.Config.ServerBoosterRole {
+			err = s.GuildMemberRoleRemove(m.GuildID, infractor.User.ID, role)
 
+			if err != nil {
+				heimdallr.LogIfError(s, err)
+			}
+		}
 	}
 	//Add the muted role
 	err = s.GuildMemberRoleAdd(guildID, userID, heimdallr.Config.MutedRole)
@@ -102,8 +108,8 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 	if err != nil {
 		return errors.Wrap(err, "getting user failed")
 	}
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: "User was muted.",
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
+		Title: fmt.Sprintf("User was muted by %s.", author.User.Username+"#"+author.User.Discriminator),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",
@@ -139,10 +145,13 @@ func commandMuteUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 
 }
 
+//getRoleIDs returns the IDs of the roles of a given member
 func getRoleIDs(m *discordgo.Member) string {
 	var roleIDs = ""
 	for _, role := range m.Roles {
-		roleIDs = roleIDs + role + ","
+		if role != heimdallr.Config.ServerBoosterRole {
+			roleIDs = roleIDs + role + ","
+		}
 	}
 	return roleIDs
 }

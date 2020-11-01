@@ -52,13 +52,25 @@ func commandRole(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.O
 
 func roleList(s *discordgo.Session, m *discordgo.MessageCreate) error {
 	roleString := ""
+	languageroles := ""
 	for _, role := range heimdallr.Config.Roles {
-		roleString += fmt.Sprintf("**%s**: *%s*\n", role.Name, role.Desc)
+		if strings.Contains(role.Desc, "who speak") {
+			languageroles += fmt.Sprintf("**%s**: *%s*\n", role.Name, role.Desc)
+		} else {
+			roleString += fmt.Sprintf("**%s**: *%s*\n", role.Name, role.Desc)
+
+		}
+
 	}
-	if roleString == "" {
+	if roleString == "" && languageroles == "" {
 		roleString = "No roles available."
 	}
 	_, err := s.ChannelMessageSend(m.ChannelID, roleString)
+	if err != nil {
+		return errors.Wrap(err, "sending message failed")
+
+	}
+	_, err = s.ChannelMessageSend(m.ChannelID, languageroles)
 	return errors.Wrap(err, "sending message failed")
 }
 

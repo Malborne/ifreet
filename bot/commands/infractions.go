@@ -25,7 +25,7 @@ var infractionsCommand = command{
 
 //commandViewInfractions lists a user's infractions
 func commandViewInfractions(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<user>"].(string))
+	userID := getIDFromMaybeMention(args["<user>"].(string), s)
 
 	guildID := m.GuildID
 	var user *discordgo.User
@@ -52,7 +52,7 @@ func commandViewInfractions(s *discordgo.Session, m *discordgo.MessageCreate, ar
 	var fields []*discordgo.MessageEmbedField
 	for _, infraction := range infractions {
 		fields = append(fields, &discordgo.MessageEmbedField{
-			Name:  infraction.Time.Format(time.RFC1123),
+			Name:  (infraction.ID) + "\n" + infraction.Time.Format(time.RFC1123),
 			Value: infraction.Reason,
 		})
 	}
@@ -69,7 +69,7 @@ func commandViewInfractions(s *discordgo.Session, m *discordgo.MessageCreate, ar
 		title += " Showing the last 25."
 	}
 
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminChannel, &discordgo.MessageEmbed{
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
 		Author: &discordgo.MessageEmbedAuthor{
 			Name:    user.Username,
 			IconURL: user.AvatarURL(""),

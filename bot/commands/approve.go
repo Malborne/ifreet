@@ -25,8 +25,8 @@ var approveCommand = command{
 
 //commandApprove gives a member the User role.
 func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<Member>"].(string)) //Changed from user to Member
-	gender := getIDFromMaybeMention(args["<gender>"].(string))
+	userID := getIDFromMaybeMention(args["<Member>"].(string), s) //Changed from user to Member
+	gender := getIDFromMaybeMention(args["<gender>"].(string), s)
 
 	guildID := m.GuildID
 	member, err := heimdallr.GetMember(s, guildID, userID)
@@ -37,7 +37,7 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	if isApproved(member) {
 		return nil
 	}
-	user := member.User
+	// user := member.User
 	err = s.GuildMemberRoleAdd(guildID, userID, heimdallr.Config.UserRole)
 	if err != nil {
 		return errors.Wrap(err, "adding user role failed")
@@ -53,16 +53,30 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		if err != nil {
 			return errors.Wrap(err, "adding gender role failed")
 		}
+	} else {
+		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The gender must be either Male or Female."))
+		return errors.Wrap(err, "adding gender role failed")
 	}
+	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
+	if err != nil {
+		return errors.Wrap(err, "adding reaction failed")
 
+	}
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
 		if strings.Count(approvalMessage, "%s") > 0 {
-			approvalMessage = fmt.Sprintf(approvalMessage, user.Mention(), heimdallr.Config.BotChannel)
-
+			approvalMessage = fmt.Sprintf(approvalMessage, member.Mention(), heimdallr.Config.BotChannel)
 		}
-		_, err := s.ChannelMessageSend(m.ChannelID, approvalMessage)
-		return errors.Wrap(err, "sending message failed")
+		userChannel, err := s.UserChannelCreate(member.User.ID)
+		if err != nil {
+			s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New user %s Does NOT ACCEPT DMs", member.Mention()))
+		}
+		_, err = s.ChannelMessageSend(userChannel.ID, approvalMessage)
+		if err != nil {
+			s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New user %s Does NOT ACCEPT DMs", member.Mention()))
+			return errors.Wrap(err, fmt.Sprintf("sending message failed to %s because the user probably does NOT ACCEPT DMs", member.User.String()))
+		}
+
 	}
 	return nil
 }
@@ -104,6 +118,13 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	if isApproved(member) {
 		return
 	}
+
+	if strings.Contains(strings.ToLower(message.Content), "female") && strings.Contains(strings.ToLower(strings.Replace(strings.ToLower(message.Content), "female", "", -1)), "male") {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("More than one gender was  found in the content of the message. Use the `;approve` command instead"))
+		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
+		return
+	}
+
 	err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.UserRole)
 	if err != nil {
 		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
@@ -128,28 +149,26 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
+	//s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New User %s has been approved", member.Mention()))
+
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
 		if strings.Count(approvalMessage, "%s") > 0 {
 			approvalMessage = fmt.Sprintf(approvalMessage, message.Author.Mention(), heimdallr.Config.BotChannel)
 		}
-		_, err := s.ChannelMessageSend(m.ChannelID, approvalMessage)
+		userChannel, err := s.UserChannelCreate(member.User.ID)
+		if err != nil {
+			s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New User %s Does NOT ACCEPT DMs", member.Mention()))
+		}
+		_, err = s.ChannelMessageSend(userChannel.ID, approvalMessage)
 		heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
+
 	}
 }
 
 func isApproved(m *discordgo.Member) bool {
 	for _, role := range m.Roles {
 		if role == heimdallr.Config.UserRole {
-			return true
-		}
-	}
-	return false
-}
-
-func isVerified(m *discordgo.Member) bool {
-	for _, role := range m.Roles {
-		if role == heimdallr.Config.VerifiedMaleRole || role == heimdallr.Config.VerifiedFemaleRole {
 			return true
 		}
 	}
