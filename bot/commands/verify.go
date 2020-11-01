@@ -24,7 +24,7 @@ var verifyCommand = command{
 
 //commandVerify gives a member the Verified Male/Female role.
 func commandVerify(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	userID := getIDFromMaybeMention(args["<Member>"].(string), s) //Changed from user to Member
+	userID := getIDFromMaybeMention(args["<Member>"].(string)) //Changed from user to Member
 
 	guildID := m.GuildID
 	member, err := heimdallr.GetMember(s, guildID, userID)
@@ -32,7 +32,7 @@ func commandVerify(s *discordgo.Session, m *discordgo.MessageCreate, args docopt
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No member was found with ID %s.", userID))
 		return errors.Wrap(err, "sending message failed")
 	}
-	if heimdallr.IsVerified(member) {
+	if isVerified(member) {
 		return nil
 	}
 
@@ -100,7 +100,7 @@ func ReactionVerify(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		heimdallr.LogIfError(s, err)
 		return
 	}
-	if heimdallr.IsVerified(member) {
+	if isVerified(member) {
 		return
 	}
 
@@ -133,7 +133,6 @@ func ReactionVerify(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 }
 func hasRole(m *discordgo.Member, r string) bool {
-
 	for _, role := range m.Roles {
 		if role == r {
 			return true

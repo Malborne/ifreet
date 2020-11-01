@@ -18,37 +18,20 @@ type BotConfig struct {
 	LogChannel      string `toml:"log_channel"`
 	AdminChannel    string `toml:"admin_channel"`
 	AdminLogChannel string `toml:"admin_log_channel"`
-	ArchiveChannel  string `toml:"archive_channel"`
-	StaffChannel    string `toml:"staff_channel"`
+	BotChannel      string `toml:"bot_channel"`
+	RulesChannel    string `toml:"rules_channel"`
 
-	BotChannel   string `toml:"bot_channel"`
-	RulesChannel string `toml:"rules_channel"`
-
-	AdminRole    string `toml:"admin_role_id"`
-	SuperModRole string `toml:"supermod_role_id"`
-	ModRole      string `toml:"mod_role_id"`
-	TrialModRole string `toml:"trial_mod_rol_id"`
-
-	OmerIbnAlKhattabRole string `toml:"Omer_Ibn_Al_Khattab_Circle_id"`
-	AbuBakrAlSiddeeqRole string `toml:"abu_bakar_alsiddeeq_circle_id"`
-	AliBinAbiTaalibRole  string `toml:"ali_bin_abi_talib_id"`
-	SistersCircleRole    string `toml:"sisters_circle_id"`
-
-	CricleLeaderRole   string `toml:"circle_leader_role_id"`
-	BrothersHelperRole string `toml:"brothers_helper_role_id"`
-	SistersHelperRole  string `toml:"sisters_helper_role_id"`
+	AdminRole          string `toml:"admin_role_id"`
+	SuperModRole       string `toml:"supermod_role_id"`
+	ModRole            string `toml:"mod_role_id"`
 	UserRole           string `toml:"user_role_id"`
 	MaleRole           string `toml:"male_role_id"`
 	FemaleRole         string `toml:"female_role_id"`
 	VerifiedMaleRole   string `toml:"verified_male_role_id"`
 	VerifiedFemaleRole string `toml:"verified_female_role_id"`
-	ServerBoosterRole  string `toml:"server_booster_id"`
-
-	MutedRole string `toml:"muted_role_id"`
+	MutedRole          string `toml:"muted_role_id"`
 
 	Roles []Role `toml:"role"`
-
-	BannedWords []string `toml:"banned_words"`
 
 	WelcomeMessage  string `toml:"welcome_message"`
 	ApprovalMessage string `toml:"approval_message"`

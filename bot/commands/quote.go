@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"strings"
 
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
@@ -19,7 +18,6 @@ var quoteCommand = command{
 	},
 	[]string{
 		"544277290610708140",
-		"https://discordapp.com/channels/678795606906634281/724040027436351508/724820450080849971",
 	},
 }
 
@@ -29,11 +27,6 @@ func commandQuote(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.
 	guild, err := heimdallr.GetGuild(s, m.GuildID)
 	if err != nil {
 		return err
-	}
-
-	if strings.Contains(messageID, "https://discordapp.com/channels") {
-		slices := strings.Split(m.Content, "/")
-		messageID = slices[len(slices)-1]
 	}
 
 	var message *discordgo.Message

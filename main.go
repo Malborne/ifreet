@@ -38,9 +38,7 @@ func init() {
 }
 
 func main() {
-	// err := heimdallr.OpenDb("heimdallr.db")
-	err := heimdallr.OpenDb(os.Getenv("DATABASE_URL"))
-
+	err := heimdallr.OpenDb("heimdallr.db")
 	if err != nil {
 		log.Fatalf("%+v\n", err)
 	}
@@ -53,11 +51,10 @@ func main() {
 	dg.AddHandler(commands.CommandHandler)
 	dg.AddHandler(commands.ReactionApprove)
 	dg.AddHandler(commands.ReactionPrompt)
-	dg.AddHandler(heimdallr.UserJoinHandler)
-	dg.AddHandler(heimdallr.UserLeaveHandler)
+	// dg.AddHandler(commands.ReactionVerify)
+	dg.AddHandler(heimdallr.UserJoinHandlerOriginal)
+	dg.AddHandler(heimdallr.UserLeaveHandlerOriginal)
 	dg.AddHandler(heimdallr.MemberBanAddHandler)
-	dg.AddHandler(heimdallr.MessageHandler)
-	dg.AddHandler(heimdallr.OnDeleteHandler)
 
 	err = dg.Open()
 	if err != nil {

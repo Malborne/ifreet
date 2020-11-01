@@ -1,11 +1,10 @@
 package heimdallr
 
 import (
-	"log"
-	"time"
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/pkg/errors"
+	"log"
+	"time"
 )
 
 //CheckPermissions checks if Heimdallr has the permissions it needs
@@ -68,11 +67,6 @@ func hasRole(m *discordgo.Member, r string) bool {
 	return false
 }
 
-//IsTrialModOrHigher returns whether the member has mod permissions or higher
-func IsTrialModOrHigher(member *discordgo.Member, guild *discordgo.Guild) bool {
-	return hasRole(member, Config.TrialModRole) || IsModOrHigher(member, guild)
-}
-
 //IsModOrHigher returns whether the member has mod permissions or higher
 func IsModOrHigher(member *discordgo.Member, guild *discordgo.Guild) bool {
 	return hasRole(member, Config.ModRole) || IsSuperModOrHigher(member, guild)
@@ -93,25 +87,6 @@ func IsOwner(member *discordgo.Member, guild *discordgo.Guild) bool {
 	return guild.OwnerID == member.User.ID
 }
 
-//IsHelper returns whether the member is a brothers or sisters helper
-func IsHelper(member *discordgo.Member, guild *discordgo.Guild) bool {
-	return hasRole(member, Config.BrothersHelperRole) || hasRole(member, Config.SistersHelperRole)
-}
-
-//IsCircleMember returns whether the member is in a circle or not
-func IsCircleMember(member *discordgo.Member, guild *discordgo.Guild) bool {
-	return hasRole(member, Config.OmerIbnAlKhattabRole) || hasRole(member, Config.AbuBakrAlSiddeeqRole) || hasRole(member, Config.AliBinAbiTaalibRole) || hasRole(member, Config.SistersCircleRole)
-}
-
-//IsVerified checks whether a user is verified
-func IsVerified(m *discordgo.Member) bool {
-	for _, role := range m.Roles {
-		if role == Config.VerifiedMaleRole || role == Config.VerifiedFemaleRole {
-			return true
-		}
-	}
-	return false
-}
 func getRoleByID(roleID string, roles []*discordgo.Role) (*discordgo.Role, error) {
 	for _, role := range roles {
 		if roleID == role.ID {
