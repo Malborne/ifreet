@@ -119,11 +119,11 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	if strings.Contains(strings.ToLower(message.Content), "female") && strings.Contains(strings.ToLower(strings.Replace(strings.ToLower(message.Content), "female", "", -1)), "male") {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("More than one gender was  found in the content of the message. Use the `;approve` command instead"))
-		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
-		return
-	}
+	// if strings.Contains(strings.ToLower(message.Content), "female") && strings.Contains(strings.ToLower(strings.Replace(strings.ToLower(message.Content), "female", "", -1)), "male") {
+	// 	_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("More than one gender was  found in the content of the message. Use the `;approve` command instead"))
+	// 	heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
+	// 	return
+	// }
 
 	err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.UserRole)
 	if err != nil {
