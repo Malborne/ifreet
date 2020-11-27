@@ -111,7 +111,7 @@ func init() {
 	userCommands = []command{
 		helpCommand,
 		quoteCommand,
-		tajweedLessonCommand,
+		// tajweedLessonCommand,
 		arabicLessonCommand,
 		roleCommand,
 		// versionCommand,

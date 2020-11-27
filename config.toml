@@ -35,15 +35,7 @@ command_prefix = ";"
 
 banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blowjob", "blow job", "buttplug", "orgasm","cunt", "dildo", " fagget", "faggot", " penis", "scrotum", "slut", "vagina", "whore", "fellatio", "f u c k", "clitoris", "fuck", "fuckin","mother fucker","motherfucker", "suck my dick", "f*ck", "f**k", "bitch", "negro", "nigger", "nigga","n**ger", "n*gga","n**ga"]
 
-[[role]]
-  id = "714905000748515338"
-  name = "tajweedlesson1"
-  description = "A self-assignable role for those who wish to be reminded of the tajweed lesson session 1"
 
-  [[role]]
-  id = "714905008382017640"
-  name = "tajweedlesson2"
-  description = "A self-assignable role for those who wish to be reminded of the tajweed lesson session 2"
 
   
  [[role]]
