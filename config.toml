@@ -202,3 +202,8 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blow
   id = "743918521372770404"
   name = "Italian"
   description = "A self-assignable role for those who speak Italian"
+
+           [[role]]
+  id = "783730718101864509"
+  name = "Persian"
+  description = "A self-assignable role for those who speak Persian"
