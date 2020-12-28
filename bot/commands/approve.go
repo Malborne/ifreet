@@ -38,10 +38,6 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		return nil
 	}
 	// user := member.User
-	err = s.GuildMemberRoleAdd(guildID, userID, heimdallr.Config.UserRole)
-	if err != nil {
-		return errors.Wrap(err, "adding user role failed")
-	}
 
 	if strings.Contains(strings.ToLower(gender), "female") {
 		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.FemaleRole)
@@ -57,6 +53,12 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The gender must be either Male or Female."))
 		return errors.Wrap(err, "adding gender role failed")
 	}
+
+	err = s.GuildMemberRoleAdd(guildID, userID, heimdallr.Config.UserRole)
+	if err != nil {
+		return errors.Wrap(err, "adding user role failed")
+	}
+
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 	if err != nil {
 		return errors.Wrap(err, "adding reaction failed")
