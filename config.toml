@@ -54,7 +54,15 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blow
   name = "events"
   description = "A self-assignable role for those who want to be notified about new events such as Quran quizzes, Islamic Quzzies, lectures, etc."
 
+ [[role]]
+  id = "830463604850819122"
+  name = "khatma"
+  description = "A self-assignable role for those who want to be notified about the daily recitation during the holy month of Ramadhan."
 
+ [[role]]
+  id = "830463850238836737"
+  name = "khatmafemale"
+  description = "A self-assignable role for those who want to be notified about about the daily recitation during the holy month of Ramadhan for female members."
 
 
 
