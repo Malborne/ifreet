@@ -75,7 +75,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 						Value: author.User.Username + "#" + author.User.Discriminator,
 					},
 					{
-						Name: "**User ID**",
+						Name:  "**User ID**",
 						Value: author.User.ID,
 					},
 				},
@@ -99,7 +99,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if IsVerified(author) && joinedAt.Before(time.Now().Add(time.Minute*-60)) { //if verified and joined more than an hour ago, just ignore it
 			isNew = false
 		}
-		if joinedAt.Before(time.Now().AddDate(0, 0, -1)) { //If they joined the server more than 24 ago, just ignore it
+		if joinedAt.Before(time.Now().AddDate(0, 0, -1)) && m.ChannelID != Config.WelcomeChannel { //If they joined the server more than 24 ago and it is not in #welcome channel,  just ignore it
 			isNew = false
 		}
 		if len(m.Attachments) > 0 && isNew { //sent a file

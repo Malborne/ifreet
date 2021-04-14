@@ -103,7 +103,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		heimdallr.LogIfError(s, err)
 		return
 	}
-	if !heimdallr.IsModOrHigher(reactingMember, guild) {
+	if !heimdallr.IsTrialModOrHigher(reactingMember, guild) {
 		return
 	}
 
