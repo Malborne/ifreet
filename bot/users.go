@@ -11,13 +11,11 @@ import (
 
 //UserJoinHandler handles new users joining the server, and will welcome them.
 func UserJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
-	_, _ = s.ChannelMessageSend(Config.WelcomeChannel, fmt.Sprintf("User has joined the building."))
 
 	welcomeMessage := Config.WelcomeMessage
 	if strings.Count(welcomeMessage, "%s") > 0 {
 		welcomeMessage = fmt.Sprintf(welcomeMessage, g.User.Mention(), Config.RulesChannel)
 	}
-	// _, err := s.ChannelMessageSend(Config.AdminLogChannel, "A new User has joined the building.")
 
 	_, err := s.ChannelMessageSend(Config.WelcomeChannel, welcomeMessage)
 	LogIfError(s, errors.Wrap(err, "sending message failed"))
@@ -32,6 +30,6 @@ func UserLeaveHandler(s *discordgo.Session, g *discordgo.GuildMemberRemove) {
 	} else {
 		name = g.User.Username
 	}
-	_, err := s.ChannelMessageSend(Config.WelcomeChannel, fmt.Sprintf("User `%s` (%s) has left the building.", name, g.User.Mention()))
+	_, err := s.ChannelMessageSend(Config.LogChannel, fmt.Sprintf("User `%s` (%s) has left the server.", name, g.User.Mention()))
 	LogIfError(s, errors.Wrap(err, "sending message failed"))
 }
