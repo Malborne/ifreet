@@ -127,12 +127,6 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.UserRole)
-	if err != nil {
-		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
-		return
-	}
-
 	if strings.Contains(strings.ToLower(message.Content), "female") {
 		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.FemaleRole)
 		if err != nil {
@@ -151,7 +145,11 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	//s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New User %s has been approved", member.Mention()))
+	err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.UserRole)
+	if err != nil {
+		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
+		return
+	}
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
