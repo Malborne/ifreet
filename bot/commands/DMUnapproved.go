@@ -71,7 +71,10 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 			}
 		}
 	}
-
+	if dmednum == 0 {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("All unapproved users have been DMed within a week."))
+		return errors.Wrap(err, "sending message failed")
+	}
 	if count == 0 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No unapproved users found."))
 		return errors.Wrap(err, "sending message failed")
