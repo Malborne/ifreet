@@ -29,32 +29,33 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 		return err
 	}
 
-	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d members in this guild", len(guild.Members)))
+	// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d members in this guild", len(guild.Members)))
+
+	var count int = 0
+	for _, member := range guild.Members {
+
+		if !isApproved(member) && !member.User.Bot {
+			count = count + 1
+			// userChannel, err := s.UserChannelCreate(member.User.ID)
+			// if err != nil {
+			// 	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.Mention()))
+			// 	heimdallr.LogIfError(s, errors.Wrap(err, "creating private channel failed. User Does NOT ACCEPT DMs"))
+			// }
+			// _, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
+			// 	"You are an unapproved member of Quran Learning Center Server and you do not have access to most of the server. If you would like to have access to the server, please contact one of the moderators in the %s channel below to be approved.\n\n\nhttps://discord.gg/R6jKWT\n\nKeep in mind that if you stay for longer than a week without getting approved, you will risk being kicked out of the server.\n\nYou cannot reply to this message.", heimdallr.Config.WelcomeChannel))
+			// if err != nil {
+			// 	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.Mention()))
+			// 	heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed. User Does NOT ACCEPT DMs"))
+			// } else {
+			// 	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent a message to %s", member.Mention()))
+
+			// 	count = count + 1
+			// }
+		}
+	}
+	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d unapproved members in this guild", count))
+
 	return err
-
-	// var count int = 0
-	// for _, member := range guild.Members {
-
-	// 	if !isApproved(member) && !member.User.Bot {
-
-	// 		userChannel, err := s.UserChannelCreate(member.User.ID)
-	// 		if err != nil {
-	// 			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.Mention()))
-	// 			heimdallr.LogIfError(s, errors.Wrap(err, "creating private channel failed. User Does NOT ACCEPT DMs"))
-	// 		}
-	// 		_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-	// 			"You are an unapproved member of Quran Learning Center Server and you do not have access to most of the server. If you would like to have access to the server, please contact one of the moderators in the %s channel below to be approved.\n\n\nhttps://discord.gg/R6jKWT\n\nKeep in mind that if you stay for longer than a week without getting approved, you will risk being kicked out of the server.\n\nYou cannot reply to this message.", heimdallr.Config.WelcomeChannel))
-	// 		if err != nil {
-	// 			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.Mention()))
-	// 			heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed. User Does NOT ACCEPT DMs"))
-	// 		} else {
-	// 			_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent a message to %s", member.Mention()))
-
-	// 			count = count + 1
-	// 		}
-	// 	}
-	// }
-
 	// if count == 0 {
 	// 	_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No unapproved users found."))
 	// 	return errors.Wrap(err, "sending message failed")
