@@ -121,7 +121,7 @@ func getRoleByID(roleID string, roles []*discordgo.Role) (*discordgo.Role, error
 	return nil, errors.New("role not found")
 }
 
-func computeBasePermissions(member *discordgo.Member, guild *discordgo.Guild) int {
+func computeBasePermissions(member *discordgo.Member, guild *discordgo.Guild) int64 {
 	if IsOwner(member, guild) {
 		return discordgo.PermissionAll
 
@@ -142,18 +142,18 @@ func computeBasePermissions(member *discordgo.Member, guild *discordgo.Guild) in
 }
 
 //PermissionInPermissions returns whether the permission number contains the given permission
-func PermissionInPermissions(permission int, permissions int) bool {
+func PermissionInPermissions(permission int64, permissions int64) bool {
 	return permission&permissions == permission
 }
 
 //CanRead returns whether the permission number contains read permission
-func CanRead(permissions int) bool {
+func CanRead(permissions int64) bool {
 	return PermissionInPermissions(discordgo.PermissionAdministrator, permissions) ||
 		PermissionInPermissions(discordgo.PermissionReadMessages|discordgo.PermissionReadMessageHistory, permissions)
 }
 
 //CanWrite returns whether the permission number contains write permission
-func CanWrite(permissions int) bool {
+func CanWrite(permissions int64) bool {
 	return PermissionInPermissions(discordgo.PermissionAdministrator, permissions) ||
 		PermissionInPermissions(discordgo.PermissionReadMessages|discordgo.PermissionSendMessages, permissions)
 }
