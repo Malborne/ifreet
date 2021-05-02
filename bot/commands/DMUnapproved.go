@@ -3,8 +3,6 @@ package commands
 import (
 	"fmt"
 
-	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 )
@@ -24,19 +22,19 @@ var DMUnapprovedCommand = command{
 
 //DM unapproved users to let them know that they will lose acess to the server and should contact on of the mods and direct them to the #approval and verification channel.
 func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	guild, err := heimdallr.GetGuild(s, m.GuildID)
-	if err != nil {
-		return err
-	}
-
-	// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d members in this guild", len(guild.Members)))
+	// guild, err := heimdallr.GetGuild(s, m.GuildID)
+	// if err != nil {
+	// 	return err
+	// }
+	members, err := s.GuildMembers(m.GuildID, "", 1000)
+	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d members in this guild", len(members)))
 
 	var count int = 0
-	for _, member := range guild.Members {
-		count = count + 1
+
+	for _, member := range members {
 
 		if !isApproved(member) && !member.User.Bot {
-			// count = count + 1
+			count = count + 1
 			// userChannel, err := s.UserChannelCreate(member.User.ID)
 			// if err != nil {
 			// 	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.Mention()))
