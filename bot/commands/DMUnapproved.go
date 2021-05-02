@@ -31,10 +31,9 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 	// 	return err
 	// }
 	members, err := s.GuildMembers(m.GuildID, "", 1000)
-	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d members in this guild", len(members)))
+	// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d members in this guild", len(members)))
 
 	var count int = 0
-	var dmednum int = 0
 
 	for _, member := range members {
 
@@ -57,26 +56,21 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 			}
 
 			if !AlreadyDMed {
-				dmednum = dmednum + 1
-				_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s have not been DMed within a week", member.Mention()))
 
-				// _, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-				// 	"You are an unapproved member of Quran Learning Center Server and you do not have access to most of the server. If you would like to have access to the server, please contact one of the moderators in the %s channel below to be approved.\n\n\nhttps://discord.gg/R6jKWT\n\nKeep in mind that if you stay for longer than a week without getting approved, you will risk being kicked out of the server.\n\nYou cannot reply to this message.", heimdallr.Config.WelcomeChannel))
-				// if err != nil {
-				// 	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.Mention()))
-				// 	heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed. User Does NOT ACCEPT DMs"))
-				// } else {
-				// 	_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent a message to %s", member.Mention()))
+				_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
+					"You are an unapproved member of Quran Learning Center Server and you do not have access to most of the server. If you would like to have access to the server, please contact one of the moderators in the %s channel below to be approved.\n\n\nhttps://discord.gg/R6jKWT\n\nKeep in mind that if you stay for longer than a week without getting approved, you will risk being kicked out of the server.\n\nYou cannot reply to this message.", heimdallr.Config.WelcomeChannel))
+				if err != nil {
+					s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.Mention()))
+					heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed. User Does NOT ACCEPT DMs"))
+				} else {
+					_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sucessfully sent a message to %s", member.Mention()))
 
-				// 	count = count + 1
-				// }
+					count = count + 1
+				}
 			}
 		}
 	}
-	if dmednum == 0 {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("All unapproved users have been DMed within a week."))
-		return errors.Wrap(err, "sending message failed")
-	}
+
 	if count == 0 {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("No unapproved users found."))
 		return errors.Wrap(err, "sending message failed")
