@@ -177,7 +177,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 func isApproved(m *discordgo.Member) bool {
 	for _, role := range m.Roles {
-		if role == heimdallr.Config.UserRole {
+		if role == heimdallr.Config.UserRole || role == heimdallr.Config.FemaleOnlyRole {
 			return true
 		}
 	}

@@ -38,6 +38,7 @@ type BotConfig struct {
 	BrothersHelperRole string `toml:"brothers_helper_role_id"`
 	SistersHelperRole  string `toml:"sisters_helper_role_id"`
 	UserRole           string `toml:"user_role_id"`
+	FemaleOnlyRole     string `toml:"female_only_role_id"`
 	MaleRole           string `toml:"male_role_id"`
 	FemaleRole         string `toml:"female_role_id"`
 	VerifiedMaleRole   string `toml:"verified_male_role_id"`
