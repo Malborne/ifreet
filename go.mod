@@ -1,5 +1,6 @@
 module github.com/Malborne/ifreet/tree/master
 
+// +heroku goVersion go1.13
 go 1.13
 
 require (
