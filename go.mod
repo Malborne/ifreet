@@ -9,7 +9,7 @@ github.com/BurntSushi/toml v0.3.1
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/pkg/errors v0.9.1
-	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
+	golang.org/x/crypto v0.0.0-20190404232315-eb5bcb51f2a3// indirect
 	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
 	github.com/lib/pq v1.7.0
 	
