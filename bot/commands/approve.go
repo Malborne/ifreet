@@ -79,7 +79,9 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		_, err = s.ChannelMessageSend(userChannel.ID, approvalMessage)
 		if err != nil {
 			s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New user %s Does NOT ACCEPT DMs", member.Mention()))
-			return errors.Wrap(err, fmt.Sprintf("sending message failed to %s because the user probably does NOT ACCEPT DMs", member.User.String()))
+			return nil
+
+			//return errors.Wrap(err, fmt.Sprintf("sending message failed to %s because the user probably does NOT ACCEPT DMs", member.User.String()))
 		}
 
 	}
