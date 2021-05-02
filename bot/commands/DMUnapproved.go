@@ -34,13 +34,6 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 	// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d members in this guild", len(members)))
 
 	var count int = 0
-	approvalStatus, _ := s.GuildMember(m.GuildID, "834322810762952746")
-	if isApproved(approvalStatus) {
-		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sarah is an approved member of the server"))
-	} else {
-		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Sarah is NOT an approved member of the server"))
-	}
-	return nil
 	for _, member := range members {
 
 		if !isApproved(member) && !member.User.Bot {
