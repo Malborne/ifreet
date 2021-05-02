@@ -3,7 +3,6 @@ package commands
 import (
 	"time"
 
-	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
@@ -23,11 +22,11 @@ var pruneCommand = command{
 
 //commandPrune kicks users who have stayed in the server for at least a week without being approved
 func commandPrune(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	guild, err := heimdallr.GetGuild(s, m.GuildID)
+	members, err := s.GuildMembers(m.GuildID, "", 1000)
 	if err != nil {
 		return err
 	}
-	for _, member := range guild.Members {
+	for _, member := range members {
 		joinedAt, err := member.JoinedAt.Parse()
 		if err != nil {
 			return errors.Wrap(err, "parsing joinedAt failed")
