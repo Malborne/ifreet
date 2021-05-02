@@ -59,7 +59,7 @@ func main() {
 	dg.AddHandler(heimdallr.MessageHandler)
 	dg.AddHandler(heimdallr.OnDeleteHandler)
 
-	// dg.Identify.Intents = discordgo.IntentsAll
+	dg.Identify.Intents = discordgo.IntentsAll
 	err = dg.Open()
 	if err != nil {
 		log.Fatalf("%+v\n", errors.Wrap(err, "failed to open session"))
