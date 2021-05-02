@@ -50,6 +50,8 @@ func main() {
 		log.Fatalf("%+v\n", errors.Wrap(err, "failed to create bot"))
 	}
 
+	dg.Identify.Intents = discordgo.IntentsAll
+
 	dg.AddHandler(commands.CommandHandler)
 	dg.AddHandler(commands.ReactionApprove)
 	dg.AddHandler(commands.ReactionPrompt)
