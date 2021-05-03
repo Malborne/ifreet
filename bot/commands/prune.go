@@ -3,6 +3,7 @@ package commands
 import (
 	"time"
 
+	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/bwmarrin/discordgo"
 	"github.com/docopt/docopt-go"
 	"github.com/pkg/errors"
@@ -31,7 +32,7 @@ func commandPrune(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.
 		if err != nil {
 			return errors.Wrap(err, "parsing joinedAt failed")
 		}
-		if joinedAt.Before(time.Now().AddDate(0, 0, -7)) && !isApproved(member) && !member.User.Bot {
+		if joinedAt.Before(time.Now().AddDate(0, 0, -7)) && !isApproved(member) && !member.User.Bot && !hasRole(member, heimdallr.Config.ServerBoosterRole) {
 			err := s.GuildMemberDeleteWithReason(m.GuildID, member.User.ID, "Stayed in the server for at least 7 days without gaining the User role")
 			if err != nil {
 				return err
