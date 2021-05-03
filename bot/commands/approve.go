@@ -44,7 +44,7 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		if err != nil {
 			return errors.Wrap(err, "adding gender role failed")
 		}
-		err = s.GuildMemberRoleAdd(guildID, userID, heimdallr.Config.UserRole)
+		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.UserRole)
 		if err != nil {
 			return errors.Wrap(err, "adding user role failed")
 		}
@@ -53,7 +53,7 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		if err != nil {
 			return errors.Wrap(err, "adding gender role failed")
 		}
-		err = s.GuildMemberRoleAdd(guildID, userID, heimdallr.Config.UserRole)
+		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.UserRole)
 		if err != nil {
 			return errors.Wrap(err, "adding user role failed")
 		}
