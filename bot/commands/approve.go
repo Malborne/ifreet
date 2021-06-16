@@ -41,18 +41,14 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 
 	if strings.Contains(strings.ToLower(gender), "female") {
 		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.FemaleRole)
-		if err != nil {
-			return errors.Wrap(err, "adding gender role failed")
-		}
+
 		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.UserRole)
 		if err != nil {
 			return errors.Wrap(err, "adding user role failed")
 		}
 	} else if strings.Contains(strings.ToLower(gender), "male") {
 		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.MaleRole)
-		if err != nil {
-			return errors.Wrap(err, "adding gender role failed")
-		}
+
 		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.UserRole)
 		if err != nil {
 			return errors.Wrap(err, "adding user role failed")
@@ -65,7 +61,6 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 	if err != nil {
 		return errors.Wrap(err, "adding reaction failed")
-
 	}
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
@@ -136,23 +131,19 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.FemaleRole)
 		if err != nil {
 			heimdallr.LogIfError(s, errors.Wrap(err, "adding female role failed"))
-			return
 		}
 		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.UserRole)
 		if err != nil {
 			heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
-			return
 		}
 	} else if strings.Contains(strings.ToLower(message.Content), "male") {
 		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.MaleRole)
 		if err != nil {
 			heimdallr.LogIfError(s, errors.Wrap(err, "adding male role failed"))
-			return
 		}
 		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.UserRole)
 		if err != nil {
 			heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
-			return
 		}
 	} else {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The gender was not found in the content of the message. Please make sure that you react to a message that contains the gender."))

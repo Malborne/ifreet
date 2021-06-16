@@ -196,23 +196,29 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blow
   name = "Tamazight"
   description = "A self-assignable role for those who speak Tamazight"
 
-       [[role]]
+   [[role]]
   id = "739391683074064484"
   name = "Swahili"
   description = "A self-assignable role for those who speak Swahili"
 
   
-       [[role]]
+    [[role]]
   id = "743399964251783189"
   name = "Hindi"
   description = "A self-assignable role for those who speak Hindi"
 
-         [[role]]
+   [[role]]
   id = "743918521372770404"
   name = "Italian"
   description = "A self-assignable role for those who speak Italian"
 
-           [[role]]
+   [[role]]
   id = "783730718101864509"
   name = "Persian"
   description = "A self-assignable role for those who speak Persian"
+
+
+    [[role]]
+  id = "854702321110614027"
+  name = "Latvian"
+  description = "A self-assignable role for those who speak Latvian"
