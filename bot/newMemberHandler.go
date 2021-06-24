@@ -17,12 +17,13 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
 	}
 
-	permissions := []int{0x0000000400}
+	// permissions := []int{0x0000000400}
 
 	// denyPermissions(s, newChannel.ID, Config.UserRole, permissions)
-	denyPermissions(s, newChannel.ID, Config.FemaleOnlyRole, permissions)
+	// denyPermissions(s, newChannel.ID, Config.FemaleOnlyRole, permissions)
 
 	err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, 0x0000000400)
+	err = s.ChannelPermissionSet(newChannel.ID, Config.FemaleOnlyRole, discordgo.PermissionOverwriteTypeRole, 0, 1024)
 
 	if err != nil {
 		LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
