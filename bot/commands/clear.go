@@ -106,7 +106,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			heimdallr.LogIfError(s, err)
 			return
 		}
-		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are  %d messages ", len(messages)))
+		// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are  %d messages ", len(messages)))
 		for mess := range messages {
 			// if !messages[mess].Author.Bot && !strings.HasPrefix(messages[mess].Content, ";") {
 			// 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.ArchiveChannel, &discordgo.MessageEmbed{
@@ -133,7 +133,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			// 	}
 			// }
 
-			err := s.ChannelMessageDelete(message.ChannelID, messages[mess].ID)
+			err := s.ChannelMessageDelete(m.ChannelID, messages[mess].ID)
 			if err != nil {
 				heimdallr.LogIfError(s, err)
 
