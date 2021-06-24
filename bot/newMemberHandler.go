@@ -16,7 +16,14 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 		LogIfError(s, errors.Wrap(err, "Creating New Channel failed"))
 
 	}
-	err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, 0x0000000400)
+
+	permissions := []int{0x0000000400, 0x0000000800}
+
+	denyPermissions(s, newChannel.ID, Config.UserRole, permissions)
+	denyPermissions(s, newChannel.ID, Config.FemaleOnlyRole, permissions)
+
+	// err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, 0x0000000400)
+
 	if err != nil {
 		LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
 
@@ -28,4 +35,24 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
 	_, err = s.ChannelMessageSend(newChannel.ID, welcomeMessage)
 	LogIfError(s, errors.Wrap(err, "sending message failed"))
+}
+
+func denyPermissions(s *discordgo.Session, channelID string, userID string, permissions []int) {
+	for perm := range permissions {
+		err := s.ChannelPermissionSet(channelID, userID, discordgo.PermissionOverwriteTypeRole, 0, permissions[perm])
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
+
+		}
+	}
+}
+
+func allowPermissions(s *discordgo.Session, channelID string, userID string, permissions []int) {
+	for perm := range permissions {
+		err := s.ChannelPermissionSet(channelID, userID, discordgo.PermissionOverwriteTypeRole, permissions[perm], 0)
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
+
+		}
+	}
 }
