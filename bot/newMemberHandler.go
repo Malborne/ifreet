@@ -39,7 +39,7 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 }
 
 func DenyPermissions(s *discordgo.Session, channelID string, roleID string, permissions []int) {
-	for perm := range permissions {
+	for _, perm := range permissions {
 		err := s.ChannelPermissionSet(channelID, roleID, discordgo.PermissionOverwriteTypeRole, 0, perm)
 		if err != nil {
 			LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
@@ -49,7 +49,7 @@ func DenyPermissions(s *discordgo.Session, channelID string, roleID string, perm
 }
 
 func allowPermissions(s *discordgo.Session, channelID string, userID string, permissions []int) {
-	for perm := range permissions {
+	for _, perm := range permissions {
 		err := s.ChannelPermissionSet(channelID, userID, discordgo.PermissionOverwriteTypeRole, perm, 0)
 		if err != nil {
 			LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
