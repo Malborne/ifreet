@@ -16,7 +16,7 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 		LogIfError(s, errors.Wrap(err, "Creating New Channel failed"))
 
 	}
-	err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, 1)
+	err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, 0x0000000400)
 	if err != nil {
 		LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
 
