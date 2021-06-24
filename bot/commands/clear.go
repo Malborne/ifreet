@@ -106,6 +106,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			heimdallr.LogIfError(s, err)
 			return
 		}
+		var messIDs = make([]string, number+1)
 		// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are  %d messages ", len(messages)))
 		for mess := range messages {
 			// if !messages[mess].Author.Bot && !strings.HasPrefix(messages[mess].Content, ";") {
@@ -132,15 +133,22 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			// 		return
 			// 	}
 			// }
-			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Number %d", mess))
+			// _, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Message Number %d", mess))
 
-			err = s.ChannelMessageDelete(m.ChannelID, messages[mess].ID)
-			if err != nil {
-				heimdallr.LogIfError(s, err)
+			// err = s.ChannelMessageDelete(m.ChannelID, messages[mess].ID)
+			// if err != nil {
+			// 	heimdallr.LogIfError(s, err)
 
-			}
+			// }
+
+			messIDs[mess] = messages[mess].ID
+		}
+		err = s.ChannelMessagesBulkDelete(m.ChannelID, messIDs)
+		if err != nil {
+			heimdallr.LogIfError(s, err)
 
 		}
+
 		s.ChannelMessageDelete(message.ChannelID, message.ID)
 		_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
 			Title: fmt.Sprintf("%d Messages  were cleared by", number),
