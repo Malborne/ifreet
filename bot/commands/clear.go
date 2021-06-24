@@ -106,6 +106,7 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			heimdallr.LogIfError(s, err)
 			return
 		}
+		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are  %d messages ", len(messages)))
 		for mess := range messages {
 			// if !messages[mess].Author.Bot && !strings.HasPrefix(messages[mess].Content, ";") {
 			// 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.ArchiveChannel, &discordgo.MessageEmbed{
