@@ -132,8 +132,11 @@ func ReactionPrompt(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 			// 	}
 			// }
 
-			err = s.ChannelMessageDelete(message.ChannelID, messages[mess].ID)
-			heimdallr.LogIfError(s, err)
+			err := s.ChannelMessageDelete(message.ChannelID, messages[mess].ID)
+			if err != nil {
+				heimdallr.LogIfError(s, err)
+
+			}
 
 		}
 		s.ChannelMessageDelete(message.ChannelID, message.ID)
