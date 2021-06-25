@@ -51,6 +51,7 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
 	// ModPermissions := []int{0x1, 0x400, 0x800}
 	// DenyPermissions(s, newChannel.ID, Config.FemaleOnlyRole, deniedPermissions)
+	newChannel.PermissionOverwrites = append(newChannel.PermissionOverwrites, &discordgo.PermissionOverwrite{ID: g.User.ID, Type: discordgo.PermissionOverwriteTypeMember, Allow: discordgo.PermissionViewChannel})
 
 	allowPermissions(s, newChannel, g.User.ID, discordgo.PermissionOverwriteTypeMember, allowedUserPermissions)
 	// allowPermissions(s, newChannel.ID, Config.ModRole, discordgo.PermissionOverwriteTypeRole, ModPermissions)
@@ -95,8 +96,8 @@ func allowPermissions(s *discordgo.Session, newChannel *discordgo.Channel, userI
 	// var permissionObjects = make([]*discordgo.PermissionOverwrite, len(permissions))
 
 	for _, perm := range permissions {
-		denied := discordgo.PermissionOverwrite{ID: userID, Type: discordgo.PermissionOverwriteTypeMember, Deny: perm}
-		newChannel.PermissionOverwrites = append(newChannel.PermissionOverwrites, &denied)
+		// allowed := discordgo.PermissionOverwrite{ID: userID, Type: discordgo.PermissionOverwriteTypeMember, Allow: perm, Deny: 0}
+		newChannel.PermissionOverwrites = append(newChannel.PermissionOverwrites, &discordgo.PermissionOverwrite{ID: userID, Type: discordgo.PermissionOverwriteTypeMember, Allow: perm, Deny: 0})
 
 		// permissionObjects[i] = &denied
 		// err := s.ChannelPermissionSet(newChannel.ID, userID, targetType, perm, 0)
