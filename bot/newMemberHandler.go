@@ -27,11 +27,11 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	// Type  PermissionOverwriteType `json:"type"`
 	// Deny  int64                   `json:"deny,string"`
 	// Allow int64                   `json:"allow,string"`
-	// denied := discordgo.PermissionOverwrite{Config.FemaleOnlyRole, discordgo.PermissionOverwriteTypeRole, 0x0000000400, 0}
-	deniedPermissions := []int64{0x0000000001, 0x0000000400, 0x0000000800, 0x0000001000, 0x0000004000, 0x0000008000, 0x0000010000, 0x0000020000, 0x0000040000, 0x0000080000, 0x0080000000, 0x0800000000, 0x1000000000}
+	// deniedPermissions := []int64{0x0000000001, 0x0000000400, 0x0000000800, 0x0000001000, 0x0000004000, 0x0000008000, 0x0000010000, 0x0000020000, 0x0000040000, 0x0000080000, 0x0080000000, 0x0800000000, 0x1000000000}
+	deniedPermissions := []int64{0x0000000400, 0x0000000800}
 
-	permissionObjects := DenyPermissions(Config.UserRole, deniedPermissions)
-
+	permissionObjects := DenyPermissions(s, Config.UserRole, deniedPermissions)
+	s.ChannelMessageSend(Config.AdminChannel, fmt.Sprintf("There are %d permission objtects", len(permissionObjects)))
 	data := discordgo.GuildChannelCreateData{Name: g.User.Username, Type: discordgo.ChannelTypeGuildText, Position: 4, PermissionOverwrites: permissionObjects, ParentID: "715788591766437898", NSFW: false}
 	newChannel, err := s.GuildChannelCreateComplex(g.GuildID, data)
 	// newChannel, err := s.GuildChannelCreate(g.GuildID, g.User.Username, discordgo.ChannelTypeGuildText)
@@ -67,11 +67,13 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	LogIfError(s, errors.Wrap(err, "sending message failed"))
 }
 
-func DenyPermissions(roleID string, permissions []int64) []*discordgo.PermissionOverwrite {
+func DenyPermissions(s *discordgo.Session, roleID string, permissions []int64) []*discordgo.PermissionOverwrite {
 	var permissionObjects = make([]*discordgo.PermissionOverwrite, len(permissions))
 	for i, perm := range permissions {
 		denied := discordgo.PermissionOverwrite{ID: roleID, Type: discordgo.PermissionOverwriteTypeRole, Deny: perm}
+
 		permissionObjects[i] = &denied
+		s.ChannelMessageSend(Config.AdminChannel, fmt.Sprintf("Denied Permission: %d", permissionObjects[i].Deny))
 
 		// err := s.ChannelPermissionSet(channelID, roleID, discordgo.PermissionOverwriteTypeRole, 0, perm)
 		// if err != nil {
