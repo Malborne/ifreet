@@ -30,9 +30,9 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	// denied := discordgo.PermissionOverwrite{Config.FemaleOnlyRole, discordgo.PermissionOverwriteTypeRole, 0x0000000400, 0}
 	deniedPermissions := []int64{0x0000000001, 0x0000000400, 0x0000000800, 0x0000001000, 0x0000004000, 0x0000008000, 0x0000010000, 0x0000020000, 0x0000040000, 0x0000080000, 0x0080000000, 0x0800000000, 0x1000000000}
 
-	permissionObjects := DenyPermissions(s, Config.UserRole, deniedPermissions)
+	permissionObjects := DenyPermissions(Config.UserRole, deniedPermissions)
 
-	data := discordgo.GuildChannelCreateData{Name: g.User.Username, Type: discordgo.ChannelTypeGuildText, Position: 0, PermissionOverwrites: permissionObjects, ParentID: "715788591766437898", NSFW: false}
+	data := discordgo.GuildChannelCreateData{Name: g.User.Username, Type: discordgo.ChannelTypeGuildText, Position: 4, PermissionOverwrites: permissionObjects, ParentID: "715788591766437898", NSFW: false}
 	newChannel, err := s.GuildChannelCreateComplex(g.GuildID, data)
 	// newChannel, err := s.GuildChannelCreate(g.GuildID, g.User.Username, discordgo.ChannelTypeGuildText)
 	if err != nil {
@@ -67,10 +67,10 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	LogIfError(s, errors.Wrap(err, "sending message failed"))
 }
 
-func DenyPermissions(s *discordgo.Session, roleID string, permissions []int64) []*discordgo.PermissionOverwrite {
+func DenyPermissions(roleID string, permissions []int64) []*discordgo.PermissionOverwrite {
 	var permissionObjects = make([]*discordgo.PermissionOverwrite, len(permissions))
 	for i, perm := range permissions {
-		denied := discordgo.PermissionOverwrite{ID: Config.FemaleOnlyRole, Type: discordgo.PermissionOverwriteTypeRole, Deny: perm}
+		denied := discordgo.PermissionOverwrite{ID: roleID, Type: discordgo.PermissionOverwriteTypeRole, Deny: perm}
 		permissionObjects[i] = &denied
 
 		// err := s.ChannelPermissionSet(channelID, roleID, discordgo.PermissionOverwriteTypeRole, 0, perm)
