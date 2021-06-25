@@ -23,18 +23,18 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	// 	NSFW                 bool                   `json:"nsfw,omitempty"`
 	// }
 
-	var ModPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite
-	var UserPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages
+	// var ModPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite
+	// var UserPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages
 
 	// newChannel, err := s.GuildChannelCreate(g.GuildID, g.User.Username, discordgo.ChannelTypeGuildText)
-	var permissionObjects = make([]*discordgo.PermissionOverwrite, 5)
+	var permissionObjects = make([]*discordgo.PermissionOverwrite, 3)
 
 	permissionObjects[0] = &discordgo.PermissionOverwrite{ID: Config.UserRole, Type: discordgo.PermissionOverwriteTypeRole, Deny: 0x1111111111}
 	permissionObjects[1] = &discordgo.PermissionOverwrite{ID: Config.FemaleOnlyRole, Type: discordgo.PermissionOverwriteTypeRole, Deny: 0x1111111111}
-
 	permissionObjects[2] = &discordgo.PermissionOverwrite{ID: g.GuildID, Type: discordgo.PermissionOverwriteTypeRole, Deny: 0x1111111111}
-	permissionObjects[3] = &discordgo.PermissionOverwrite{ID: g.User.Username, Type: discordgo.PermissionOverwriteTypeMember, Allow: UserPermissions}
-	permissionObjects[4] = &discordgo.PermissionOverwrite{ID: Config.ModRole, Type: discordgo.PermissionOverwriteTypeRole, Allow: ModPermissions}
+
+	// permissionObjects[3] = &discordgo.PermissionOverwrite{ID: g.User.Username, Type: discordgo.PermissionOverwriteTypeMember, Allow: UserPermissions}
+	// permissionObjects[4] = &discordgo.PermissionOverwrite{ID: Config.ModRole, Type: discordgo.PermissionOverwriteTypeRole, Allow: ModPermissions}
 
 	// s.ChannelMessageSend(Config.AdminChannel, fmt.Sprintf("There are %d permission objtects", len(permissionObjects)))
 	data := discordgo.GuildChannelCreateData{Name: g.User.Username, Type: discordgo.ChannelTypeGuildText, Position: 4, PermissionOverwrites: permissionObjects, ParentID: "715788591766437898", NSFW: false}
@@ -44,20 +44,19 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
 	}
 	err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionViewChannel)
-	err = s.ChannelPermissionSet(newChannel.ID, "678795606906634281", discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionViewChannel|discordgo.PermissionReadMessageHistory)
-	// err = s.ChannelPermissionSet(newChannel.ID, "678795606906634281", discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionReadMessageHistory)
+	// err = s.ChannelPermissionSet(newChannel.ID, "678795606906634281", discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionViewChannel|discordgo.PermissionReadMessageHistory)
 
 	// err = s.ChannelPermissionSet(newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, 0x0000000400, 0)
 
 	// deniedPermissions := []int{0x0000000400, 0x0000000800}
 
-	allowedUserPermissions := []int64{discordgo.PermissionViewChannel, discordgo.PermissionSendMessages, discordgo.PermissionReadMessageHistory}
+	// allowedUserPermissions := []int64{discordgo.PermissionViewChannel, discordgo.PermissionSendMessages, discordgo.PermissionReadMessageHistory}
 
 	// ModPermissions := []int{0x1, 0x400, 0x800}
 	// DenyPermissions(s, newChannel.ID, Config.FemaleOnlyRole, deniedPermissions)
-	newChannel.PermissionOverwrites = append(newChannel.PermissionOverwrites, &discordgo.PermissionOverwrite{ID: g.User.ID, Type: discordgo.PermissionOverwriteTypeMember, Allow: discordgo.PermissionViewChannel})
+	// newChannel.PermissionOverwrites = append(newChannel.PermissionOverwrites, &discordgo.PermissionOverwrite{ID: g.User.ID, Type: discordgo.PermissionOverwriteTypeMember, Allow: discordgo.PermissionViewChannel})
 
-	allowPermissions(s, newChannel, g.User.ID, discordgo.PermissionOverwriteTypeMember, allowedUserPermissions)
+	// allowPermissions(s, newChannel, g.User.ID, discordgo.PermissionOverwriteTypeMember, allowedUserPermissions)
 	// allowPermissions(s, newChannel.ID, Config.ModRole, discordgo.PermissionOverwriteTypeRole, ModPermissions)
 	// allowPermissions(s, newChannel.ID, Config.TrialModRole, ModPermissions)
 
