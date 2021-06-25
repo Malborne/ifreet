@@ -3,6 +3,7 @@ package heimdallr
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/pkg/errors"
@@ -54,7 +55,7 @@ func DenyPermissions(s *discordgo.Session, channelID string, roleID string, perm
 			LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
 
 		}
-		// time.Sleep(200 * time.Millisecond)
+		time.Sleep(350 * time.Millisecond)
 
 	}
 }
