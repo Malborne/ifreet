@@ -23,14 +23,14 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	// allowedUserPermissions := []int{0x400, 0x800, 0x10000}
 
 	// ModPermissions := []int{0x1, 0x400, 0x800}
-	// DenyPermissions(s, newChannel.ID, Config.UserRole, deniedPermissions)
+	DenyPermissions(s, newChannel.ID, Config.UserRole, deniedPermissions)
 	DenyPermissions(s, newChannel.ID, Config.FemaleOnlyRole, deniedPermissions)
 
 	// allowPermissions(s, newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, allowedUserPermissions)
 	// allowPermissions(s, newChannel.ID, Config.ModRole, discordgo.PermissionOverwriteTypeRole, ModPermissions)
 	// allowPermissions(s, newChannel.ID, Config.TrialModRole, ModPermissions)
 
-	err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, 0x0000000400)
+	// err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, 0x0000000400)
 	// err = s.ChannelPermissionSet(newChannel.ID, Config.FemaleOnlyRole, discordgo.PermissionOverwriteTypeRole, 0, 1024)
 
 	// if err != nil {
