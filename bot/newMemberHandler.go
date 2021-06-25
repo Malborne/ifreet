@@ -41,8 +41,8 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
 	}
 	err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionViewChannel)
-	err = s.ChannelPermissionSet(newChannel.ID, "678795606906634281", discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionViewChannel)
-	err = s.ChannelPermissionSet(newChannel.ID, "678795606906634281", discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionReadMessageHistory)
+	err = s.ChannelPermissionSet(newChannel.ID, "678795606906634281", discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionViewChannel|discordgo.PermissionReadMessageHistory)
+	// err = s.ChannelPermissionSet(newChannel.ID, "678795606906634281", discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionReadMessageHistory)
 
 	// err = s.ChannelPermissionSet(newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, 0x0000000400, 0)
 
