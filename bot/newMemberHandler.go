@@ -43,16 +43,16 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, 0x0000000400)
 	err = s.ChannelPermissionSet(newChannel.ID, "678795606906634281", discordgo.PermissionOverwriteTypeRole, 0, 0x0000000400)
 
-	err = s.ChannelPermissionSet(newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, 0x0000000400, 0)
+	// err = s.ChannelPermissionSet(newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, 0x0000000400, 0)
 
 	// deniedPermissions := []int{0x0000000400, 0x0000000800}
 
-	// allowedUserPermissions := []int{0x400, 0x800, 0x10000}
+	allowedUserPermissions := []int{0x0000000400, 0x0000000800, 0x0000010000}
 
 	// ModPermissions := []int{0x1, 0x400, 0x800}
 	// DenyPermissions(s, newChannel.ID, Config.FemaleOnlyRole, deniedPermissions)
 
-	// allowPermissions(s, newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, allowedUserPermissions)
+	allowPermissions(s, newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, allowedUserPermissions)
 	// allowPermissions(s, newChannel.ID, Config.ModRole, discordgo.PermissionOverwriteTypeRole, ModPermissions)
 	// allowPermissions(s, newChannel.ID, Config.TrialModRole, ModPermissions)
 
@@ -91,13 +91,13 @@ func DenyPermissions(s *discordgo.Session, roleID string, permissions []int64) [
 	return permissionObjects
 }
 
-// func allowPermissions(s *discordgo.Session,userID string, targetType discordgo.PermissionOverwriteType, permissions []int) {
-// 	for _, perm := range permissions {
+func allowPermissions(s *discordgo.Session, channelID string, userID string, targetType discordgo.PermissionOverwriteType, permissions []int) {
+	for _, perm := range permissions {
 
-// 		err := s.ChannelPermissionSet(channelID, userID, targetType, perm, 0)
-// 		if err != nil {
-// 			LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
+		err := s.ChannelPermissionSet(channelID, userID, targetType, perm, 0)
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "Changing permissions failed"))
 
-// 		}
-// 	}
-// }
+		}
+	}
+}
