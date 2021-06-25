@@ -25,7 +25,7 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	var DeniedPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite | discordgo.PermissionAttachFiles | discordgo.PermissionEmbedLinks | discordgo.PermissionUseExternalEmojis
 
 	var ModPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite
-	// var UserPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages
+	var UserPermissions int = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages
 
 	// newChannel, err := s.GuildChannelCreate(g.GuildID, g.User.Username, discordgo.ChannelTypeGuildText)
 	var permissionObjects = make([]*discordgo.PermissionOverwrite, 4)
@@ -47,7 +47,7 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	// err = s.ChannelPermissionSet(newChannel.ID, Config.UserRole, discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionViewChannel)
 	// err = s.ChannelPermissionSet(newChannel.ID, "678795606906634281", discordgo.PermissionOverwriteTypeRole, 0, discordgo.PermissionViewChannel|discordgo.PermissionReadMessageHistory)
 
-	// err = s.ChannelPermissionSet(newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, 0x0000000400, 0)
+	err = s.ChannelPermissionSet(newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, UserPermissions, 0)
 
 	// deniedPermissions := []int{0x0000000400, 0x0000000800}
 
