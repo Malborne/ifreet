@@ -40,19 +40,25 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	// user := member.User
 
 	if strings.Contains(strings.ToLower(gender), "female") {
+		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.UserRole)
+		if err != nil {
+			return errors.Wrap(err, "adding user role failed")
+		}
 		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.FemaleRole)
-
-		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.UserRole)
 		if err != nil {
-			return errors.Wrap(err, "adding user role failed")
+			return errors.Wrap(err, "adding Female role failed")
 		}
+
 	} else if strings.Contains(strings.ToLower(gender), "male") {
-		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.MaleRole)
-
 		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.UserRole)
 		if err != nil {
-			return errors.Wrap(err, "adding user role failed")
+			return errors.Wrap(err, "adding Member role failed")
 		}
+		err = s.GuildMemberRoleAdd(m.GuildID, userID, heimdallr.Config.MaleRole)
+		if err != nil {
+			return errors.Wrap(err, "adding Male role failed")
+		}
+
 	} else {
 		_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The gender must be either Male or Female."))
 		return errors.Wrap(err, "adding gender role failed")
@@ -80,6 +86,7 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		}
 
 	}
+
 	return nil
 }
 
@@ -128,23 +135,25 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	}
 
 	if strings.Contains(strings.ToLower(message.Content), "female") {
+		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.UserRole)
+		if err != nil {
+			heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
+		}
 		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.FemaleRole)
 		if err != nil {
 			heimdallr.LogIfError(s, errors.Wrap(err, "adding female role failed"))
 		}
+
+	} else if strings.Contains(strings.ToLower(message.Content), "male") {
 		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.UserRole)
 		if err != nil {
 			heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
 		}
-	} else if strings.Contains(strings.ToLower(message.Content), "male") {
 		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.MaleRole)
 		if err != nil {
 			heimdallr.LogIfError(s, errors.Wrap(err, "adding male role failed"))
 		}
-		err = s.GuildMemberRoleAdd(m.GuildID, message.Author.ID, heimdallr.Config.UserRole)
-		if err != nil {
-			heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
-		}
+
 	} else {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The gender was not found in the content of the message. Please make sure that you react to a message that contains the gender."))
 		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
@@ -192,3 +201,8 @@ func isFemale(m *discordgo.Member) bool {
 	}
 	return false
 }
+
+// func DeleteUserChannel(guild *discordgo.Guild) {
+// 	guild.
+
+// }
