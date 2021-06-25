@@ -29,11 +29,16 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	// Allow int64                   `json:"allow,string"`
 	deniedPermissions := []int64{0x0000000001, 0x0000000400, 0x0000000800, 0x0000001000, 0x0000004000, 0x0000008000, 0x0000010000, 0x0000020000, 0x0000040000, 0x0000080000, 0x0080000000, 0x0800000000, 0x1000000000}
 	// deniedPermissions := []int64{0x0000000400, 0x0000000800}
+
 	newChannel, err := s.GuildChannelCreate(g.GuildID, g.User.Username, discordgo.ChannelTypeGuildText)
 	for _, perm := range deniedPermissions {
-		denied := discordgo.PermissionOverwrite{ID: Config.UserRole, Type: discordgo.PermissionOverwriteTypeRole, Deny: perm}
+
+		denied := discordgo.PermissionOverwrite{ID: Config.UserRole, Type: discordgo.PermissionOverwriteTypeRole, Deny: perm, Allow: 0}
+		denied2 := discordgo.PermissionOverwrite{ID: "678795606906634281", Type: discordgo.PermissionOverwriteTypeRole, Deny: perm, Allow: 0}
 
 		newChannel.PermissionOverwrites = append(newChannel.PermissionOverwrites, &denied)
+		newChannel.PermissionOverwrites = append(newChannel.PermissionOverwrites, &denied2)
+
 	}
 	// permissionObjects := DenyPermissions(s, newChannel, Config.UserRole, deniedPermissions)
 	// s.ChannelMessageSend(Config.AdminChannel, fmt.Sprintf("There are %d permission objtects", len(permissionObjects)))
