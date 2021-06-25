@@ -23,16 +23,19 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	// 	NSFW                 bool                   `json:"nsfw,omitempty"`
 	// }
 
-	// ID    string                  `json:"id"`
-	// Type  PermissionOverwriteType `json:"type"`
-	// Deny  int64                   `json:"deny,string"`
-	// Allow int64                   `json:"allow,string"`
-	deniedPermissions := []int64{0x0000000001, 0x0000000400, 0x0000000800, 0x0000001000, 0x0000004000, 0x0000008000, 0x0000010000, 0x0000020000, 0x0000040000, 0x0000080000, 0x0080000000, 0x0800000000, 0x1000000000}
-	// deniedPermissions := []int64{0x0000000400, 0x0000000800}
+	var ModPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite
+	var UserPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages
 
 	// newChannel, err := s.GuildChannelCreate(g.GuildID, g.User.Username, discordgo.ChannelTypeGuildText)
+	var permissionObjects = make([]*discordgo.PermissionOverwrite, 5)
 
-	permissionObjects := DenyPermissions(s, Config.UserRole, deniedPermissions)
+	permissionObjects[0] = &discordgo.PermissionOverwrite{ID: Config.UserRole, Type: discordgo.PermissionOverwriteTypeRole, Deny: 0x1111111111}
+	permissionObjects[1] = &discordgo.PermissionOverwrite{ID: Config.FemaleOnlyRole, Type: discordgo.PermissionOverwriteTypeRole, Deny: 0x1111111111}
+
+	permissionObjects[2] = &discordgo.PermissionOverwrite{ID: g.GuildID, Type: discordgo.PermissionOverwriteTypeRole, Deny: 0x1111111111}
+	permissionObjects[3] = &discordgo.PermissionOverwrite{ID: g.User.Username, Type: discordgo.PermissionOverwriteTypeMember, Allow: UserPermissions}
+	permissionObjects[4] = &discordgo.PermissionOverwrite{ID: Config.ModRole, Type: discordgo.PermissionOverwriteTypeRole, Allow: ModPermissions}
+
 	// s.ChannelMessageSend(Config.AdminChannel, fmt.Sprintf("There are %d permission objtects", len(permissionObjects)))
 	data := discordgo.GuildChannelCreateData{Name: g.User.Username, Type: discordgo.ChannelTypeGuildText, Position: 4, PermissionOverwrites: permissionObjects, ParentID: "715788591766437898", NSFW: false}
 	newChannel, err := s.GuildChannelCreateComplex(g.GuildID, data)
