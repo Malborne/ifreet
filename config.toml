@@ -121,6 +121,12 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blow
   name = "Norwegian"
   description = "A self-assignable role for those who speak Norwegian"
 
+ [[role]]
+  id = "863382477182861332"
+  name = "Danish"
+  description = "A self-assignable role for those who speak Danish"
+
+
   [[role]]
   id = "722098976882688052"
   name = "Indonesian"
