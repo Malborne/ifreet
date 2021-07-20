@@ -42,3 +42,24 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	_, err = s.ChannelMessageSend(newChannel.ID, welcomeMessage)
 	LogIfError(s, errors.Wrap(err, "sending message failed"))
 }
+
+//NewMemberLeaveHandler wishes ex members goodbye and deletes the channel that was created for them
+func NewMemberLeaveHandler(s *discordgo.Session, g *discordgo.GuildMemberRemove) {
+
+	userChannelID, err := GetnewChannel(g.User.ID)
+	if userChannelID != "" {
+		_, err = s.ChannelDelete(userChannelID)
+		LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
+		err = RemoveNewChannel(userChannelID)
+		LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
+	}
+	// var name string
+	// if g.Nick != "" {
+	// 	name = g.Nick
+	// } else {
+	// 	name = g.User.Username
+	// }
+	// _, err = s.ChannelMessageSend(Config.LogChannel, fmt.Sprintf("User `%s` (%s) has left the server.", name, g.User.Mention()))
+	// LogIfError(s, errors.Wrap(err, "sending message failed"))
+
+}

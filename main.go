@@ -58,8 +58,8 @@ func main() {
 	dg.AddHandler(heimdallr.MemberBanAddHandler)
 	dg.AddHandler(heimdallr.MessageHandler)
 	dg.AddHandler(heimdallr.OnDeleteHandler)
-	// dg.AddHandler(heimdallr.NewMemberJoinHandler)
-
+	dg.AddHandler(heimdallr.NewMemberJoinHandler)
+	dg.AddHandler(heimdallr.NewMemberLeaveHandler)
 	dg.Identify.Intents = discordgo.IntentsAll
 	err = dg.Open()
 	if err != nil {

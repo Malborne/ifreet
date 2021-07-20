@@ -138,6 +138,12 @@ CREATE TABLE IF NOT EXISTS resources (
 	content TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS new_channels (
+	id SERIAL PRIMARY KEY,
+	channel_ID TEXT NOT NULL,
+	user_ID TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS resource_tags (
 	id SERIAL PRIMARY KEY,
 	name TEXT UNIQUE NOT NULL
@@ -267,6 +273,24 @@ func GetStudent(userID string) (Student, error) {
 	return student, nil
 }
 
+//AddNewChannel adds a new channel to the database
+func AddNewChannel(userID string, channelID string) error {
+	_, err := db.Exec("INSERT INTO new_channels (user_ID,channel_ID) VALUES ($1, $2) ON CONFLICT DO NOTHING", userID, channelID)
+	if err != nil {
+		return errors.Wrap(err, "inserting new channel failed")
+	}
+	return nil
+}
+
+//RemoveInfraction removes an infraction for a user
+func RemoveNewChannel(userID string) error {
+	_, err := db.Query(
+		"DELETE FROM new_channels WHERE user_ID::text = $1::text",
+		userID,
+	)
+	return errors.Wrap(err, "deleting channel failed")
+}
+
 //GetStudents retrieve all the students information of a cirtain circle from the database
 func GetStudents(circleName string) ([]Student, error) {
 	var students []Student
@@ -306,6 +330,58 @@ func RemoveStudent(userID string) error {
 		userID,
 	)
 	return errors.Wrap(err, "deleting student failed")
+}
+
+//GetnewChannel gets a channel ID from the database using the user ID
+func GetnewChannel(userID string) (string, error) {
+	var ChannelID string
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
+	rows, err := db.Query(
+		"SELECT channel_ID FROM new_channels WHERE user_id=$1",
+		userID,
+	)
+	if err != nil {
+		return ChannelID, errors.Wrap(err, "getting channel ID failed")
+	}
+	for rows.Next() {
+		err := rows.Scan(&ChannelID)
+		if err != nil {
+			return ChannelID, err
+		}
+	}
+	rows.Close()
+	return ChannelID, nil
+}
+
+//GetAllnewChannels gets the IDs of all the new channels
+func GetAllnewChannels() ([]string, error) {
+	var ChannelIDs []string
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
+	rows, err := db.Query(
+		"SELECT channel_ID FROM new_channels")
+	if err != nil {
+		return ChannelIDs, errors.Wrap(err, "getting channel IDs failed")
+	}
+	for rows.Next() {
+		var ChannelID string
+		err := rows.Scan(&ChannelID)
+		if err != nil {
+			return ChannelIDs, err
+		}
+		ChannelIDs = append(ChannelIDs, ChannelID)
+	}
+	rows.Close()
+	return ChannelIDs, nil
 }
 
 //AddtoArchive adds a message to the archive table
