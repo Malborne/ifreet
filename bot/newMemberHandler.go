@@ -34,6 +34,9 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
 	err = s.ChannelPermissionSet(newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, UserPermissions, DeniedUserPermissions)
 
+	//Prevent new members from seeing the old welcome channel
+	err = s.ChannelPermissionSet(Config.WelcomeChannel, g.User.ID, discordgo.PermissionOverwriteTypeMember, 0, int(DeniedPermissions))
+
 	//Add new channel to database
 	err = AddNewChannel(g.User.ID, newChannel.ID)
 	LogIfError(s, errors.Wrap(err, "failed to add the new channel info to the database."))
