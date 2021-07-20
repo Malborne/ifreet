@@ -52,7 +52,7 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 func NewMemberLeaveHandler(s *discordgo.Session, g *discordgo.GuildMemberRemove) {
 
 	userChannelID, err := GetnewChannel(g.User.ID)
-	if userChannelID != "" {
+	if err !=nil && userChannelID != "" {
 		_, err = s.ChannelDelete(userChannelID)
 		LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
 		err = RemoveNewChannel(g.User.ID)
