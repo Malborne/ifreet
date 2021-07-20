@@ -11,7 +11,7 @@ import (
 //UserJoinHandler handles new users joining the server, and will welcome them.
 func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
-	var DeniedPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite | discordgo.PermissionAttachFiles | discordgo.PermissionEmbedLinks | discordgo.PermissionUseExternalEmojis
+	var DeniedPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite | discordgo.PermissionAttachFiles | discordgo.PermissionEmbedLinks | discordgo.PermissionUseExternalEmojis | 0x0080000000
 
 	var ModPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite
 	var UserPermissions int = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages
@@ -25,7 +25,7 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	permissionObjects[3] = &discordgo.PermissionOverwrite{ID: Config.ModRole, Type: discordgo.PermissionOverwriteTypeRole, Allow: ModPermissions}
 	permissionObjects[4] = &discordgo.PermissionOverwrite{ID: Config.TrialModRole, Type: discordgo.PermissionOverwriteTypeRole, Allow: ModPermissions}
 
-	data := discordgo.GuildChannelCreateData{Name: g.User.ID, Type: discordgo.ChannelTypeGuildText, Position: 4, PermissionOverwrites: permissionObjects, ParentID: "715788591766437898", NSFW: false}
+	data := discordgo.GuildChannelCreateData{Name: "welcome-" + g.User.Username, Type: discordgo.ChannelTypeGuildText, Position: 4, PermissionOverwrites: permissionObjects, ParentID: "715788591766437898", NSFW: false}
 	newChannel, err := s.GuildChannelCreateComplex(g.GuildID, data)
 	if err != nil {
 		LogIfError(s, errors.Wrap(err, "Creating New Channel failed"))
@@ -52,7 +52,7 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 func NewMemberLeaveHandler(s *discordgo.Session, g *discordgo.GuildMemberRemove) {
 
 	userChannelID, err := GetnewChannel(g.User.ID)
-	if err !=nil && userChannelID != "" {
+	if err != nil && userChannelID != "" {
 		_, err = s.ChannelDelete(userChannelID)
 		LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
 		err = RemoveNewChannel(g.User.ID)
