@@ -34,6 +34,11 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
 	err = s.ChannelPermissionSet(newChannel.ID, g.User.ID, discordgo.PermissionOverwriteTypeMember, UserPermissions, 0)
 
+	//Add new channel to database
+	err = AddNewChannel(g.User.ID, newChannel.ID)
+	LogIfError(s, errors.Wrap(err, "failed to add the new channel info to the database."))
+
+	//Welcome message
 	welcomeMessage := Config.WelcomeMessage
 	if strings.Count(welcomeMessage, "%s") > 0 {
 		welcomeMessage = fmt.Sprintf(welcomeMessage, g.User.Mention(), Config.RulesChannel)
@@ -50,7 +55,7 @@ func NewMemberLeaveHandler(s *discordgo.Session, g *discordgo.GuildMemberRemove)
 	if userChannelID != "" {
 		_, err = s.ChannelDelete(userChannelID)
 		LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
-		err = RemoveNewChannel(userChannelID)
+		err = RemoveNewChannel(g.User.ID)
 		LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
 	}
 	// var name string
