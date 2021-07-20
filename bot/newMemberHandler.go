@@ -11,7 +11,7 @@ import (
 //UserJoinHandler handles new users joining the server, and will welcome them.
 func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
-	var DeniedPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite | discordgo.PermissionAttachFiles | discordgo.PermissionEmbedLinks | discordgo.PermissionUseExternalEmojis | 0x0080000000
+	var DeniedPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite | discordgo.PermissionAttachFiles | discordgo.PermissionEmbedLinks | discordgo.PermissionUseExternalEmojis | discordgo.PermissionSendTTSMessages | 0x0080000000
 
 	var ModPermissions int64 = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages | discordgo.PermissionAddReactions | discordgo.PermissionManageMessages | discordgo.PermissionMentionEveryone | discordgo.PermissionCreateInstantInvite
 	var UserPermissions int = discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory | discordgo.PermissionSendMessages

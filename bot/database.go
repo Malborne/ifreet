@@ -334,7 +334,7 @@ func RemoveStudent(userID string) error {
 
 //GetnewChannel gets a channel ID from the database using the user ID
 func GetnewChannel(userID string) (string, error) {
-	var ChannelID string
+	var ChannelID string = ""
 	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
 		db.Close()
 		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
