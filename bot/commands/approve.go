@@ -70,7 +70,7 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	}
 
 	userChannelID, err := heimdallr.GetnewChannel(userID)
-	if userChannelID != "" {
+	if err != nil && userChannelID != "" {
 		_, err = s.ChannelDelete(userChannelID)
 		heimdallr.LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
 		err = heimdallr.RemoveNewChannel(userID)
@@ -170,7 +170,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	}
 
 	userChannelID, err := heimdallr.GetnewChannel(member.User.ID)
-	if userChannelID != "" {
+	if err != nil && userChannelID != "" {
 		_, err = s.ChannelDelete(userChannelID)
 		heimdallr.LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
 		err = heimdallr.RemoveNewChannel(member.User.ID)
