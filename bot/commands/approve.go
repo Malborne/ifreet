@@ -101,10 +101,6 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 
 //ReactionApprove approves a person if a mod reacts to their message with a green checkmark in the welcome channel
 func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
-	if m.ChannelID != heimdallr.Config.WelcomeChannel {
-		return
-	}
-
 	if m.Emoji.Name != "✅" {
 		return
 	}
@@ -169,13 +165,13 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	// userChannelID, err := heimdallr.GetnewChannel(member.User.ID)
-	// if userChannelID != "" {
-	// 	_, err = s.ChannelDelete(userChannelID)
-	// 	heimdallr.LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
-	// 	err = heimdallr.RemoveNewChannel(member.User.ID)
-	// 	heimdallr.LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
-	// }
+	userChannelID, err := heimdallr.GetnewChannel(member.User.ID)
+	if userChannelID != "" {
+		_, err = s.ChannelDelete(userChannelID)
+		heimdallr.LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
+		err = heimdallr.RemoveNewChannel(member.User.ID)
+		heimdallr.LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
+	}
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
