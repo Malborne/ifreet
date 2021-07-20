@@ -70,7 +70,7 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	}
 
 	userChannelID, err := heimdallr.GetnewChannel(userID)
-	if err != nil && userChannelID != "" {
+	if userChannelID != "" {
 		_, err = s.ChannelDelete(userChannelID)
 		heimdallr.LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
 		err = heimdallr.RemoveNewChannel(userID)
@@ -169,13 +169,13 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		return
 	}
 
-	userChannelID, err := heimdallr.GetnewChannel(member.User.ID)
-	if err != nil && userChannelID != "" {
-		_, err = s.ChannelDelete(userChannelID)
-		heimdallr.LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
-		err = heimdallr.RemoveNewChannel(member.User.ID)
-		heimdallr.LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
-	}
+	// userChannelID, err := heimdallr.GetnewChannel(member.User.ID)
+	// if userChannelID != "" {
+	// 	_, err = s.ChannelDelete(userChannelID)
+	// 	heimdallr.LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
+	// 	err = heimdallr.RemoveNewChannel(member.User.ID)
+	// 	heimdallr.LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
+	// }
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
