@@ -68,6 +68,15 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	if err != nil {
 		return errors.Wrap(err, "adding reaction failed")
 	}
+
+	userChannelID, err := heimdallr.GetnewChannel(userID)
+	if userChannelID != "" {
+		_, err = s.ChannelDelete(userChannelID)
+		heimdallr.LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
+		err = heimdallr.RemoveNewChannel(userID)
+		heimdallr.LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
+	}
+
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
 		if strings.Count(approvalMessage, "%s") > 0 {
@@ -158,6 +167,14 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The gender was not found in the content of the message. Please make sure that you react to a message that contains the gender."))
 		heimdallr.LogIfError(s, errors.Wrap(err, "adding user role failed"))
 		return
+	}
+
+	userChannelID, err := heimdallr.GetnewChannel(member.User.ID)
+	if userChannelID != "" {
+		_, err = s.ChannelDelete(userChannelID)
+		heimdallr.LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
+		err = heimdallr.RemoveNewChannel(member.User.ID)
+		heimdallr.LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
 	}
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
