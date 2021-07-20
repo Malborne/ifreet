@@ -58,13 +58,13 @@ func NewMemberLeaveHandler(s *discordgo.Session, g *discordgo.GuildMemberRemove)
 		err = RemoveNewChannel(g.User.ID)
 		LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
 	}
-	// var name string
-	// if g.Nick != "" {
-	// 	name = g.Nick
-	// } else {
-	// 	name = g.User.Username
-	// }
-	// _, err = s.ChannelMessageSend(Config.LogChannel, fmt.Sprintf("User `%s` (%s) has left the server.", name, g.User.Mention()))
-	// LogIfError(s, errors.Wrap(err, "sending message failed"))
+	var name string
+	if g.Nick != "" {
+		name = g.Nick
+	} else {
+		name = g.User.Username
+	}
+	_, err = s.ChannelMessageSend(Config.LogChannel, fmt.Sprintf("User `%s` (%s) has left the server.", name, g.User.Mention()))
+	LogIfError(s, errors.Wrap(err, "sending message failed"))
 
 }

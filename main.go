@@ -54,7 +54,7 @@ func main() {
 	dg.AddHandler(commands.ReactionApprove)
 	dg.AddHandler(commands.ReactionPrompt)
 	// dg.AddHandler(heimdallr.UserJoinHandler)
-	dg.AddHandler(heimdallr.UserLeaveHandler)
+	// dg.AddHandler(heimdallr.UserLeaveHandler)
 	dg.AddHandler(heimdallr.MemberBanAddHandler)
 	dg.AddHandler(heimdallr.MessageHandler)
 	dg.AddHandler(heimdallr.OnDeleteHandler)
