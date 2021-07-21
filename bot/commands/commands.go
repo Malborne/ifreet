@@ -117,7 +117,7 @@ func init() {
 		// versionCommand,
 		lessonsCommand,
 		arabiclessonsCommand,
-		isolateCommand,
+		// isolateCommand,
 		// searchResourcesCommand,
 		getSheetCommand,
 	}
