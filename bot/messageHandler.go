@@ -68,7 +68,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				return
 			}
 			_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
-				Title: "User ws automatically kicked by Ifreet.",
+				Title: "User was automatically kicked by Ifreet.",
 				Fields: []*discordgo.MessageEmbedField{
 					{
 						Name:  "**Username**",

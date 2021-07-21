@@ -96,7 +96,7 @@ func kickMember(s *discordgo.Session, member *discordgo.Member) {
 		}
 
 		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
-			Title: "User ws automatically kicked by Ifreet after staying for a week without being approved.",
+			Title: "User was automatically kicked by Ifreet after staying for a week without being approved.",
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "**Username**",
