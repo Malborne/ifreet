@@ -46,6 +46,7 @@ type BotConfig struct {
 	ServerBoosterRole  string `toml:"server_booster_id"`
 
 	MutedRole string `toml:"muted_role_id"`
+	IsolatedRole string `toml:"isolated_role_id"`
 
 	Roles []Role `toml:"role"`
 
