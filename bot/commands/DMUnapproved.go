@@ -57,7 +57,7 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 			if !AlreadyDMed {
 
 				_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-					"You are an unapproved member of Quran Learning Center Server and you do not have access to most of the server. If you would like to have access to the server, please contact one of the moderators in the %s channel below to be approved.\n\n\nhttps://discord.gg/R6jKWT\n\nKeep in mind that if you stay for longer than a week without getting approved, you will risk being kicked out of the server.\n\nYou cannot reply to this message.", heimdallr.Config.WelcomeChannel))
+					"You are an unapproved member of Quran Learning Center Server and you do not have access to most of the server. If you would like to have access to the server, please contact one of the moderators in the <#%s> channel below to be approved.\n\n\nhttps://discord.gg/R6jKWT\n\nKeep in mind that if you stay for longer than a week without getting approved, you will risk being kicked out of the server.\n\nYou cannot reply to this message.", heimdallr.Config.WelcomeChannel))
 				if err != nil {
 					s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s Does NOT ACCEPT DMs", member.Mention()))
 					heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed. User Does NOT ACCEPT DMs"))
