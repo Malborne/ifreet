@@ -56,7 +56,7 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 
 	//kick the user they are still unapproved after some time
 	member, _ := GetMember(s, g.GuildID, g.User.ID)
-	time.AfterFunc(168*time.Hour, func() { kickMember(s , member ) }) //called after 7 days
+	time.AfterFunc(168*time.Hour, func() { kickMember(s, member) }) //called after 7 days
 }
 
 //NewMemberLeaveHandler wishes ex members goodbye and deletes the channel that was created for them
@@ -88,11 +88,29 @@ func sendUnapprovedMessage(s *discordgo.Session, newChannel *discordgo.Channel, 
 	}
 }
 func kickMember(s *discordgo.Session, member *discordgo.Member) {
-	
+
 	if !isUserApproved(member) && !member.User.Bot && !hasRole(member, Config.ServerBoosterRole) {
 		err := s.GuildMemberDeleteWithReason(member.GuildID, member.User.ID, "Stayed in the server for at least 7 days without gaining the User role")
 		if err != nil {
 			LogIfError(s, errors.Wrap(err, "kicking failed"))
+		}
+
+		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
+			Title: "User ws automatically kicked by Ifreet after staying for a week without being approved.",
+			Fields: []*discordgo.MessageEmbedField{
+				{
+					Name:  "**Username**",
+					Value: member.User.Username + "#" + member.User.Discriminator,
+				},
+				{
+					Name:  "**User ID**",
+					Value: member.User.ID,
+				},
+			},
+			Color: 0xEE0000,
+		})
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "sending Embed failed"))
 		}
 	}
 }

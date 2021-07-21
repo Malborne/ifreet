@@ -77,9 +77,9 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 		heimdallr.LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
 	}
 
-//Send a message in the LogChannel once a user is approved 
-_, err = s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("User `%s` (%s) has been successfully approved ✅", member.User.Username, member.Mention()))
-heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
+	//Send a message in the LogChannel once a user is approved
+	_, err = s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("User `%s` (%s) has been successfully approved ✅", member.User.Username, member.Mention()))
+	heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
 	if approvalMessage != "" {
@@ -177,8 +177,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		heimdallr.LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
 	}
 
-
-	//Send a message in the LogChannel once a user is approved 
+	//Send a message in the LogChannel once a user is approved
 	_, err = s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("User `%s` (%s) has been successfully approved ✅", member.User.Username, member.Mention()))
 	heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
 
