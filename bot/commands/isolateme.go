@@ -30,7 +30,7 @@ var isolateCommand = command{
 func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	duration, _ := args.Int("<duration>")
 	unit, _ := args.String("<unit>")
-	member := m.Member
+	// member := m.Member
 	acceptedUnits := []string{"s", "second", "seconds", "sec", "secs", "minute", "minutes", "min", "mins", "m", "h", "hour", "hours", "hr", "hrs", "day", "days", "d"}
 	index, isUnitAccepted := stringInSlice(strings.ToLower(unit), acceptedUnits)
 
@@ -55,6 +55,8 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	if err != nil {
 		return err
 	}
+
+	member, err = heimdallr.GetMember(s, guildID, m.Member.User.ID)
 
 	if heimdallr.IsAdminOrHigher(member, guild) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The Admin cannot be isolated."))
@@ -117,6 +119,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		return errors.Wrap(err, "adding reaction failed")
 	}
 
+	//Restore the user after the timer expires
 	if unit == "seconds" {
 		time.AfterFunc(time.Duration(duration)*time.Second, func() { restoreUser(s, member.User, guildID) })
 	} else if unit == "minutes" {
