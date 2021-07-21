@@ -31,7 +31,12 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 	// 	return err
 	// }
 	members, err := s.GuildMembers(m.GuildID, "", 1000)
-	// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d members in this guild", len(members)))
+	members2, _ := s.GuildMembers(m.GuildID, members[len(members)-1].User.ID, 1000)
+
+	for index, _ := range members2 {
+		members = append(members, members2[index])
+}
+// _, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("There are %d members in this guild", len(members)))
 
 	var count int = 0
 	for _, member := range members {
