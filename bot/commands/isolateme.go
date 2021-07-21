@@ -16,7 +16,7 @@ var isolateCommand = command{
 	commandIsolateme,
 	"Isolates you from the server for a specified duration of time.",
 	[]string{
-		"<duration>", "<unit>",
+		"<duration> <unit>",
 	},
 	[]string{
 		"10 seconds",
