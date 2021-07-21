@@ -52,7 +52,11 @@ func NewMemberJoinHandler(s *discordgo.Session, g *discordgo.GuildMemberAdd) {
 	LogIfError(s, errors.Wrap(err, "sending message failed"))
 
 	//Send a message to remind the user that they are still unapproved after some time
-	time.AfterFunc(30*time.Second, func() { sendUnapprovedMessage(s, newChannel, g.User) })
+	time.AfterFunc(144*time.Hour, func() { sendUnapprovedMessage(s, newChannel, g.User) }) //called after 6 days
+
+	//kick the user they are still unapproved after some time
+	member, _ := GetMember(s, g.GuildID, g.User.ID)
+	time.AfterFunc(168*time.Hour, func() { kickMember(s , member ) }) //called after 7 days
 }
 
 //NewMemberLeaveHandler wishes ex members goodbye and deletes the channel that was created for them
@@ -78,8 +82,26 @@ func NewMemberLeaveHandler(s *discordgo.Session, g *discordgo.GuildMemberRemove)
 
 func sendUnapprovedMessage(s *discordgo.Session, newChannel *discordgo.Channel, user *discordgo.User) {
 	_, err := s.ChannelMessageSend(newChannel.ID, fmt.Sprintf(
-		"%s You are an unapproved member of Quran Learning Center Server and you do not have access to most of the server. If you would like to have access to the server, please contact one of the moderators to be approved.\n\nKeep in mind that if you stay for one more day without getting approved, you will risk being kicked out of the server.", user.Mention()))
+		"%s You are an unapproved member of Quran Learning Center Server and you do not have access to most of the server. If you would like to have access to the server, please contact one of the moderators using `@Moderator` to be approved.\n\nKeep in mind that if you stay for one more day without getting approved, you will risk being kicked out of the server.", user.Mention()))
 	if err != nil {
 		LogIfError(s, errors.Wrap(err, "sending message failed"))
 	}
+}
+func kickMember(s *discordgo.Session, member *discordgo.Member) {
+	
+	if !isUserApproved(member) && !member.User.Bot && !hasRole(member, Config.ServerBoosterRole) {
+		err := s.GuildMemberDeleteWithReason(member.GuildID, member.User.ID, "Stayed in the server for at least 7 days without gaining the User role")
+		if err != nil {
+			LogIfError(s, errors.Wrap(err, "kicking failed"))
+		}
+	}
+}
+
+func isUserApproved(m *discordgo.Member) bool {
+	for _, role := range m.Roles {
+		if role == Config.UserRole || role == Config.FemaleOnlyRole {
+			return true
+		}
+	}
+	return false
 }
