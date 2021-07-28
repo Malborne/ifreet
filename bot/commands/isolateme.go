@@ -31,6 +31,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	duration, _ := args.Int("<duration>")
 	unit, _ := args.String("<unit>")
 	// member := m.Member
+	// var timer *time.Timer;
 	acceptedUnits := []string{"s", "second", "seconds", "sec", "secs", "minute", "minutes", "min", "mins", "m", "h", "hour", "hours", "hr", "hrs", "day", "days", "d"}
 	index, isUnitAccepted := stringInSlice(strings.ToLower(unit), acceptedUnits)
 
@@ -63,8 +64,25 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		return errors.Wrap(err, "Isolating the admin cannot be done")
 	}
 
+	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The duration of isolation is %d %s.", duration, unit))
+	startTime := time.Now()
+	var endTime time.Time
+	if unit == "seconds" {
+		endTime = startTime.Add(time.Duration(duration) * time.Second)
+
+	} else if unit == "minutes" {
+		endTime = startTime.Add(time.Duration(duration) * time.Minute)
+	} else if unit == "hours" {
+		endTime = startTime.Add(time.Duration(duration) * time.Hour)
+	} else if unit == "days" {
+		endTime = startTime.Add(time.Duration(24*duration) * time.Hour)
+	} else {
+		s.ChannelMessageSend(heimdallr.Config.AdminChannel, fmt.Sprintf("The unit used for the duration is incorrect"))
+		return err
+	}
+
 	//Add the isolated user's roles to the database
-	err = heimdallr.AddMutedUser(*member.User, time.Now(), getRoleIDs(member))
+	err = heimdallr.AddIsolatedUser(*member.User, startTime, endTime, getRoleIDs(member))
 	if err != nil {
 		return err
 	}
@@ -120,18 +138,21 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	}
 
 	//Restore the user after the timer expires
-	if unit == "seconds" {
-		time.AfterFunc(time.Duration(duration)*time.Second, func() { restoreUser(s, member.User, guildID) })
-	} else if unit == "minutes" {
-		time.AfterFunc(time.Duration(duration)*time.Minute, func() { restoreUser(s, member.User, guildID) })
 
-	} else if unit == "hours" {
-		time.AfterFunc(time.Duration(duration)*time.Hour, func() { restoreUser(s, member.User, guildID) })
+	time.AfterFunc(endTime.Sub(startTime), func() { restoreUser(s, member.User, guildID) })
 
-	} else if unit == "days" {
-		time.AfterFunc(time.Duration(24*duration)*time.Hour, func() { restoreUser(s, member.User, guildID) })
+	// if unit == "seconds" {
+	// 	time.AfterFunc(time.Duration(duration)*time.Second, func() { restoreUser(s, member.User, guildID) })
+	// } else if unit == "minutes" {
+	// 	time.AfterFunc(time.Duration(duration)*time.Minute, func() { restoreUser(s, member.User, guildID) })
 
-	}
+	// } else if unit == "hours" {
+	// 	time.AfterFunc(time.Duration(duration)*time.Hour, func() { restoreUser(s, member.User, guildID) })
+
+	// } else if unit == "days" {
+	// 	time.AfterFunc(time.Duration(24*duration)*time.Hour, func() { restoreUser(s, member.User, guildID) })
+
+	// }
 	return nil
 }
 
@@ -147,7 +168,7 @@ func stringInSlice(a string, list []string) (int, bool) {
 
 func restoreUser(s *discordgo.Session, user *discordgo.User, guildID string) {
 	//Add all the other user roles
-	roles, err := heimdallr.GetMutedUserRoles(user.ID)
+	roles, err := heimdallr.GetIsolatedUserRoles(user.ID)
 	if err != nil {
 		heimdallr.LogIfError(s, errors.Wrap(err, "getting roles from the database failed"))
 	}
@@ -166,7 +187,7 @@ func restoreUser(s *discordgo.Session, user *discordgo.User, guildID string) {
 		}
 	}
 	//remove the isolated user from the database
-	err = heimdallr.RemoveMutedUser(user.ID)
+	err = heimdallr.RemoveIsolatedUser(user.ID)
 	if err != nil {
 		heimdallr.LogIfError(s, errors.Wrap(err, "Removing the Isolated user from the database failed"))
 
@@ -179,7 +200,7 @@ func restoreUser(s *discordgo.Session, user *discordgo.User, guildID string) {
 
 	}
 
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("%s was automatically restored to the server.", user.Username+"#"+user.Discriminator),
 		Fields: []*discordgo.MessageEmbedField{
 			{

@@ -95,6 +95,15 @@ CREATE TABLE IF NOT EXISTS mutedUsers (
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS isolatedUsers (
+	id SERIAL PRIMARY KEY,
+	roleIDs TEXT,
+	start_time timestamp,
+	end_time timestamp,
+	user_id TEXT,
+	FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
 
 CREATE TABLE IF NOT EXISTS students (
 	id SERIAL PRIMARY KEY,
@@ -451,6 +460,18 @@ func AddMutedUser(user discordgo.User, time time.Time, roleIDs string) error {
 	return errors.Wrap(err, "muting user failed")
 }
 
+//AddIsolatedUser Adds an isolated user to the list of users
+func AddIsolatedUser(user discordgo.User, start_time time.Time, end_time time.Time, roleIDs string) error {
+	err := AddUser(user)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec("INSERT INTO isolatedUsers (roleIDs, start_time, end_time, user_id) VALUES ($1, $2, $3, $4)",
+		roleIDs, start_time, end_time, user.ID)
+	return errors.Wrap(err, "isolating user failed")
+}
+
 //AddWhitelistedUser Adds a user to the whitelist to be able to post links
 // func AddWhitelistedUser(user discordgo.User, time time.Time) error {
 // 	err := AddUser(user)
@@ -507,10 +528,91 @@ func GetMutedUserRoles(userID string) ([]string, error) {
 	return roles, nil
 }
 
+//GetIsolatedUserRoles retrieves the roles of an isolated member
+func GetIsolatedUserRoles(userID string) ([]string, error) {
+	var roles []string
+	var roleIDs string
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
+	rows, err := db.Query(
+		"SELECT roleIDs, start_time, end_time FROM isolatedUsers WHERE user_id=$1 ORDER BY start_time",
+		userID,
+	)
+	if err != nil {
+		return roles, errors.Wrap(err, "fetching infractions failed")
+	}
+
+	for rows.Next() {
+		var startTime time.Time
+		var endTime time.Time
+
+		err = rows.Scan(&roleIDs, &startTime, &endTime)
+		if err != nil {
+			return nil, errors.Wrap(err, "getting row failed")
+		}
+
+	}
+	roles = strings.Split(roleIDs, ",")
+
+	if err = rows.Err(); err != nil {
+		return roles, errors.WithStack(err)
+	}
+	rows.Close()
+	return roles, nil
+}
+
+//GetIsolatedEndTime retrieves the end time of an isolated user
+func GetIsolatedEndTime(userID string) (time.Time, error) {
+	var end_time time.Time
+	var roleIDs string
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
+	rows, err := db.Query(
+		"SELECT roleIDs, start_time, end_time FROM isolatedUsers WHERE user_id=$1 ORDER BY start_time",
+		userID,
+	)
+	if err != nil {
+		return end_time, errors.Wrap(err, "fetching infractions failed")
+	}
+
+	for rows.Next() {
+		var startTime time.Time
+
+		err = rows.Scan(&roleIDs, &startTime, &end_time)
+		if err != nil {
+			return end_time, errors.Wrap(err, "getting row failed")
+		}
+
+	}
+
+	if err = rows.Err(); err != nil {
+		return end_time, errors.WithStack(err)
+	}
+	rows.Close()
+	return end_time, nil
+}
+
 //RemoveMutedUser Removes a user from the database after being unmuted
 func RemoveMutedUser(userID string) error {
 	_, err := db.Query(
 		"DELETE FROM mutedUsers WHERE user_id=$1",
+		userID,
+	)
+	return errors.Wrap(err, "deleting user failed")
+}
+
+//RemoveIsolatedUser Removes a user from the database after being unisolated
+func RemoveIsolatedUser(userID string) error {
+	_, err := db.Query(
+		"DELETE FROM isolatedUsers WHERE user_id=$1",
 		userID,
 	)
 	return errors.Wrap(err, "deleting user failed")
