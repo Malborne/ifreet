@@ -21,6 +21,14 @@ type Infraction struct {
 	Time   time.Time
 }
 
+//IsolatedUser contains the basic information about an isolated User
+type IsolatedUser struct {
+	UserID    string
+	StartTime time.Time
+	EndTime   time.Time
+	RoleIDs   []string
+}
+
 //Student contains the information about each student in the Hifz circles
 type Student struct {
 	ID        string
@@ -35,14 +43,6 @@ type Message struct {
 	content   string
 	Time      time.Time
 	userID    string
-}
-
-//IsolatedUser contains the basic information about an isolated User
-type IsolatedUser struct {
-	userID    string
-	startTime time.Time
-	endTime   time.Time
-	roleIDs   []string
 }
 
 //Resource represents a learning resource

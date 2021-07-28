@@ -68,18 +68,20 @@ func main() {
 	}
 
 	// go heimdallr.CheckPermissions(dg)
+
+	//Checks if any users are still isolated and restores them if/when their duration has expired
 	isolatedUsers, err := heimdallr.GetAllIsolatedUsers()
 	if err != nil {
 		heimdallr.LogIfError(dg, errors.Wrap(err, "getting isolated Users failed"))
 	}
 	guildID := heimdallr.Config.GuildID
 	for _, isoUser := range isolatedUsers {
-		member, _ := heimdallr.GetMember(dg, guildID, isoUser.userID)
+		member, _ := heimdallr.GetMember(dg, guildID, isoUser.UserID)
 		currentTime := time.Now()
-		if currentTime.After(isoUser.endTime) {
+		if currentTime.After(isoUser.EndTime) {
 			commands.RestoreUser(dg, member, guildID)
 		} else {
-			time.AfterFunc(isoUser.endTime.Sub(currentTime), func() { commands.RestoreUser(dg, member, guildID) })
+			time.AfterFunc(isoUser.EndTime.Sub(currentTime), func() { commands.RestoreUser(dg, member, guildID) })
 
 		}
 	}
