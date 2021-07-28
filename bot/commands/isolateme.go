@@ -30,7 +30,7 @@ var isolateCommand = command{
 func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	duration, err := args.Int("<duration>")
 	if err != nil {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Incorrect duration. Please use only integer values"))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Incorrect duration. Please use only whole numbers"))
 		return errors.Wrap(err, "Duration is not correct")
 	}
 	unit, _ := args.String("<unit>")
