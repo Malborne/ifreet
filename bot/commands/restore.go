@@ -11,7 +11,7 @@ import (
 
 var restoreCommand = command{
 	"restore",
-	commandUnmuteUser,
+	commandRestoreUser,
 	"restores an isolated user.",
 	[]string{
 		"<user>",
