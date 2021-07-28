@@ -57,7 +57,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		return err
 	}
 
-	member, err := heimdallr.GetMember(s, guildID, m.Member.User.ID)
+	member, err := heimdallr.GetMember(s, guildID, m.Author.ID)
 
 	if heimdallr.IsAdminOrHigher(member, guild) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The Admin cannot be isolated."))
