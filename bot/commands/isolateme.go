@@ -106,20 +106,20 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	if err != nil {
 		return errors.Wrap(err, "getting user failed")
 	}
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
-		Title: fmt.Sprintf("User isolated himself for %d %s", duration, unit),
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:  "**Username**",
-				Value: member.User.Username + "#" + member.User.Discriminator,
-			},
-			{
-				Name:  "**User ID**",
-				Value: member.User.ID,
-			},
-		},
-		Color: 0xEE0000,
-	})
+	// _, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
+	// 	Title: fmt.Sprintf("User isolated himself for %d %s", duration, unit),
+	// 	Fields: []*discordgo.MessageEmbedField{
+	// 		{
+	// 			Name:  "**Username**",
+	// 			Value: member.User.Username + "#" + member.User.Discriminator,
+	// 		},
+	// 		{
+	// 			Name:  "**User ID**",
+	// 			Value: member.User.ID,
+	// 		},
+	// 	},
+	// 	Color: 0xEE0000,
+	// })
 
 	userChannel, err := s.UserChannelCreate(member.User.ID)
 	if err != nil {
@@ -138,7 +138,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	}
 
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
-		Title: fmt.Sprintf("%s was isolated for %d %s", member.User.Username+"#"+member.User.Discriminator, duration, unit),
+		Title: fmt.Sprintf("%s is isolated for %d %s", member.User.Username+"#"+member.User.Discriminator, duration, unit),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",
