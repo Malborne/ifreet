@@ -62,6 +62,9 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	}
 
 	member, err := heimdallr.GetMember(s, guildID, m.Author.ID)
+	if err != nil {
+		return errors.Wrap(err, "getting user failed")
+	}
 
 	if heimdallr.IsAdminOrHigher(member, guild) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The Admin cannot be isolated."))
@@ -106,24 +109,6 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	if err != nil {
 		return errors.Wrap(err, "adding user role failed")
 	}
-
-	if err != nil {
-		return errors.Wrap(err, "getting user failed")
-	}
-	// _, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
-	// 	Title: fmt.Sprintf("User isolated himself for %d %s", duration, unit),
-	// 	Fields: []*discordgo.MessageEmbedField{
-	// 		{
-	// 			Name:  "**Username**",
-	// 			Value: member.User.Username + "#" + member.User.Discriminator,
-	// 		},
-	// 		{
-	// 			Name:  "**User ID**",
-	// 			Value: member.User.ID,
-	// 		},
-	// 	},
-	// 	Color: 0xEE0000,
-	// })
 
 	userChannel, err := s.UserChannelCreate(member.User.ID)
 	if err != nil {
