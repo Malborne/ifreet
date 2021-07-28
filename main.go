@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/Malborne/ifreet/tree/master/bot/commands"
 	"github.com/Malborne/ifreet/tree/master/bot/version"
@@ -67,6 +68,21 @@ func main() {
 	}
 
 	// go heimdallr.CheckPermissions(dg)
+	isolatedUsers, err := heimdallr.GetAllIsolatedUsers()
+	if err != nil {
+		heimdallr.LogIfError(dg, errors.Wrap(err, "getting isolated Users failed"))
+	}
+	guildID := heimdallr.Config.GuildID
+	for _, isoUser := range isolatedUsers {
+		member, _ := heimdallr.GetMember(dg, guildID, isoUser.userID)
+		currentTime := time.Now()
+		if currentTime.After(isoUser.endTime) {
+			commands.RestoreUser(dg, member, guildID)
+		} else {
+			time.AfterFunc(isoUser.endTime.Sub(currentTime), func() { commands.RestoreUser(dg, member, guildID) })
+
+		}
+	}
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)

@@ -13,7 +13,9 @@ var Config = BotConfig{}
 
 //BotConfig contains config info
 type BotConfig struct {
-	Token           string `toml:"token"`
+	Token   string `toml:"token"`
+	GuildID string `toml:"qlc_server_id"`
+
 	WelcomeChannel  string `toml:"welcome_channel"`
 	LogChannel      string `toml:"log_channel"`
 	AdminChannel    string `toml:"admin_channel"`
@@ -45,7 +47,7 @@ type BotConfig struct {
 	VerifiedFemaleRole string `toml:"verified_female_role_id"`
 	ServerBoosterRole  string `toml:"server_booster_id"`
 
-	MutedRole string `toml:"muted_role_id"`
+	MutedRole    string `toml:"muted_role_id"`
 	IsolatedRole string `toml:"isolated_role_id"`
 
 	Roles []Role `toml:"role"`

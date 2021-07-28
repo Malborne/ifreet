@@ -37,6 +37,14 @@ type Message struct {
 	userID    string
 }
 
+//IsolatedUser contains the basic information about an isolated User
+type IsolatedUser struct {
+	userID    string
+	startTime time.Time
+	endTime   time.Time
+	roleIDs   []string
+}
+
 //Resource represents a learning resource
 type Resource struct {
 	ID      int
@@ -598,6 +606,51 @@ func GetIsolatedEndTime(userID string) (time.Time, error) {
 	}
 	rows.Close()
 	return end_time, nil
+}
+
+//GetAllIsolatedUsers retrieves a list of isolated users
+func GetAllIsolatedUsers() ([]IsolatedUser, error) {
+
+	var roleIDs string
+	var userID string
+	var startTime time.Time
+	var endTime time.Time
+	var isolatedUsers []IsolatedUser
+	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
+		db.Close()
+		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+		db.SetMaxIdleConns(0)
+		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
+	}
+	rows, err := db.Query(
+		"SELECT user_id, roleIDs, start_time, end_time FROM isolatedUsers ORDER BY start_time")
+	if err != nil {
+		return isolatedUsers, errors.Wrap(err, "fetching isolated users failed")
+	}
+
+	for rows.Next() {
+
+		err = rows.Scan(&userID, &roleIDs, &startTime, &endTime)
+		if err != nil {
+			return isolatedUsers, errors.Wrap(err, "getting row failed")
+		}
+
+		roles := strings.Split(roleIDs, ",")
+
+		// isolatedUser := IsolatedUser{
+		// 	userID:    userID,
+		// 	roleIDs:   roles,
+		// 	startTime: startTime,
+		// 	endTime:   endTime,
+		// }
+		isolatedUsers = append(isolatedUsers, IsolatedUser{userID, startTime, endTime, roles})
+	}
+
+	if err = rows.Err(); err != nil {
+		return isolatedUsers, errors.WithStack(err)
+	}
+	rows.Close()
+	return isolatedUsers, nil
 }
 
 //RemoveMutedUser Removes a user from the database after being unmuted

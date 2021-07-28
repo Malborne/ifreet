@@ -154,7 +154,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 
 	//Restore the user after the timer expires
 
-	time.AfterFunc(endTime.Sub(startTime), func() { restoreUser(s, member, guildID) })
+	time.AfterFunc(endTime.Sub(startTime), func() { RestoreUser(s, member, guildID) })
 
 	return nil
 }
@@ -169,7 +169,7 @@ func stringInSlice(a string, list []string) (int, bool) {
 	return -1, false
 }
 
-func restoreUser(s *discordgo.Session, member *discordgo.Member, guildID string) {
+func RestoreUser(s *discordgo.Session, member *discordgo.Member, guildID string) {
 
 	if !isIsolated(member) { // If the user has already been restored manually
 		return
