@@ -138,7 +138,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	}
 
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: fmt.Sprintf("%s was isolated for .for %d %s", member.User.Username+"#"+member.User.Discriminator, duration, unit),
+		Title: fmt.Sprintf("%s was isolated for %d %s", member.User.Username+"#"+member.User.Discriminator, duration, unit),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",
@@ -206,6 +206,16 @@ func restoreUser(s *discordgo.Session, member *discordgo.Member, guildID string)
 	if err != nil {
 		heimdallr.LogIfError(s, errors.Wrap(err, "removing isolated role failed"))
 
+	}
+	userChannel, err := s.UserChannelCreate(member.User.ID)
+	if err != nil {
+		s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s Does NOT ACCEPT DMs but was sucessfully restored", member.Mention()))
+		return
+	}
+	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
+		"You have been automatically restored in Quran Learning Center \n\nYou cannot reply to this message."))
+	if err != nil {
+		return
 	}
 
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
