@@ -64,7 +64,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		return errors.Wrap(err, "Isolating the admin cannot be done")
 	}
 
-	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The duration of isolation is %d %s.", duration, unit))
+	// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The duration of isolation is %d %s.", duration, unit))
 	startTime := time.Now()
 	var endTime time.Time
 	if unit == "seconds" {
@@ -126,7 +126,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		return nil
 	}
 	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-		"You have been isolated in %s for for %d %s\nYou will automatically be returned to the server after the duration expires. If you would like to return before that, please DM one of the moderators.\n\nYou cannot reply to this message.", guild.Name, duration, unit))
+		"You have been isolated in %s for %d %s\nYou will automatically be returned to the server after the duration expires. If you would like to return before that, please DM one of the moderators.\n\nYou cannot reply to this message.", guild.Name, duration, unit))
 	if err != nil {
 		return nil
 	}
@@ -137,22 +137,25 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		return errors.Wrap(err, "adding reaction failed")
 	}
 
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
+		Title: fmt.Sprintf("%s was isolated for .for %d %s", member.User.Username+"#"+member.User.Discriminator, duration, unit),
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:  "**Username**",
+				Value: member.User.Username + "#" + member.User.Discriminator,
+			},
+			{
+				Name:  "**User ID**",
+				Value: member.User.ID,
+			},
+		},
+		Color: 0xFFFF00,
+	})
+
 	//Restore the user after the timer expires
 
-	time.AfterFunc(endTime.Sub(startTime), func() { restoreUser(s, member.User, guildID) })
+	time.AfterFunc(endTime.Sub(startTime), func() { restoreUser(s, member, guildID) })
 
-	// if unit == "seconds" {
-	// 	time.AfterFunc(time.Duration(duration)*time.Second, func() { restoreUser(s, member.User, guildID) })
-	// } else if unit == "minutes" {
-	// 	time.AfterFunc(time.Duration(duration)*time.Minute, func() { restoreUser(s, member.User, guildID) })
-
-	// } else if unit == "hours" {
-	// 	time.AfterFunc(time.Duration(duration)*time.Hour, func() { restoreUser(s, member.User, guildID) })
-
-	// } else if unit == "days" {
-	// 	time.AfterFunc(time.Duration(24*duration)*time.Hour, func() { restoreUser(s, member.User, guildID) })
-
-	// }
 	return nil
 }
 
@@ -166,9 +169,14 @@ func stringInSlice(a string, list []string) (int, bool) {
 	return -1, false
 }
 
-func restoreUser(s *discordgo.Session, user *discordgo.User, guildID string) {
+func restoreUser(s *discordgo.Session, member *discordgo.Member, guildID string) {
+
+	if !isIsolated(member) { // If the user has already been restored manually
+		return
+	}
+
 	//Add all the other user roles
-	roles, err := heimdallr.GetIsolatedUserRoles(user.ID)
+	roles, err := heimdallr.GetIsolatedUserRoles(member.User.ID)
 	if err != nil {
 		heimdallr.LogIfError(s, errors.Wrap(err, "getting roles from the database failed"))
 	}
@@ -176,7 +184,7 @@ func restoreUser(s *discordgo.Session, user *discordgo.User, guildID string) {
 	for _, role := range roles {
 		if role != heimdallr.Config.ServerBoosterRole {
 			if role != "" {
-				err = s.GuildMemberRoleAdd(guildID, user.ID, role)
+				err = s.GuildMemberRoleAdd(guildID, member.User.ID, role)
 			}
 
 			if err != nil {
@@ -187,32 +195,41 @@ func restoreUser(s *discordgo.Session, user *discordgo.User, guildID string) {
 		}
 	}
 	//remove the isolated user from the database
-	err = heimdallr.RemoveIsolatedUser(user.ID)
+	err = heimdallr.RemoveIsolatedUser(member.User.ID)
 	if err != nil {
 		heimdallr.LogIfError(s, errors.Wrap(err, "Removing the Isolated user from the database failed"))
 
 	}
 
 	//Remove the isolated role
-	err = s.GuildMemberRoleRemove(guildID, user.ID, heimdallr.Config.IsolatedRole)
+	err = s.GuildMemberRoleRemove(guildID, member.User.ID, heimdallr.Config.IsolatedRole)
 	if err != nil {
 		heimdallr.LogIfError(s, errors.Wrap(err, "removing isolated role failed"))
 
 	}
 
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
-		Title: fmt.Sprintf("%s was automatically restored to the server.", user.Username+"#"+user.Discriminator),
+		Title: fmt.Sprintf("%s was automatically restored to the server.", member.User.Username+"#"+member.User.Discriminator),
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "**Username**",
-				Value: user.Username + "#" + user.Discriminator,
+				Value: member.User.Username + "#" + member.User.Discriminator,
 			},
 			{
 				Name:  "**User ID**",
-				Value: user.ID,
+				Value: member.User.ID,
 			},
 		},
-		Color: 0xEE0000,
+		Color: 0xFFFF00,
 	})
 
+}
+
+func isIsolated(m *discordgo.Member) bool {
+	for _, role := range m.Roles {
+		if role == heimdallr.Config.IsolatedRole {
+			return true
+		}
+	}
+	return false
 }
