@@ -28,7 +28,11 @@ var isolateCommand = command{
 
 //commandIsolateme isolates a user for a specific period of time
 func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
-	duration, _ := args.Int("<duration>")
+	duration, err := args.Int("<duration>")
+	if err != nil {
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Incorrect duration. Please use only integer values"))
+		return errors.Wrap(err, "Duration is not correct")
+	}
 	unit, _ := args.String("<unit>")
 	// member := m.Member
 	// var timer *time.Timer;
