@@ -96,7 +96,7 @@ func commandRestoreUser(s *discordgo.Session, m *discordgo.MessageCreate, args d
 	if err != nil {
 		return errors.Wrap(err, "getting user failed")
 	}
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("User was restored by %s.", author.User.Username+"#"+author.User.Discriminator),
 		Fields: []*discordgo.MessageEmbedField{
 			{

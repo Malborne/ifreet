@@ -137,7 +137,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		return errors.Wrap(err, "adding reaction failed")
 	}
 
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("%s was isolated for %d %s", member.User.Username+"#"+member.User.Discriminator, duration, unit),
 		Fields: []*discordgo.MessageEmbedField{
 			{
@@ -188,7 +188,6 @@ func restoreUser(s *discordgo.Session, member *discordgo.Member, guildID string)
 			}
 
 			if err != nil {
-				// s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("No role with ID %s found", role))
 
 				heimdallr.LogIfError(s, errors.Wrap(err, fmt.Sprintf("adding role with ID %s failed", role)))
 			}
@@ -209,7 +208,7 @@ func restoreUser(s *discordgo.Session, member *discordgo.Member, guildID string)
 	}
 	userChannel, err := s.UserChannelCreate(member.User.ID)
 	if err != nil {
-		s.ChannelMessageSend(heimdallr.Config.AdminLogChannel, fmt.Sprintf("%s Does NOT ACCEPT DMs but was sucessfully restored", member.Mention()))
+		s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("%s Does NOT ACCEPT DMs but was sucessfully restored", member.Mention()))
 		return
 	}
 	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
@@ -218,7 +217,7 @@ func restoreUser(s *discordgo.Session, member *discordgo.Member, guildID string)
 		return
 	}
 
-	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.AdminLogChannel, &discordgo.MessageEmbed{
+	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("%s was automatically restored to the server.", member.User.Username+"#"+member.User.Discriminator),
 		Fields: []*discordgo.MessageEmbedField{
 			{
