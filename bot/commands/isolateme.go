@@ -104,6 +104,10 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		return errors.Wrap(err, "adding user role failed")
 	}
 
+	//Restore the user after the timer expires
+
+	time.AfterFunc(endTime.Sub(startTime), func() { RestoreUser(s, member, guildID) })
+
 	userChannel, _ := s.UserChannelCreate(member.User.ID)
 	// if err != nil {
 	// 	return nil
@@ -134,10 +138,6 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		},
 		Color: 0xFFFF00,
 	})
-
-	//Restore the user after the timer expires
-
-	time.AfterFunc(endTime.Sub(startTime), func() { RestoreUser(s, member, guildID) })
 
 	return nil
 }
