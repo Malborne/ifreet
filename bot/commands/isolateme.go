@@ -108,16 +108,6 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 
 	time.AfterFunc(endTime.Sub(startTime), func() { RestoreUser(s, member, guildID) })
 
-	userChannel, _ := s.UserChannelCreate(member.User.ID)
-	// if err != nil {
-	// 	return nil
-	// }
-	s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-		"You have been isolated in %s for %d %s\nYou will automatically be returned to the server after the duration expires. If you would like to return before that, please DM one of the moderators.\n\nYou cannot reply to this message.", guild.Name, duration, unit))
-	// if err != nil {
-	// 	return nil
-	// }
-
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 
 	if err != nil {
@@ -138,6 +128,10 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		},
 		Color: 0xFFFF00,
 	})
+	userChannel, _ := s.UserChannelCreate(member.User.ID)
+
+	s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
+		"You have been isolated in %s for %d %s\nYou will automatically be returned to the server after the duration expires. If you would like to return before that, please DM one of the moderators.\n\nYou cannot reply to this message.", guild.Name, duration, unit))
 
 	return nil
 }
@@ -189,16 +183,6 @@ func RestoreUser(s *discordgo.Session, member *discordgo.Member, guildID string)
 		heimdallr.LogIfError(s, errors.Wrap(err, "removing isolated role failed"))
 
 	}
-	userChannel, err := s.UserChannelCreate(member.User.ID)
-	if err != nil {
-		s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("%s Does NOT ACCEPT DMs but was sucessfully restored", member.Mention()))
-		return
-	}
-	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
-		"You have been automatically restored in Quran Learning Center \n\nYou cannot reply to this message."))
-	if err != nil {
-		return
-	}
 
 	_, err = s.ChannelMessageSendEmbed(heimdallr.Config.LogChannel, &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("%s was automatically restored to the server.", member.User.Username+"#"+member.User.Discriminator),
@@ -214,6 +198,18 @@ func RestoreUser(s *discordgo.Session, member *discordgo.Member, guildID string)
 		},
 		Color: 0xFFFF00,
 	})
+	if err != nil {
+		heimdallr.LogIfError(s, errors.Wrap(err, "sending server log message failed"))
+
+	}
+
+	userChannel, err := s.UserChannelCreate(member.User.ID)
+	if err != nil {
+		s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("%s Does NOT ACCEPT DMs but was sucessfully restored", member.Mention()))
+		return
+	}
+	s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
+		"You have been automatically restored in Quran Learning Center \n\nYou cannot reply to this message."))
 
 }
 
