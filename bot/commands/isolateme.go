@@ -71,10 +71,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	// s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The duration of isolation is %d %s.", duration, unit))
 	startTime := time.Now()
 	var endTime time.Time
-	if unit == "seconds" {
-		endTime = startTime.Add(time.Duration(duration) * time.Second)
-
-	} else if unit == "minutes" {
+	if unit == "minutes" {
 		endTime = startTime.Add(time.Duration(duration) * time.Minute)
 	} else if unit == "hours" {
 		endTime = startTime.Add(time.Duration(duration) * time.Hour)
@@ -107,15 +104,15 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 		return errors.Wrap(err, "adding user role failed")
 	}
 
-	userChannel, err := s.UserChannelCreate(member.User.ID)
-	if err != nil {
-		return nil
-	}
-	_, err = s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
+	userChannel, _ := s.UserChannelCreate(member.User.ID)
+	// if err != nil {
+	// 	return nil
+	// }
+	s.ChannelMessageSend(userChannel.ID, fmt.Sprintf(
 		"You have been isolated in %s for %d %s\nYou will automatically be returned to the server after the duration expires. If you would like to return before that, please DM one of the moderators.\n\nYou cannot reply to this message.", guild.Name, duration, unit))
-	if err != nil {
-		return nil
-	}
+	// if err != nil {
+	// 	return nil
+	// }
 
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 
