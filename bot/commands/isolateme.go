@@ -19,7 +19,6 @@ var isolateCommand = command{
 		"<duration> <unit>",
 	},
 	[]string{
-		"10 seconds",
 		"3 minutes",
 		"5 hours",
 		"7 days",
@@ -36,16 +35,14 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	unit, _ := args.String("<unit>")
 	// member := m.Member
 	// var timer *time.Timer;
-	acceptedUnits := []string{"s", "second", "seconds", "sec", "secs", "minute", "minutes", "min", "mins", "m", "h", "hour", "hours", "hr", "hrs", "day", "days", "d"}
+	acceptedUnits := []string{"minute", "minutes", "min", "mins", "m", "h", "hour", "hours", "hr", "hrs", "day", "days", "d"}
 	index, isUnitAccepted := stringInSlice(strings.ToLower(unit), acceptedUnits)
 
 	if !isUnitAccepted {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Invalid Unit, please enter a correct unit either `seconds`, `minutes`, `hours`, or `days`"))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Invalid Unit, please enter a correct unit either `minutes`, `hours`, or `days`"))
 		return errors.Wrap(err, "Isolating user failed")
 	} else {
 		if index < 5 {
-			unit = "seconds"
-		} else if index < 10 {
 			unit = "minutes"
 		} else if index < 15 {
 			unit = "hours"
