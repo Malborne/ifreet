@@ -44,7 +44,7 @@ func commandIsolateme(s *discordgo.Session, m *discordgo.MessageCreate, args doc
 	} else {
 		if index < 5 {
 			unit = "minutes"
-		} else if index < 15 {
+		} else if index < 10 {
 			unit = "hours"
 		} else {
 			unit = "days"
