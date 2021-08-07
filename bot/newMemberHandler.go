@@ -65,7 +65,11 @@ func NewMemberLeaveHandler(s *discordgo.Session, g *discordgo.GuildMemberRemove)
 	userChannelID, err := GetnewChannel(g.User.ID)
 	if err == nil {
 		_, err = s.ChannelDelete(userChannelID)
-		LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
+		if err != nil {
+			if !strings.Contains(err.Error(), "HTTP 404 Not Found") { //Channel has probably been manually deleted
+				LogIfError(s, errors.Wrap(err, "unable to delete the channel"))
+			}
+		}
 		err = RemoveNewChannel(g.User.ID)
 		LogIfError(s, errors.Wrap(err, "unable to remove the channel from the database"))
 	}
