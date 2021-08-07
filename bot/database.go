@@ -367,8 +367,8 @@ func GetnewChannel(userID string) (string, error) {
 	}
 	for rows.Next() {
 		err := rows.Scan(&ChannelID)
-		if err != nil {
-			return ChannelID, err
+		if err != nil || ChannelID == "" {
+			return ChannelID, errors.Wrap(err, "getting channel ID failed")
 		}
 	}
 	rows.Close()
@@ -376,8 +376,10 @@ func GetnewChannel(userID string) (string, error) {
 }
 
 //GetAllnewChannels gets the IDs of all the new channels
-func GetAllnewChannels() ([]string, error) {
+func GetAllnewChannelsWithUsers() ([]string, []string, error) {
 	var ChannelIDs []string
+	var userIDs []string
+
 	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
 		db.Close()
 		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
@@ -385,20 +387,24 @@ func GetAllnewChannels() ([]string, error) {
 		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
 	}
 	rows, err := db.Query(
-		"SELECT channel_ID FROM new_channels")
+		"SELECT channel_ID user_ID FROM new_channels")
 	if err != nil {
-		return ChannelIDs, errors.Wrap(err, "getting channel IDs failed")
+		return ChannelIDs, userIDs, errors.Wrap(err, "getting channel IDs failed")
 	}
 	for rows.Next() {
 		var ChannelID string
-		err := rows.Scan(&ChannelID)
+		var userID string
+
+		err := rows.Scan(&ChannelID, &userID)
 		if err != nil {
-			return ChannelIDs, err
+			return ChannelIDs, userIDs, err
 		}
 		ChannelIDs = append(ChannelIDs, ChannelID)
+		userIDs = append(userIDs, userID)
+
 	}
 	rows.Close()
-	return ChannelIDs, nil
+	return ChannelIDs, userIDs, nil
 }
 
 //AddtoArchive adds a message to the archive table

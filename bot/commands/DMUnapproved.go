@@ -50,7 +50,7 @@ func commandDMUnapproved(s *discordgo.Session, m *discordgo.MessageCreate, args 
 			messages, err := s.ChannelMessages(userChannel.ID, 100, "", "", "")
 			AlreadyDMed := false
 			for _, mess := range messages {
-				messTime, _ := mess.Timestamp.Parse()
+				messTime, _ := heimdallr.GetDateTimeFromID(mess.ID)
 				if strings.Contains(mess.Content, "You are an unapproved member of Quran Learning Center Server") && !messTime.Before(time.Now().AddDate(0, 0, -7)) {
 					//Already sent a message within a week
 					AlreadyDMed = true

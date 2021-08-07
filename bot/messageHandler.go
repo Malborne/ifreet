@@ -1,6 +1,7 @@
 package heimdallr
 
 import (
+	"strconv"
 	"time"
 
 	"fmt"
@@ -94,7 +95,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		isNew := true
 		joinedAt, err := author.JoinedAt.Parse()
 		if err != nil {
-			LogIfError(s, err)
+			LogIfError(s, errors.Wrap(err, fmt.Sprintf("Error parsing the time the message sender %s joined at", author.User.String())))
 		}
 		if IsVerified(author) && joinedAt.Before(time.Now().Add(time.Minute*-60)) { //if verified and joined more than an hour ago, just ignore it
 			isNew = false
@@ -253,4 +254,11 @@ func getRoleIDs(m *discordgo.Member) string {
 		roleIDs = roleIDs + role + ","
 	}
 	return roleIDs
+}
+
+//GetDateTimeFromID Converts the message ID into time.Time Object
+func GetDateTimeFromID(messageID string) (time.Time, error) {
+	DISCORD_EPOCH := 1420070400000
+	IDint, err := strconv.Atoi(messageID)
+	return time.Unix(0, int64(IDint/4194304+DISCORD_EPOCH)*int64(time.Millisecond)), err
 }
