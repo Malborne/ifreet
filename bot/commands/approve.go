@@ -223,7 +223,6 @@ func isFemale(m *discordgo.Member) bool {
 	return false
 }
 
-// func DeleteUserChannel(guild *discordgo.Guild) {
-// 	guild.
-
+// func sendPostApprovalMessage() {
+// 	message := ""
 // }

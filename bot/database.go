@@ -387,7 +387,7 @@ func GetAllnewChannelsWithUsers() ([]string, []string, error) {
 		db.SetMaxOpenConns(db.Stats().MaxOpenConnections)
 	}
 	rows, err := db.Query(
-		"SELECT channel_ID user_ID FROM new_channels")
+		"SELECT channel_ID, user_ID FROM new_channels")
 	if err != nil {
 		return ChannelIDs, userIDs, errors.Wrap(err, "getting channel IDs failed")
 	}
