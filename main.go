@@ -102,6 +102,11 @@ func main() {
 		messages, err := dg.ChannelMessages(channelID, 100, "", "", "")
 		if err != nil {
 			heimdallr.LogIfError(dg, errors.Wrap(err, "getting channel messages failed"))
+
+			if strings.Contains(err.Error(), "HTTP 404 Not Found") { //Channel has probably been manually deleted
+				err = heimdallr.RemoveNewChannel(mewMember.User.ID) // Remove the channel from the database
+				heimdallr.LogIfError(dg, errors.Wrap(err, "unable to remove the channel from the database"))
+			}
 		}
 
 		alreadyWarned := false
