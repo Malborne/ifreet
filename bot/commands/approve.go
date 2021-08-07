@@ -78,7 +78,7 @@ func commandApprove(s *discordgo.Session, m *discordgo.MessageCreate, args docop
 	}
 
 	//Send a message in the LogChannel once a user is approved
-	_, err = s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("User `%s` (%s) has been successfully approved by `%s` ✅", member.User.Username, member.User.String(), m.Author.Mention()))
+	_, err = s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("User `%s` (%s) has been successfully approved by `%s` ✅", member.User.Username, member.Mention(), m.Author.String()))
 	heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
@@ -174,7 +174,7 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	}
 
 	//Send a message in the LogChannel once a user is approved
-	_, err = s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("User `%s` (%s) has been successfully approved by `%s` ✅", member.User.Username, member.User.String(), reactingMember.Mention()))
+	_, err = s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("User `%s` (%s) has been successfully approved by `%s` ✅", member.User.Username, member.Mention(), reactingMember.User.String()))
 	heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
 
 	approvalMessage := heimdallr.Config.ApprovalMessage
