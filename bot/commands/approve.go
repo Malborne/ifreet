@@ -186,11 +186,13 @@ func ReactionApprove(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		if strings.Count(approvalMessage, "%s") > 0 {
 			approvalMessage = fmt.Sprintf(approvalMessage, message.Author.Mention(), heimdallr.Config.BotChannel)
 		}
-		userChannel, err := s.UserChannelCreate(member.User.ID)
-		if err != nil {
-			s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New User %s Does NOT ACCEPT DMs", member.Mention()))
-		}
-		_, err = s.ChannelMessageSend(userChannel.ID, approvalMessage)
+		// userChannel, err := s.UserChannelCreate(member.User.ID)
+		// if err != nil {
+		// 	s.ChannelMessageSend(heimdallr.Config.LogChannel, fmt.Sprintf("New User %s Does NOT ACCEPT DMs", member.Mention()))
+		// }
+		// _, err = s.ChannelMessageSend(userChannel.ID, approvalMessage)
+
+		_, err = s.ChannelMessageSend(heimdallr.Config.BotChannel, approvalMessage)
 		heimdallr.LogIfError(s, errors.Wrap(err, "sending message failed"))
 
 	}
