@@ -107,7 +107,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if len(m.Attachments) > 0 && isNew { //sent a file
 
 			_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
-				Title: fmt.Sprintf("A user attempted to post a file. Beaware of suspicious links don't click them"),
+				Title: fmt.Sprintf("A user attempted to post a file. Never download this file into your device."),
 				Fields: []*discordgo.MessageEmbedField{
 					{
 						Name:  "Message Author",
@@ -117,24 +117,19 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 						Name:  "Channel",
 						Value: fmt.Sprintf("<#%s>", m.ChannelID),
 					},
-					{
-						Name:  "File URL",
-						Value: m.Attachments[0].URL,
-					},
 				},
 				Color: 0xEE0000,
 			})
-			if err != nil {
-				LogIfError(s, errors.Wrap(err, "sending embed failed"))
-				return
-			}
+
+			LogIfError(s, errors.Wrap(err, "sending embed failed"))
+
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The posted file is:\n%s", m.Attachments[0].URL))
+			LogIfError(s, errors.Wrap(err, "sending embed failed"))
+
 			s.ChannelMessageDelete(m.ChannelID, m.ID)
 
-			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send files yet. Please wait until you are on the server for a longer time.", author.Mention()))
-			if err != nil {
-				LogIfError(s, errors.Wrap(err, "sending message failed"))
-				return
-			}
+			_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s You are NOT allowed to send files yet. Please wait until you are on the server for a longer time.", author.Mention()))
+			LogIfError(s, errors.Wrap(err, "sending message failed"))
 
 		}
 		if len(m.Embeds) > 0 || strings.Contains(strings.ToLower(m.Content), "https://") || strings.Contains(strings.ToLower(m.Content), "http://") && isNew { //sent a link
