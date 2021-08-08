@@ -107,7 +107,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if len(m.Attachments) > 0 && isNew { //sent a file
 
 			_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
-				Title: fmt.Sprintf("A user attempted to post a file."),
+				Title: fmt.Sprintf("A user attempted to post a file. Beaware of suspicious links don't click them"),
 				Fields: []*discordgo.MessageEmbedField{
 					{
 						Name:  "Message Author",
@@ -116,6 +116,10 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 					{
 						Name:  "Channel",
 						Value: fmt.Sprintf("<#%s>", m.ChannelID),
+					},
+					{
+						Name:  "File URL",
+						Value: m.Attachments[0].URL,
 					},
 				},
 				Color: 0xEE0000,
