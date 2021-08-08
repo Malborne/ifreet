@@ -123,8 +123,9 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			LogIfError(s, errors.Wrap(err, "sending embed failed"))
 
-			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("The posted file is:\n%s", m.Attachments[0].URL))
-			LogIfError(s, errors.Wrap(err, "sending embed failed"))
+			_, err := s.ChannelMessageSend(Config.LogChannel, fmt.Sprintf("The posted file is **(For your security, please do NOT download this file)**:\n%s", m.Attachments[0].URL))
+
+			LogIfError(s, errors.Wrap(err, "sending File failed"))
 
 			s.ChannelMessageDelete(m.ChannelID, m.ID)
 
