@@ -96,7 +96,7 @@ func KickMember(s *discordgo.Session, member *discordgo.Member) {
 	if !isUserApproved(member) && !member.User.Bot && !hasRole(member, Config.ServerBoosterRole) {
 		err := s.GuildMemberDeleteWithReason(member.GuildID, member.User.ID, "Stayed in the server for at least 7 days without gaining approved")
 		if err != nil {
-			LogIfError(s, errors.Wrap(err, "kicking failed"))
+			LogIfError(s, errors.Wrap(err, fmt.Sprintf("kicking %s failed", member.User.String())))
 			// if strings.Contains(err.Error(), "HTTP 404 Not Found") { //User has probably been kicked already or left and needs to be removed from the databaase
 			// 	RemoveNewChannel(member.User.ID)
 			// }
