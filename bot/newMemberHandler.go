@@ -97,6 +97,10 @@ func KickMember(s *discordgo.Session, member *discordgo.Member) {
 		err := s.GuildMemberDeleteWithReason(member.GuildID, member.User.ID, "Stayed in the server for at least 7 days without gaining the User role")
 		if err != nil {
 			LogIfError(s, errors.Wrap(err, "kicking failed"))
+			if strings.Contains(err.Error(), "HTTP 404 Not Found") { //User has probably been kicked already or left and needs to be removed from the databaase
+				RemoveNewChannel(member.User.ID)
+			}
+			return
 		}
 
 		_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{

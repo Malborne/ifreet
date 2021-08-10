@@ -299,7 +299,7 @@ func AddNewChannel(userID string, channelID string) error {
 	return nil
 }
 
-//RemoveInfraction removes an infraction for a user
+//RemoveNewChannel removes an infraction for a user
 func RemoveNewChannel(userID string) error {
 	_, err := db.Query(
 		"DELETE FROM new_channels WHERE user_ID::text = $1::text",
