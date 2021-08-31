@@ -36,7 +36,7 @@ func MemberBanAddHandler(s *discordgo.Session, e *discordgo.GuildBanAdd) {
 		reason = "N/A"
 	}
 
-	_, err = s.ChannelMessageSendEmbed(Config.AdminLogChannel, &discordgo.MessageEmbed{
+	_, err = s.ChannelMessageSendEmbed(Config.LogChannel, &discordgo.MessageEmbed{
 		Title: "User was banned.",
 		Fields: []*discordgo.MessageEmbedField{
 			{
