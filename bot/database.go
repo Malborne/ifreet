@@ -72,7 +72,7 @@ func OpenDb(file string) error {
 	// 	FOREIGN KEY(user_id) REFERENCES users(id)
 	// );
 
-	// dropTables := `DROP TABLE IF EXISTS users cascade;
+	dropTables := `DROP TABLE IF EXISTS isolatedUsers cascade;`
 	// 			  DROP TABLE IF EXISTS infractions cascade;
 	// 			  DROP TABLE IF EXISTS mutedUsers cascade;
 	// 			  DROP TABLE IF EXISTS resources cascade;
@@ -174,10 +174,10 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	FOREIGN KEY(resource_tag_id) REFERENCES resource_tags(id)
 );
 `
-	// _, err = db.Exec(dropTables)
-	// if err != nil {
-	// 	return errors.Wrap(err, "deleting database tables failed")
-	// }
+	_, err = db.Exec(dropTables)
+	if err != nil {
+		return errors.Wrap(err, "deleting database tables failed")
+	}
 	db.SetMaxIdleConns(0)
 	db.SetMaxOpenConns(19)
 
