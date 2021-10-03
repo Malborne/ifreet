@@ -79,11 +79,13 @@ func main() {
 	for _, isoUser := range isolatedUsers {
 		member, _ := heimdallr.GetMember(dg, guildID, isoUser.UserID)
 		currentTime := time.Now()
-		if currentTime.After(isoUser.EndTime) {
-			commands.RestoreUser(dg, member, guildID)
-		} else {
-			time.AfterFunc(isoUser.EndTime.Sub(currentTime), func() { commands.RestoreUser(dg, member, guildID) })
+		if member != nil {
+			if currentTime.After(isoUser.EndTime) {
+				commands.RestoreUser(dg, member, guildID)
+			} else {
+				time.AfterFunc(isoUser.EndTime.Sub(currentTime), func() { commands.RestoreUser(dg, member, guildID) })
 
+			}
 		}
 	}
 
