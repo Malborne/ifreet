@@ -64,6 +64,16 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blow
   name = "tafsirclass"
   description = "A self-assignable role for those who wish to be reminded of the Tafsir Class"
 
+[[role]]
+  id = "897199822644342825"
+  name = "Introtoislam"
+  description = "A self-assignable role for those who wish to be reminded of the Introduction to Islam Class"
+
+
+[[role]]
+  id = "897200019122302986"
+  name = "Usul"
+  description = "A self-assignable role for those who wish to be reminded of Usul Al Fiqh Class"
 
   [[role]]
   id = "727340877072171048"
