@@ -33,7 +33,7 @@ func commandRule(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.O
 	}
 
 	if number > 16 {
-		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Please enter a value between 1 and 16"))
+		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Incorrect use of command. Please enter a value between 1 and 16"))
 		return errors.Wrap(err, "clearing message failed")
 	}
 
@@ -42,10 +42,13 @@ func commandRule(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.O
 		if RuleNumber == number {
 			//Quote the rule
 			_, err = s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
+				Title: fmt.Sprintf("Rule No. %s:", rule.Number),
+
 				Footer: &discordgo.MessageEmbedFooter{
-					Text: fmt.Sprintf("(quoted by: %s) | <#%s>", m.Author.Username, heimdallr.Config.RulesChannel),
+					Text: fmt.Sprintf("(quoted by: %s)", m.Author.Username),
 				},
-				Description: fmt.Sprintf("**Rule No. %s:** %s", rule.Number, rule.Text),
+				Description: fmt.Sprintf("%s\n<#734707679116918836>", rule.Text),
+				Color:       0xFFFF00,
 			})
 			if err != nil {
 				return errors.Wrap(err, "sending embed failed")
