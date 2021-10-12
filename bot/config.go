@@ -51,6 +51,7 @@ type BotConfig struct {
 	IsolatedRole string `toml:"isolated_role_id"`
 
 	Roles []Role `toml:"role"`
+	Rules []Rule `toml:"rule"`
 
 	BannedWords []string `toml:"banned_words"`
 
@@ -65,6 +66,12 @@ type Role struct {
 	ID   string `toml:"id"`
 	Name string `toml:"name"`
 	Desc string `toml:"description"`
+}
+
+//Rule is a struct containing details about server rules
+type Rule struct {
+	Number string `toml:"number"`
+	Text   string `toml:"text"`
 }
 
 //LoadConfig loads the configuration file

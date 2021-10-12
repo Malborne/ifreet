@@ -36,6 +36,75 @@ command_prefix = ";"
 
 banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blowjob", "blow job", "buttplug", "orgasm","cunt", "dildo", " fagget", "faggot", " penis", "scrotum", "slut", "vagina", "whore", "fellatio", "f u c k", "clitoris", "fuck", "fuckin","mother fucker","motherfucker", "suck my dick", "f*ck", "f**k", "bitch", "negro", "nigger", "nigga","n**ger", "n*gga","n**ga"]
 
+[[rule]]
+  number = "1"
+  text = "Be respectful. Do not insult/mock anyone at all, nor harass or bother them."
+
+[[rule]]
+  number = "2"
+  text = "Do not use inappropriate or vulgar language or anything that may offend someone."
+
+  [[rule]]
+  number = "3"
+  text = "Do not share any sensitive or private information of yourself or anyone."
+
+
+  [[rule]]
+  number = "4"
+  text = "Your posts, links, profiles should not contain NSFW, awrah, any offensive content or spam. Do not send anything that might harm a member (e.g. medically), scare them, or cause fitnah."
+
+  [[rule]]
+  number = "5"
+  text = "Do not scam or send any harmful links or IP grabbers."
+
+  [[rule]]
+  number = "6"
+  text = "Do not advertise on the server or send discord invites without permission."
+
+  [[rule]]
+  number = "7"
+  text = "Send messages in the appropriate channels. (Read channel topics before chatting)."
+
+  [[rule]]
+  number = "8"
+  text = "Give a music warning before posting content that contains music."
+
+  [[rule]]
+  number = "9"
+  text = "Do not join with an alt account (if you wish to switch accounts tell us)."
+
+  [[rule]]
+  number = "10"
+  text = "Do not tag moderators, helpers or members without a proper reason or excessively. Additionally, leave a 1.5 hour gap between pinging the Recite Together role."
+
+  [[rule]]
+  number = "11"
+  text = "Any gender-exclusive discussion or conversations regarding marriage should be in the gender-exclusive channels. (Get verified to access those!)."
+
+  [[rule]]
+  number = "12"
+  text = "We follow the Qur'an, the authentic Sunnah and the Salaf. Do not spread anything opposing this or argue regarding it."
+
+  [[rule]]
+  number = "13"
+  text = "Do not speak without knowledge, and always be sure to fact check anything you send. Do not send or say anything misleading or untruthful, and do not be extreme!"
+
+  [[rule]]
+  number = "14"
+  text = "Do not debate/argue or converse in a way that might incite an argument. (E.g. politics, extremist groups, sects, deviant aqeedah, etc.)."
+
+  [[rule]]
+  number = "15"
+  text = "Communicate with the opposite gender appropriately."
+
+ [[rule]]
+  number = "16"
+  text = "If the moderators ask you to do something then comply."
+
+
+
+
+
 [[role]]
   id = "714905000748515338"
   name = "tajweedlesson1"
