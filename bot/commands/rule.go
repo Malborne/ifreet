@@ -43,9 +43,9 @@ func commandRule(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.O
 			//Quote the rule
 			_, err = s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 				Footer: &discordgo.MessageEmbedFooter{
-					Text: fmt.Sprintf("(quoted by: %s) | #%s", m.Author.Username, heimdallr.Config.RulesChannel),
+					Text: fmt.Sprintf("(quoted by: %s) | <#%s>", m.Author.Username, heimdallr.Config.RulesChannel),
 				},
-				Description: fmt.Sprintf("Rule No. %s: %s", rule.Number, rule.Text),
+				Description: fmt.Sprintf("**Rule No. %s:** %s", rule.Number, rule.Text),
 			})
 			if err != nil {
 				return errors.Wrap(err, "sending embed failed")
