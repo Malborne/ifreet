@@ -135,6 +135,7 @@ func init() {
 		verifyCommand,
 		muteCommand,
 		unmuteCommand,
+		ruleCommand,
 	}
 	moderatorCommands = []command{
 		restoreCommand,
