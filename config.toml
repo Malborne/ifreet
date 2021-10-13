@@ -149,6 +149,12 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blow
   name = "recitetogether"
   description = "A self-assignable role for those who want to recite together in the voice chat or listen to others recite."
 
+ [[role]]
+  id = "897829906711478394"
+  name = "femalerecitetogether"
+  description = "A self-assignable role for female members who want to recite together in the female voice chat or listen to others recite."
+
+
   [[role]]
   id = "727349233921032212"
   name = "events"
