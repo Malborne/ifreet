@@ -30,7 +30,7 @@ verified_female_role_id = "719618129319297064"
 muted_role_id = "709449969660067911"
 isolated_role_id = "867232111273181185"
 welcome_message = "‎السلام عليكم ورحمة الله وبركاته \nMay the peace, mercy and blessings of Allah be upon you.\n\n Welcome %s :star2: to the Quran Learning Center.\n\n**This server is dedicated to:**\n • The memorization and recitation of the Quran\n • Learning Tajweed and Arabic\n\n**Please read the <#%s> and answer the following questions to proceed:**\n1. What is your gender (Male or Female)?\n2. How much of the Quran do you know/memorize?\n3. What is your reason for joining (plus anything else you’d like to share)?\n\n*Note: we may ask extra questions.*\n\n__If you need any help or have any questions, feel free to ask here and tag__ `@Moderator`.\n\nJazakumullahu khayran\nWe hope that you benefit from the server."
-approval_message = "Welcome %s to the server and thank you for joining :blush:\n\n:small_blue_diamond: To view all the roles, type: `;role list` (in <#%s>)\n:small_blue_diamond: To get a role, type: `;role get ROLENAME`\n:small_blue_diamond: To view Tajweed lessons, type:`;lessons`\n:small_blue_diamond: To view Arabic lessons, type: `;arabiclesson` \n:small_blue_diamond: To set your time zone, type: `-ft set @YourUsername` then the timezone region (e.g. California/United States).\n\n:small_orange_diamond: For resources view #tajweed-resources and #arabic-resources.\n:small_orange_diamond: For Tajweed help: tag a `@Tajweed Helper` \n:small_orange_diamond: For Qur’an help and testing: `@Brothers Helper` or `@Sisters Helper`. \n:small_orange_diamond: Gender specific channels: require verification, tag a `@Moderator` for more information. \n:small_orange_diamond: To join a Hifdh Circle: be verified and tag a `@Super Moderator` for more information. If you have any questions or need any help, please do not hesitate to ask."
+approval_message = "Welcome %s to the server and thank you for joining :blush:\n\n:small_blue_diamond: To view all the roles, type: `;role list` (in <#%s>)\n:small_blue_diamond: To get a role, type: `;role get ......`\n:small_blue_diamond: To view Tajweed lessons, type:`;lessons`\n:small_blue_diamond: To view Arabic lessons, type: `;arabiclesson` \n:small_blue_diamond: To set your time zone, type: `-ft set @YourUsername` then the timezone region (e.g. California/United States).\n\n:small_orange_diamond: For resources view #tajweed-resources and #arabic-resources.\n:small_orange_diamond: For Tajweed help: tag a `@Tajweed Helper` \n:small_orange_diamond: For Qur’an help and testing: `@Brothers Helper` or `@Sisters Helper`. \n:small_orange_diamond: Gender specific channels: require verification, tag a `@Moderator` for more information. \n:small_orange_diamond: To join a Hifdh Circle: be verified and tag a `@Super Moderator` for more information. If you have any questions or need any help, please do not hesitate to ask."
 command_prefix = ";"
 
 
@@ -344,3 +344,10 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blow
   id = "907343997431853087"
   name = "Tagalog"
   description = "A self-assignable role for those who speak Tagalog"
+
+
+        [[role]]
+  id = "914199727938084864"
+  name = "Dhivehi"
+  description = "A self-assignable role for those who speak Dhivehi"
+  

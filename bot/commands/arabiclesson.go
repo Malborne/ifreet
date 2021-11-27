@@ -24,7 +24,7 @@ var arabicLessonCommand = command{
 func arabiclesson(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.Opts) error {
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "Arabic Lesson",
-		Description: fmt.Sprintf("This server has a weekly Arabic Lesson on Sundays at  10:30pm EST (New York time) /Mondays at 3:30am UK time  in Lessons & Review VC, where we explain the grammar and learn some new vocabulary using Al Madinah Arabic book.\nYou can refer back to <#%s>.\nIf you want to see all the documents for all of the previous lessons, just type `;arabicdocs`.", "729392922444955720"),
+		Description: fmt.Sprintf("This server has a weekly Arabic Lesson on Wednesdays & Saturdays at 2:30PM EDT (new york time)/7:30PM UK time.  in Lessons & Review VC, where we explain the grammar and learn some new vocabulary using **Al`arabiyyah Bayna Yadayk** textbook.\nYou can refer back to <#%s>.\nIf you want to see all the documents for all of the previous lessons, just type `;arabicdocs`.", "729392922444955720"),
 		Color:       0x00AA00,
 	})
 	return errors.Wrap(err, "sending embed failed")
