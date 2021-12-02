@@ -188,6 +188,11 @@ banned_words = [ "nudes", "asshole","biatch", "Scumbag","pain in the ass", "blow
   description = "A self-assignable role for those who speak Japanese"
 
   [[role]]
+  id = "916009197970288651"
+  name = "Korean"
+  description = "A self-assignable role for those who speak Korean"
+
+  [[role]]
   id = "722098887854391306"
   name = "French"
   description = "A self-assignable role for those who speak French"
