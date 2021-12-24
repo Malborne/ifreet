@@ -2,6 +2,7 @@ package heimdallr
 
 import (
 	"database/sql"
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -182,12 +183,7 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	db.SetMaxOpenConns(19)
 
 	_, err = db.Exec(createTableStatement)
-	// if err != nil {
 	return errors.Wrap(err, "creating database tables failed")
-	// }
-
-	// _, err = db.Exec(`ALTER ROLE gifcwznoqhqcvy CONNECTION LIMIT -1;`)
-	// return errors.Wrap(err, "creating database tables failed")
 }
 
 //CloseDb closes the database connection
@@ -439,7 +435,7 @@ func GetFromArchive(messageID string) (Message, error) {
 		messageID,
 	)
 	if err != nil {
-		return message, errors.Wrap(err, "fetching message failed")
+		return message, errors.Wrap(err, fmt.Sprintf("fetching message failed. There are %d open connections to the database.", db.Stats().OpenConnections))
 	}
 	for rows.Next() {
 		var channelID string
