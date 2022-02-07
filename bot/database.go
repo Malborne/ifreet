@@ -83,6 +83,7 @@ func OpenDb(file string) error {
 
 	// dropTables := `DROP TABLE IF EXISTS archive cascade;`
 	createTableStatement := `
+	DROP TABLE IF EXISTS users cascade;
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
 	username TEXT
@@ -122,7 +123,7 @@ CREATE TABLE IF NOT EXISTS students (
 	FOREIGN KEY(user_id) REFERENCES users(id)	
 );
 
-DROP TABLE IF EXISTS archive cascade;
+
 
 CREATE TABLE IF NOT EXISTS archive (
 	id SERIAL PRIMARY KEY,
