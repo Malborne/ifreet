@@ -88,6 +88,24 @@ CREATE TABLE IF NOT EXISTS users (
 	username TEXT
 );
 
+CREATE OR REPLACE FUNCTION clean_users()
+RETURNS TRIGGER AS
+$body$
+BEGIN
+    IF (SELECT count(*) FROM users) >= 3000 THEN 
+	DELETE FROM users WHERE id IN (SELECT id FROM users ORDER BY time_ asc LIMIT 1); 
+	END IF;
+	RETURN NEW;
+END;
+$body$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS clean_users ON users;
+
+CREATE TRIGGER clean_users 
+BEFORE INSERT ON users
+FOR EACH STATEMENT EXECUTE PROCEDURE clean_users();
+
 CREATE TABLE IF NOT EXISTS infractions (
 	id SERIAL PRIMARY KEY,
 	reason TEXT,
