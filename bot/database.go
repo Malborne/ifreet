@@ -83,7 +83,6 @@ func OpenDb(file string) error {
 
 	// dropTables := `DROP TABLE IF EXISTS archive cascade;`
 	createTableStatement := `
-	DROP TABLE IF EXISTS users cascade;
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
 	username TEXT
@@ -426,7 +425,7 @@ func AddtoArchive(user discordgo.User, m *discordgo.MessageCreate) error {
 //GetFromArchive gets a message from the archive table
 func GetFromArchive(messageID string) (Message, error) {
 	var message Message
-
+	timout := 10
 	if db.Stats().OpenConnections >= db.Stats().MaxOpenConnections || db.Stats().InUse >= db.Stats().MaxOpenConnections { //closes the connection pool and opens a new one to clear out the connections
 		db.Close()
 		db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
@@ -437,8 +436,23 @@ func GetFromArchive(messageID string) (Message, error) {
 		"SELECT channelID, time_, content, user_id FROM archive WHERE messageID=$1 ORDER BY time_",
 		messageID,
 	)
+
+	if err != nil {
+		i := 0
+		for i < timout {
+			db.Close()
+			db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+			time.AfterFunc(500*time.Millisecond, func() {})
+			rows, err = db.Query("SELECT channelID, time_, content, user_id FROM archive WHERE messageID=$1 ORDER BY time_", messageID)
+			if err == nil {
+				break
+			}
+			i = i + 1
+		}
+	}
 	if err != nil {
 		return message, errors.Wrap(err, fmt.Sprintf("fetching message failed. There are %d open connections to the database.", db.Stats().OpenConnections))
+
 	}
 	for rows.Next() {
 		var channelID string

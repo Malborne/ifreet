@@ -80,5 +80,5 @@ func commandKickUser(s *discordgo.Session, m *discordgo.MessageCreate, args doco
 		return err
 	}
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
-	return errors.Wrap(err, "adding reaction failed")
+	return nil
 }
