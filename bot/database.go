@@ -174,6 +174,8 @@ CREATE TABLE IF NOT EXISTS resource_tags_resources (
 	FOREIGN KEY(resource_id) REFERENCES resources(id),
 	FOREIGN KEY(resource_tag_id) REFERENCES resource_tags(id)
 );
+
+DELETE FROM archive;
 `
 	// _, err = db.Exec(dropTables)
 	// if err != nil {
