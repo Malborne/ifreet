@@ -81,7 +81,7 @@ func roleList(s *discordgo.Session, m *discordgo.MessageCreate) error {
 		return errors.Wrap(err, "sending message failed")
 
 	}
-	_, err = s.ChannelMessageSend(m.ChannelID, "*Self-assignable roles for speakers of the following languages:*\n")
+	_, err = s.ChannelMessageSend(m.ChannelID, "*\nSelf-assignable roles for speakers of the following languages:*\n")
 	if err != nil {
 		return errors.Wrap(err, "sending message failed")
 
