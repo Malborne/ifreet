@@ -63,9 +63,9 @@ func roleList(s *discordgo.Session, m *discordgo.MessageCreate) error {
 			// 	languageroles2 += fmt.Sprintf("**%s**: *%s*\n", role.Name, role.Desc)
 			// }
 			if role != heimdallr.Config.Roles[len(heimdallr.Config.Roles)-1] {
-				languageroles += fmt.Sprintf("**%s, **", role.Name)
+				languageroles += fmt.Sprintf("**%s, ", role.Name)
 			} else {
-				languageroles += fmt.Sprintf("**%s**", role.Name)
+				languageroles += fmt.Sprintf("%s**", role.Name)
 			}
 		} else {
 			roleString += fmt.Sprintf("**%s**: *%s*\n", role.Name, role.Desc)
@@ -81,7 +81,7 @@ func roleList(s *discordgo.Session, m *discordgo.MessageCreate) error {
 		return errors.Wrap(err, "sending message failed")
 
 	}
-	_, err = s.ChannelMessageSend(m.ChannelID, "*Self-assignable roles for speakers of the following languages:\n*")
+	_, err = s.ChannelMessageSend(m.ChannelID, "*Self-assignable roles for speakers of the following languages:*\n")
 	if err != nil {
 		return errors.Wrap(err, "sending message failed")
 
