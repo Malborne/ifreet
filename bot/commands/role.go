@@ -52,7 +52,7 @@ func commandRole(s *discordgo.Session, m *discordgo.MessageCreate, args docopt.O
 
 func roleList(s *discordgo.Session, m *discordgo.MessageCreate) error {
 	roleString := ""
-	languageroles := ""
+	languageroles := "**"
 	// languageroles2 := ""
 
 	for _, role := range heimdallr.Config.Roles {
@@ -63,7 +63,7 @@ func roleList(s *discordgo.Session, m *discordgo.MessageCreate) error {
 			// 	languageroles2 += fmt.Sprintf("**%s**: *%s*\n", role.Name, role.Desc)
 			// }
 			if role != heimdallr.Config.Roles[len(heimdallr.Config.Roles)-1] {
-				languageroles += fmt.Sprintf("**%s, ", role.Name)
+				languageroles += fmt.Sprintf("%s, ", role.Name)
 			} else {
 				languageroles += fmt.Sprintf("%s**", role.Name)
 			}
@@ -73,7 +73,7 @@ func roleList(s *discordgo.Session, m *discordgo.MessageCreate) error {
 		}
 
 	}
-	if roleString == "" && languageroles == "" {
+	if roleString == "" && languageroles == "**" {
 		roleString = "No roles available."
 	}
 	_, err := s.ChannelMessageSend(m.ChannelID, roleString)
