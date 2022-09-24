@@ -36,6 +36,9 @@ type BotConfig struct {
 	AliBinAbiTaalibRole  string `toml:"ali_bin_abi_talib_id"`
 	SistersCircleRole    string `toml:"sisters_circle_id"`
 
+	VoiceVerifyBrothersRole string `toml:"voice_verify_brothers_rol_id"`
+	VoiceVerifySistersRole  string `toml:"voice_verify_sisters_rol_id"`
+
 	CricleLeaderRole   string `toml:"circle_leader_role_id"`
 	BrothersHelperRole string `toml:"brothers_helper_role_id"`
 	SistersHelperRole  string `toml:"sisters_helper_role_id"`

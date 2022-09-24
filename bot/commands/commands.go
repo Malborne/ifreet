@@ -100,6 +100,7 @@ func (command *command) parse(args []string) (docopt.Opts, error) {
 
 var userCommands []command
 var helperCommands []command
+var voiceVerifyCommands []command
 var trialModeratorCommands []command
 var moderatorCommands []command
 var superModeratorCommands []command
@@ -128,11 +129,14 @@ func init() {
 		mystudentsCommand,
 	}
 
+	voiceVerifyCommands = []command{
+		verifyCommand,
+	}
+
 	trialModeratorCommands = []command{
 		warnCommand,
 		infractionsCommand,
 		approveCommand,
-		verifyCommand,
 		muteCommand,
 		unmuteCommand,
 		ruleCommand,
@@ -165,6 +169,7 @@ func init() {
 	}
 
 	requireRoleForCommands("helper", helperCommands)
+	requireRoleForCommands("voice verifier", voiceVerifyCommands)
 	requireRoleForCommands("trial moderator", trialModeratorCommands)
 	requireRoleForCommands("moderator", moderatorCommands)
 	requireRoleForCommands("moderator", moderatorCommands)
@@ -175,6 +180,7 @@ func init() {
 	var commands []command
 	commands = append(commands, userCommands...)
 	commands = append(commands, helperCommands...)
+	commands = append(commands, voiceVerifyCommands...)
 	commands = append(commands, trialModeratorCommands...)
 	commands = append(commands, moderatorCommands...)
 	commands = append(commands, superModeratorCommands...)
@@ -219,6 +225,8 @@ func getPrivilegeChecker(role string) func(*discordgo.Member, *discordgo.Guild) 
 	switch role {
 	case "helper":
 		return heimdallr.IsHelper
+	case "voice verifier":
+		return heimdallr.IsVoiceVerifier
 	case "trial moderator":
 		return heimdallr.IsTrialModOrHigher
 	case "moderator":

@@ -81,7 +81,7 @@ func roleList(s *discordgo.Session, m *discordgo.MessageCreate) error {
 		return errors.Wrap(err, "sending message failed")
 
 	}
-	_, err = s.ChannelMessageSend(m.ChannelID, "\n*Self-assignable roles for speakers of the following languages:*\n")
+	_, err = s.ChannelMessageSend(m.ChannelID, "\n *Self-assignable roles for speakers of the following languages:*\n")
 	if err != nil {
 		return errors.Wrap(err, "sending message failed")
 
@@ -117,15 +117,7 @@ func roleGet(s *discordgo.Session, m *discordgo.MessageCreate, roleNames []strin
 			success = false
 			continue
 		}
-		if m.Author.ID == "550664345302859786" && roleID == "722098858288480267" { //Wasan trying to get Japanese
-			success = false
-			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("I am not going to let you get the Japanese role وسن 😒 you're still not worthy."))
-			if err != nil {
-				heimdallr.LogIfError(s, errors.Wrap(err, "Adding role failed"))
-				return errors.Wrap(err, "Adding role failed")
-			}
-			return nil
-		}
+
 		err = s.GuildMemberRoleAdd(guildID, m.Author.ID, roleID)
 
 		if err != nil {
