@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/Malborne/ifreet/tree/master/bot/commands"
-	"github.com/Malborne/ifreet/tree/master/bot/version"
 
 	heimdallr "github.com/Malborne/ifreet/tree/master/bot"
 	"github.com/pkg/errors"
@@ -24,7 +23,7 @@ var (
 )
 
 func init() {
-	fmt.Printf("Ifreet version: %s, commit: %s\n", version.VERSION, version.COMMIT)
+	fmt.Printf("Ifreet version: 2.0, commit: 17.0\n")
 
 	err := heimdallr.Config.LoadConfig("config.toml")
 	if err != nil {
