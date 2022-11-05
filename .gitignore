@@ -4,3 +4,4 @@ vendor/
 *.db
 rest-client.private.env.json
 scratch.http
+config.toml
