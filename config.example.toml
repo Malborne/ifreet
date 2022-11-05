@@ -1,0 +1,21 @@
+token = "<DISCORD BOT TOKEN>"
+welcome_channel = "123456789"
+log_channel = "123456789"
+admin_channel = "987654321"
+admin_log_channel = "987654321"
+admin_role_id = "097612345"
+supermod_role_id = "098763454"
+mod_role_id = "097634596"
+user_role_id = "8734456776"
+welcome_message = "Welcome to the server, %s!"
+command_prefix = ";"
+
+[[role]]
+  id = "1235435345476"
+  name = "cool_kid"
+  description = "self-assignable role with the name 'cool_kid'"
+
+[[role]]
+  id = "7656535438"
+  name = "developer"
+  description = "self-assignable roles for developers"
