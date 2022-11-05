@@ -39,7 +39,7 @@ func init() {
 
 func main() {
 	// err := heimdallr.OpenDb("heimdallr.db")
-	// err := heimdallr.OpenDb(os.Getenv("DATABASE_URL"))
+	err := heimdallr.OpenDb(os.Getenv("DATABASE_URL"))
 
 	// if err != nil {
 	// 	log.Fatalf("%+v\n", err)
