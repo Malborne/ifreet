@@ -45,7 +45,6 @@ func main() {
 	// if err != nil {
 	// 	log.Fatalf("%+v\n", err)
 	// }
-	err = http.ListenAndServe(":3333", nil)
 
 	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
@@ -153,6 +152,7 @@ func main() {
 			}
 		}
 	}
+	err = http.ListenAndServe(":3333", nil)
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
