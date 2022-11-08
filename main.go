@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"strings"
@@ -41,10 +42,10 @@ func init() {
 func main() {
 	// err := heimdallr.OpenDb("heimdallr.db")
 	err := heimdallr.OpenDb(os.Getenv("DATABASE_URL"))
-
 	// if err != nil {
 	// 	log.Fatalf("%+v\n", err)
 	// }
+	err = http.ListenAndServe(":3333", nil)
 
 	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
